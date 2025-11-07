@@ -1,20 +1,44 @@
-# Introduction 
-TODO: Give a short introduction of your project. Let this section explain the objectives or the motivation behind this project. 
+# ies2-aulapp-frontend-nextgen
 
-# Getting Started
-TODO: Guide users through getting your code up and running on their own system. In this section you can talk about:
-1.	Installation process
-2.	Software dependencies
-3.	Latest releases
-4.	API references
+Projeto React + TypeScript configurado com Vite.
 
-# Build and Test
-TODO: Describe and show how to build your code and run the tests. 
+## 📁 Estrutura do Projeto
 
-# Contribute
-TODO: Explain how other users and developers can contribute to make your code better. 
+```
+/src
+├── /assets         # Imagens, fontes, etc.
+├── /components     # Componentes de UI reutilizáveis (Button, Input, Card)
+├── /features       # Componentes complexos ou de negócio (ex: /ActivityPlayer, /AnnotationSidebar)
+├── /hooks          # Hooks customizados (ex: useTimer, useApi)
+├── /pages          # Componentes que representam as páginas da aplicação (ex: /ContentPage)
+├── /services       # Lógica de comunicação com a API
+├── /styles         # Estilos globais, temas, variáveis CSS
+├── /types          # Definições de tipos do TypeScript
+└── /utils          # Funções utilitárias genéricas
+```
 
-If you want to learn more about creating good readme files then refer the following [guidelines](https://docs.microsoft.com/en-us/azure/devops/repos/git/create-a-readme?view=azure-devops). You can also seek inspiration from the below readme files:
-- [ASP.NET Core](https://github.com/aspnet/Home)
-- [Visual Studio Code](https://github.com/Microsoft/vscode)
-- [Chakra Core](https://github.com/Microsoft/ChakraCore)
+## 🚀 Comandos Disponíveis
+
+- `pnpm dev` - Inicia o servidor de desenvolvimento
+- `pnpm build` - Compila o projeto para produção
+- `pnpm preview` - Visualiza o build de produção localmente
+- `pnpm lint` - Verifica problemas de linting
+- `pnpm lint:fix` - Corrige automaticamente problemas de linting
+- `pnpm format` - Formata os arquivos com Prettier
+- `pnpm format:check` - Verifica a formatação dos arquivos
+
+## 🛠️ Tecnologias
+
+- React 19.x
+- TypeScript 5.x
+- Vite 7.x
+- ESLint + Prettier
+- pnpm
+
+## 📝 Convenções de Código
+
+O projeto está configurado com:
+- **ESLint** para análise estática de código
+- **Prettier** para formatação automática
+- **TypeScript** para tipagem estática
+- Regras personalizadas para React e TypeScript
