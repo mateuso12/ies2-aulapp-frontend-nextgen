@@ -4,7 +4,7 @@ import {
   SearchNormal,
   Timer,
   RefreshCircle,
-  Menu,
+  HambergerMenu,
 } from 'iconsax-react'
 import { ResourceBadge } from 'ies2-aulapp-ui-kit'
 export const Header: React.FC = () => {
@@ -18,19 +18,13 @@ export const Header: React.FC = () => {
         <h1 className="font-sans text-2xl font-semibold text-[#FF246E]">
           4.2 <span className="text-[#FF246E]">Nome da Aula</span>
         </h1>
-      </div>
-
-      {/* Center: Controls */}
-      <div className="flex items-center gap-4">
-        {/* Exercise List Button */}
-        <div className="shrink-0 whitespace-nowrap">
+        <div>
           <ResourceBadge
-            variant="avaliacao"
+            variant="lista"
             appearance="primary"
-            color="#FF246E"
+            className="shadow-none"
           />
         </div>
-
         {/* Search */}
         <div className="flex h-8 w-[487px] items-center rounded bg-[#F5F7FB] px-4 text-[#FF246E]">
           <SearchNormal size="16" color="currentColor" variant="Linear" />
@@ -40,7 +34,10 @@ export const Header: React.FC = () => {
             className="ml-2 w-full bg-transparent text-sm text-gray-600 outline-none placeholder:text-gray-400"
           />
         </div>
+      </div>
 
+      {/* Center: Controls */}
+      <div className="flex items-center gap-4">
         {/* Timer */}
         <div className="flex items-center gap-2 rounded-full border border-[#FFB6B6] bg-white px-4 py-2 text-[#FF246E]">
           <Timer size="20" color="currentColor" variant="Bold" />
@@ -50,14 +47,14 @@ export const Header: React.FC = () => {
         </div>
 
         {/* Refresh */}
-        <button className="flex h-10 w-10 items-center justify-center rounded-full text-[#FF246E] hover:bg-gray-100">
+        <div className="flex h-10 w-10 items-center justify-center rounded-full text-[#FF246E]">
           <RefreshCircle size="24" color="currentColor" variant="Bold" />
-        </button>
+        </div>
       </div>
 
       {/* Right: Menu */}
       <button className="flex h-10 w-10 items-center justify-center rounded-full text-[#FF246E] hover:bg-gray-100">
-        <Menu size="24" color="currentColor" variant="Linear" />
+        <HambergerMenu size="24" color="currentColor" variant="Linear" />
       </button>
     </header>
   )

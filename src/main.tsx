@@ -4,6 +4,7 @@ import { registerSW } from 'virtual:pwa-register'
 import App from '@/App.tsx'
 import '@/index.css'
 import '@/services/i18n'
+import 'ies2-aulapp-ui-kit/style.css'
 
 registerSW({ immediate: true })
 
