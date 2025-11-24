@@ -1,20 +1,31 @@
-import '@/App.css'
-import { useTranslation } from 'react-i18next'
+import { BrowserRouter, Routes, Route, Link } from 'react-router-dom'
+import { VirtualClassroom } from './pages/VirtualClassroom'
+import './App.css'
 
 function App() {
-  const { t, i18n } = useTranslation()
-
-  const toggle = () => {
-    const next = i18n.language.startsWith('pt') ? 'en' : 'pt'
-    i18n.changeLanguage(next)
-  }
-
   return (
-    <div className="app">
-      <h1>{t('hello')}</h1>
-      <p>{t('welcome')}</p>
-      <button onClick={toggle}>{t('change_language')}</button>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <div className="app">
+              <h1>Aulapp</h1>
+              <p>Aplicação educacional</p>
+              <nav className="mt-4">
+                <Link
+                  to="/sala-virtual"
+                  className="text-blue-400 hover:underline"
+                >
+                  Ir para Sala Virtual
+                </Link>
+              </nav>
+            </div>
+          }
+        />
+        <Route path="/sala-virtual" element={<VirtualClassroom />} />
+      </Routes>
+    </BrowserRouter>
   )
 }
 
