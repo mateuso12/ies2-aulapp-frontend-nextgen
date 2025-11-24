@@ -6,7 +6,7 @@ import {
   RefreshCircle,
   Menu,
 } from 'iconsax-react'
-
+import { ResourceBadge } from 'ies2-aulapp-ui-kit'
 export const Header: React.FC = () => {
   return (
     <header className="flex h-[88px] w-full items-center justify-between bg-white px-8 shadow-sm">
@@ -23,9 +23,13 @@ export const Header: React.FC = () => {
       {/* Center: Controls */}
       <div className="flex items-center gap-4">
         {/* Exercise List Button */}
-        <button className="flex h-[26px] items-center justify-center rounded bg-[#FBE7E4] px-2 text-sm font-medium text-[#FF246E] hover:bg-[#fad1cc]">
-          Lista de Exercícios
-        </button>
+        <div className="shrink-0 whitespace-nowrap">
+          <ResourceBadge
+            variant="avaliacao"
+            appearance="primary"
+            color="#FF246E"
+          />
+        </div>
 
         {/* Search */}
         <div className="flex h-8 w-[487px] items-center rounded bg-[#F5F7FB] px-4 text-[#FF246E]">
