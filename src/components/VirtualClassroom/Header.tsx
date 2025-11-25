@@ -2,11 +2,11 @@ import React from 'react'
 import {
   ArrowLeft,
   SearchNormal,
-  Timer,
   RefreshCircle,
   HambergerMenu,
 } from 'iconsax-react'
 import { ResourceBadge } from 'ies2-aulapp-ui-kit'
+import { Timer } from './Timer'
 export const Header: React.FC = () => {
   return (
     <header className="flex h-[88px] w-full items-center justify-between bg-white px-8 shadow-sm">
@@ -39,12 +39,7 @@ export const Header: React.FC = () => {
       {/* Center: Controls */}
       <div className="flex items-center gap-4">
         {/* Timer */}
-        <div className="flex items-center gap-2 rounded-full border border-[#FFB6B6] bg-white px-4 py-2 text-[#FF246E]">
-          <Timer size="20" color="currentColor" variant="Bold" />
-          <span className="font-sans text-base font-bold text-[#343A40]">
-            05:21
-          </span>
-        </div>
+        <Timer />
 
         {/* Refresh */}
         <div className="flex h-10 w-10 items-center justify-center rounded-full text-[#FF246E]">
