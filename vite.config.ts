@@ -6,7 +6,7 @@ import tailwindcss from '@tailwindcss/postcss'
 import autoprefixer from 'autoprefixer'
 
 // https://vite.dev/config/
-export default defineConfig({
+export default defineConfig(({ mode }) => ({
   css: {
     postcss: {
       plugins: [tailwindcss(), autoprefixer()],
@@ -46,7 +46,8 @@ export default defineConfig({
         ],
       },
       workbox: {
-        globPatterns: ['**/*.{js,css,html,ico,png,svg}'],
+        globPatterns:
+          mode === 'development' ? [] : ['**/*.{js,css,html,ico,png,svg}'],
         cleanupOutdatedCaches: true,
         clientsClaim: true,
         runtimeCaching: [
@@ -89,4 +90,4 @@ export default defineConfig({
       '@assets': path.resolve(__dirname, './src/assets'),
     },
   },
-})
+}))

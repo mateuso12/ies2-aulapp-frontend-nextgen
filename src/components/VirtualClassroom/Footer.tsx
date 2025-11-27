@@ -8,13 +8,51 @@ import {
   Edit2,
   Stickynote,
   Category,
+  RefreshLeftSquare,
 } from 'iconsax-react'
 
 export const Footer: React.FC = () => {
   return (
-    <footer className="relative flex h-[105px] w-full items-center justify-center bg-[#2C2C2C] px-8 text-white">
-      {/* Main Block (Centered) */}
-      <div className="flex w-full max-w-[1092px] items-center justify-between">
+    <footer className="relative flex w-full items-center justify-center bg-[#2C2C2C] text-white max-md:h-20 max-md:rounded-t-2xl max-md:px-4 md:h-[105px] md:px-8">
+      {/* Mobile Content */}
+      <div className="hidden w-full items-center justify-between max-md:flex">
+        {/* Left Tools */}
+        <div className="flex items-center gap-4">
+          <button className="p-2 hover:text-[#FF246E]">
+            <Category size="24" color="currentColor" variant="Linear" />
+          </button>
+          <button className="p-2 hover:text-[#FF246E]">
+            <RefreshLeftSquare
+              size="24"
+              color="currentColor"
+              variant="Linear"
+            />
+          </button>
+        </div>
+
+        {/* Center: Counter & Dots */}
+        <div className="flex flex-col items-center gap-1">
+          <span className="font-['Jacquard_12'] text-xl">1 de 8</span>
+          <div className="flex gap-1">
+            <div className="h-1.5 w-1.5 rounded-full bg-white" />
+            <div className="h-1.5 w-1.5 rounded-full bg-white/30" />
+            <div className="h-1.5 w-1.5 rounded-full bg-white/30" />
+          </div>
+        </div>
+
+        {/* Right Tools */}
+        <div className="flex items-center gap-4">
+          <button className="p-2 hover:text-[#FF246E]">
+            <ReceiveSquare size="24" color="currentColor" variant="Linear" />
+          </button>
+          <button className="p-2 hover:text-[#FF246E]">
+            <Maximize3 size="24" color="currentColor" variant="Linear" />
+          </button>
+        </div>
+      </div>
+
+      {/* Desktop Content */}
+      <div className="hidden w-full max-w-[1092px] items-center justify-between md:flex">
         {/* Left Arrow */}
         <button className="flex h-[54px] w-[54px] items-center justify-center rounded-full hover:bg-white/10">
           <ArrowCircleLeft size="45" color="currentColor" variant="Bold" />
@@ -55,8 +93,8 @@ export const Footer: React.FC = () => {
         </button>
       </div>
 
-      {/* Settings (Absolute Right) */}
-      <div className="absolute right-8">
+      {/* Settings (Desktop Only) */}
+      <div className="absolute right-8 hidden md:block">
         <button className="p-2 hover:text-[#FF246E]">
           <Setting2 size="24" color="currentColor" variant="Linear" />
         </button>
