@@ -3,7 +3,7 @@ import { VirtualClassroomLayout } from '../layouts/VirtualClassroomLayout'
 
 export const VirtualClassroom: React.FC = () => {
   return (
-    <VirtualClassroomLayout>
+    <VirtualClassroomLayout variant="gamified">
       <div className="flex h-full w-full items-center justify-center text-white">
         <div className="text-center">
           <h2 className="text-3xl font-bold">Conteúdo da Aula</h2>

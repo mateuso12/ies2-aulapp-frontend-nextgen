@@ -1,5 +1,6 @@
 @import 'tailwindcss';
 
 @theme {
+  --font-baloo: 'Baloo Bhaijaan 2', cursive;
   --font-sans: 'Plus Jakarta Sans', sans-serif;
 }
