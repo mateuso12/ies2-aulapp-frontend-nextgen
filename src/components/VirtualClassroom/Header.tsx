@@ -2,6 +2,8 @@ import React from 'react'
 import { HambergerMenu } from 'iconsax-react'
 import { HeaderActions } from './HeaderActions'
 import { HeaderStatus } from './HeaderStatus'
+import { SidebarMenu } from './SidebarMenu'
+import { motion } from 'framer-motion'
 
 interface HeaderProps {
   variant?: 'default' | 'gamified'
@@ -9,6 +11,8 @@ interface HeaderProps {
   score?: number
   redoCurrent?: number
   redoTotal?: number
+  currentPage?: number
+  totalPages?: number
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -17,8 +21,15 @@ export const Header: React.FC<HeaderProps> = ({
   score = 0,
   redoCurrent = 1,
   redoTotal = 3,
+  currentPage = 1,
+  totalPages = 1,
 }) => {
   if (variant === 'gamified') {
+    const progress = Math.min(
+      100,
+      Math.max(0, (currentPage / totalPages) * 100)
+    )
+
     return (
       <header className="fixed top-0 z-50 flex w-full items-center justify-between bg-white/18 backdrop-blur-sm px-8 py-6 pointer-events-none">
         {/* Left Pill */}
@@ -26,7 +37,12 @@ export const Header: React.FC<HeaderProps> = ({
 
         {/* Center Progress Bar */}
         <div className="pointer-events-auto h-4 w-full max-w-[400px] overflow-hidden rounded-full bg-white shadow-lg border-[3.38px] border-black/20">
-          <div className="h-full w-[70%] bg-linear-to-r from-[#FF5A82] to-[#FF246E]" />
+          <motion.div
+            className="h-full bg-linear-to-r from-[#FF5A82] to-[#FF246E]"
+            initial={{ width: 0 }}
+            animate={{ width: `${progress}%` }}
+            transition={{ duration: 1, ease: 'easeOut' }}
+          />
         </div>
 
         {/* Right Group */}
@@ -40,9 +56,11 @@ export const Header: React.FC<HeaderProps> = ({
           />
 
           {/* Menu Button - Ghost Variant */}
-          <button className="flex h-12 w-12 items-center justify-center text-[#FF246E] hover:bg-white/10 rounded-full transition-colors">
-            <HambergerMenu size="24" color="currentColor" variant="Linear" />
-          </button>
+          <SidebarMenu>
+            <button className="flex h-12 w-12 cursor-pointer items-center justify-center text-[#FF246E] hover:bg-white/10 rounded-full transition-colors">
+              <HambergerMenu size="24" color="currentColor" variant="Linear" />
+            </button>
+          </SidebarMenu>
         </div>
       </header>
     )
