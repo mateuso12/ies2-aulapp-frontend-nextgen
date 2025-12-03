@@ -18,10 +18,10 @@ export const Footer: React.FC = () => {
       <div className="hidden w-full items-center justify-between max-md:flex">
         {/* Left Tools */}
         <div className="flex items-center gap-4">
-          <button className="p-2 hover:text-[#FF246E]">
+          <button className="p-3 rounded-lg hover:bg-black hover:text-white cursor-pointer transition-colors">
             <Category size="24" color="currentColor" variant="Linear" />
           </button>
-          <button className="p-2 hover:text-[#FF246E]">
+          <button className="p-3 rounded-lg hover:bg-black hover:text-white transition-colors">
             <RefreshLeftSquare
               size="24"
               color="currentColor"
@@ -42,10 +42,10 @@ export const Footer: React.FC = () => {
 
         {/* Right Tools */}
         <div className="flex items-center gap-4">
-          <button className="p-2 hover:text-[#FF246E]">
+          <button className="p-3 rounded-lg hover:bg-black hover:text-white cursor-pointer transition-colors">
             <ReceiveSquare size="24" color="currentColor" variant="Linear" />
           </button>
-          <button className="p-2 hover:text-[#FF246E]">
+          <button className="p-3 rounded-lg hover:bg-black hover:text-white cursor-pointer transition-colors">
             <Maximize3 size="24" color="currentColor" variant="Linear" />
           </button>
         </div>
@@ -62,13 +62,13 @@ export const Footer: React.FC = () => {
         <div className="flex items-center gap-12">
           {/* Tools Group */}
           <div className="flex items-center gap-8">
-            <button className="p-2 hover:text-[#FF246E]">
+            <button className="p-3 rounded-lg hover:bg-black hover:text-white cursor-pointer transition-colors">
               <Category size="24" color="currentColor" variant="Linear" />
             </button>
-            <button className="p-2 hover:text-[#FF246E]">
+            <button className="p-3 rounded-lg hover:bg-black hover:text-white cursor-pointer transition-colors">
               <Stickynote size="24" color="currentColor" variant="Linear" />
             </button>
-            <button className="p-2 hover:text-[#FF246E]">
+            <button className="p-3 rounded-lg hover:bg-black hover:text-white cursor-pointer transition-colors">
               <Edit2 size="24" color="currentColor" variant="Linear" />
             </button>
           </div>
@@ -78,10 +78,10 @@ export const Footer: React.FC = () => {
 
           {/* Right Tools */}
           <div className="flex items-center gap-8">
-            <button className="p-2 hover:text-[#FF246E]">
+            <button className="p-3 rounded-lg hover:bg-black hover:text-white transition-colors">
               <ReceiveSquare size="24" color="currentColor" variant="Linear" />
             </button>
-            <button className="p-2 hover:text-[#FF246E]">
+            <button className="p-3 rounded-lg hover:bg-black hover:text-white transition-colors">
               <Maximize3 size="24" color="currentColor" variant="Linear" />
             </button>
           </div>
@@ -95,7 +95,7 @@ export const Footer: React.FC = () => {
 
       {/* Settings (Desktop Only) */}
       <div className="absolute right-8 hidden md:block">
-        <button className="p-2 hover:text-[#FF246E]">
+        <button className="p-3 rounded-lg hover:bg-black hover:text-white transition-colors">
           <Setting2 size="24" color="currentColor" variant="Linear" />
         </button>
       </div>
