@@ -44,7 +44,7 @@ export const HeaderStatus: React.FC<HeaderStatusProps> = ({
   return (
     <div className="relative flex flex-col items-center">
       {/* Main Status Container */}
-      <div className="flex items-center gap-8 rounded-4xl border-[3.38px] border-black/20 bg-[#D14B75] px-6 pb-8 pt-4 shadow-lg">
+      <div className="flex items-center gap-8 rounded-4xl border-[3.38px] border-black/20 bg-linear-to-r from-[#FF5A82] to-[#FF246E] px-6 pb-8 pt-4 shadow-lg">
         {/* Score */}
         <div className="flex items-center">
           <div
