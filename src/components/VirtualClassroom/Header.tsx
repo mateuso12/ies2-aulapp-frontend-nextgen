@@ -13,6 +13,7 @@ interface HeaderProps {
   redoTotal?: number
   currentPage?: number
   totalPages?: number
+  resourceType?: string
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -23,6 +24,7 @@ export const Header: React.FC<HeaderProps> = ({
   redoTotal = 3,
   currentPage = 1,
   totalPages = 1,
+  resourceType = 'content',
 }) => {
   if (variant === 'gamified') {
     const progress = Math.min(
@@ -31,12 +33,16 @@ export const Header: React.FC<HeaderProps> = ({
     )
 
     return (
-      <header className="fixed top-0 z-50 flex w-full items-center justify-between bg-white/18 backdrop-blur-sm px-8 py-6 pointer-events-none">
+      <header className="fixed top-0 z-50 flex w-full items-center justify-between bg-white/18 backdrop-blur-sm px-8 py-6">
         {/* Left Pill */}
-        <HeaderActions variant="gamified" title="Nome da Aula" />
+        <HeaderActions
+          variant="gamified"
+          title="Nome da Aula"
+          resourceType={resourceType}
+        />
 
         {/* Center Progress Bar */}
-        <div className="pointer-events-auto h-4 w-full max-w-[400px] overflow-hidden rounded-full bg-white shadow-lg border-[3.38px] border-black/20">
+        <div className="h-4 w-full max-w-[400px] overflow-hidden rounded-full bg-white shadow-lg border-[3.38px] border-black/20">
           <motion.div
             className="h-full bg-linear-to-r from-[#FF5A82] to-[#FF246E]"
             initial={{ width: 0 }}
@@ -46,7 +52,7 @@ export const Header: React.FC<HeaderProps> = ({
         </div>
 
         {/* Right Group */}
-        <div className="flex items-center gap-4 pointer-events-auto">
+        <div className="flex items-center gap-4">
           <HeaderStatus
             variant="gamified"
             lives={lives}
@@ -67,9 +73,13 @@ export const Header: React.FC<HeaderProps> = ({
   }
 
   return (
-    <header className="flex w-full items-center justify-between bg-white shadow-sm max-md:h-[60px] max-md:px-4 md:h-[88px] md:px-8">
+    <header className="relative z-20 flex w-full items-center justify-between bg-white shadow-[0px_4px_4px_rgba(0,0,0,0.25)] max-md:h-[60px] max-md:px-4 md:h-[88px] md:px-8">
       {/* Left: Back & Title */}
-      <HeaderActions variant="default" title="Nome da Aula" />
+      <HeaderActions
+        variant="default"
+        title="Nome da Aula"
+        resourceType={resourceType}
+      />
 
       {/* Center: Controls (Desktop Only) */}
       <div className="flex items-center gap-8">
