@@ -51,7 +51,7 @@ export const VirtualClassroomLayout: React.FC<VirtualClassroomLayoutProps> = ({
     isVisible,
     setIsVisible,
     clearStrokes,
-  } = useAnnotations(`page-${currentPage}`)
+  } = useAnnotations(`page-${currentPage}`, 'user-1')
 
   const mainRef = useRef<HTMLDivElement>(null)
   const { scrollY } = useScroll({ container: mainRef })
