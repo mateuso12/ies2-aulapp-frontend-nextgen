@@ -14,11 +14,19 @@ import {
 interface FooterProps {
   onToggleAnnotations?: () => void
   resourceType?: string
+  currentPage?: number
+  totalPages?: number
+  onNext?: () => void
+  onPrevious?: () => void
 }
 
 export const Footer: React.FC<FooterProps> = ({
   onToggleAnnotations,
   resourceType = 'content',
+  currentPage = 1,
+  totalPages = 1,
+  onNext,
+  onPrevious,
 }) => {
   const showTools = resourceType === 'content' || resourceType === 'material'
 
@@ -42,7 +50,10 @@ export const Footer: React.FC<FooterProps> = ({
 
         {/* Center: Counter & Dots */}
         <div className="flex flex-col items-center gap-1">
-          <span className="font-['Jacquard_12'] text-xl">1 de 8</span>
+          <span className="font-plus-jakarta text-xl">
+            <span className="font-bold">{currentPage}</span> de{' '}
+            <span className="font-bold">{totalPages}</span>
+          </span>
           <div className="flex gap-1">
             <div className="h-1.5 w-1.5 rounded-full bg-white" />
             <div className="h-1.5 w-1.5 rounded-full bg-white/30" />
@@ -64,7 +75,13 @@ export const Footer: React.FC<FooterProps> = ({
       {/* Desktop Content */}
       <div className="hidden w-full max-w-[1092px] items-center justify-between md:flex">
         {/* Left Arrow */}
-        <button className="flex h-[54px] w-[54px] items-center justify-center rounded-full hover:bg-white/10 cursor-pointer">
+        <button
+          onClick={onPrevious}
+          disabled={currentPage <= 1}
+          className={`flex h-[54px] w-[54px] items-center justify-center rounded-full hover:bg-white/10 cursor-pointer ${
+            currentPage <= 1 ? 'opacity-50 cursor-not-allowed' : ''
+          }`}
+        >
           <ArrowCircleLeft size="45" color="currentColor" variant="Bold" />
         </button>
 
@@ -96,7 +113,10 @@ export const Footer: React.FC<FooterProps> = ({
           </div>
 
           {/* Slide Counter */}
-          <span className="font-['Jacquard_12'] text-2xl">5 de 19</span>
+          <span className="font-plus-jakarta text-2xl">
+            <span className="font-bold">{currentPage}</span> de{' '}
+            <span className="font-bold">{totalPages}</span>
+          </span>
 
           {/* Right Tools */}
           <div className="flex items-center gap-8">
@@ -112,7 +132,13 @@ export const Footer: React.FC<FooterProps> = ({
         </div>
 
         {/* Right Arrow */}
-        <button className="flex h-[54px] w-[54px] items-center justify-center rounded-full hover:bg-white/10 cursor-pointer">
+        <button
+          onClick={onNext}
+          disabled={currentPage >= totalPages}
+          className={`flex h-[54px] w-[54px] items-center justify-center rounded-full hover:bg-white/10 cursor-pointer ${
+            currentPage >= totalPages ? 'opacity-50 cursor-not-allowed' : ''
+          }`}
+        >
           <ArrowCircleRight size="45" color="currentColor" variant="Bold" />
         </button>
       </div>
