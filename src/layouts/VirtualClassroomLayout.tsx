@@ -22,8 +22,10 @@ interface VirtualClassroomLayoutProps {
   resourceType?: ResourceType | string
   currentPage?: number
   totalPages?: number
+  pages?: { id: string | number; content: React.ReactNode }[]
   onNext?: () => void
   onPrevious?: () => void
+  onPageSelect?: (page: number) => void
 }
 
 export const VirtualClassroomLayout: React.FC<VirtualClassroomLayoutProps> = ({
@@ -32,8 +34,10 @@ export const VirtualClassroomLayout: React.FC<VirtualClassroomLayoutProps> = ({
   resourceType: initialResourceType = 'content',
   currentPage = 1,
   totalPages = 1,
+  pages = [],
   onNext,
   onPrevious,
+  onPageSelect,
 }) => {
   const [variant, setVariant] = useState(initialVariant)
   const [resourceType, setResourceType] = useState(initialResourceType)
@@ -129,8 +133,10 @@ export const VirtualClassroomLayout: React.FC<VirtualClassroomLayoutProps> = ({
         resourceType={resourceType}
         currentPage={currentPage}
         totalPages={totalPages}
+        pages={pages}
         onNext={onNext}
         onPrevious={onPrevious}
+        onPageSelect={onPageSelect}
       />
 
       {/* DevTools - Only visible in development */}

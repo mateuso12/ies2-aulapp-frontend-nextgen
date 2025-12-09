@@ -19,13 +19,21 @@ export const VirtualClassroom: React.FC = () => {
     }
   }
 
+  const handlePageSelect = (page: number) => {
+    if (page >= 1 && page <= totalPages) {
+      setCurrentPageIndex(page - 1)
+    }
+  }
+
   return (
     <VirtualClassroomLayout
       variant="gamified"
       currentPage={currentPageIndex + 1}
       totalPages={totalPages}
+      pages={mockContentPages}
       onNext={handleNext}
       onPrevious={handlePrevious}
+      onPageSelect={handlePageSelect}
     >
       <div className="text-gray-800">{currentPage.content}</div>
     </VirtualClassroomLayout>
