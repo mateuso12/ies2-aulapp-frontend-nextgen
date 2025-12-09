@@ -92,9 +92,11 @@ export const Header: React.FC<HeaderProps> = ({
         />
 
         {/* Right: Menu */}
-        <button className="flex h-10 w-10 items-center justify-center rounded-full text-[#FF246E] hover:bg-gray-100">
-          <HambergerMenu size="24" color="currentColor" variant="Linear" />
-        </button>
+        <SidebarMenu>
+          <button className="flex h-10 w-10 items-center justify-center rounded-full text-[#FF246E] hover:bg-gray-100 cursor-pointer">
+            <HambergerMenu size="24" color="currentColor" variant="Linear" />
+          </button>
+        </SidebarMenu>
       </div>
     </header>
   )
