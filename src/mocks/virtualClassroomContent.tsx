@@ -111,4 +111,211 @@ export const mockContentPages: ContentPage[] = [
       </>
     ),
   },
+  {
+    id: 5,
+    title: 'Geometria Plana',
+    content: (
+      <>
+        <h2 className="text-2xl font-bold mt-8 mb-4 text-gray-700">
+          Geometria Plana
+        </h2>
+        <p className="mb-4 text-lg leading-relaxed">
+          A geometria plana estuda as figuras que possuem apenas duas dimensões:
+          comprimento e largura.
+        </p>
+        <div className="flex gap-4 my-8 justify-center">
+          <div className="w-24 h-24 border-2 border-blue-500 bg-blue-100 flex items-center justify-center">
+            Quadrado
+          </div>
+          <div className="w-24 h-24 rounded-full border-2 border-red-500 bg-red-100 flex items-center justify-center">
+            Círculo
+          </div>
+          <div className="w-0 h-0 border-l-50 border-l-transparent border-b-100 border-b-green-500 border-r-50 border-r-transparent relative">
+            <span className="absolute top-12 -left-4 text-white font-bold text-xs">
+              Triângulo
+            </span>
+          </div>
+        </div>
+      </>
+    ),
+  },
+  {
+    id: 6,
+    title: 'Álgebra Elementar',
+    content: (
+      <>
+        <h2 className="text-2xl font-bold mt-8 mb-4 text-gray-700">
+          Álgebra Elementar
+        </h2>
+        <p className="mb-4 text-lg leading-relaxed">
+          A álgebra introduz o uso de letras para representar números
+          desconhecidos em equações.
+        </p>
+        <div className="p-6 bg-gray-100 rounded-lg font-mono text-xl text-center my-6">
+          x + 5 = 10 <br />x = 5
+        </div>
+      </>
+    ),
+  },
+  {
+    id: 7,
+    title: 'Frações e Decimais',
+    content: (
+      <>
+        <h2 className="text-2xl font-bold mt-8 mb-4 text-gray-700">
+          Frações e Decimais
+        </h2>
+        <p className="mb-4 text-lg leading-relaxed">
+          Frações representam partes de um todo. Decimais são outra forma de
+          representar números fracionários.
+        </p>
+        <div className="grid grid-cols-2 gap-8 my-6">
+          <div className="text-center p-4 border rounded">
+            <div className="text-3xl font-bold">1/2</div>
+            <div className="text-sm text-gray-500">Metade</div>
+          </div>
+          <div className="text-center p-4 border rounded">
+            <div className="text-3xl font-bold">0.5</div>
+            <div className="text-sm text-gray-500">Cinco décimos</div>
+          </div>
+        </div>
+      </>
+    ),
+  },
+  {
+    id: 8,
+    title: 'Porcentagem',
+    content: (
+      <>
+        <h2 className="text-2xl font-bold mt-8 mb-4 text-gray-700">
+          Porcentagem
+        </h2>
+        <p className="mb-4 text-lg leading-relaxed">
+          Porcentagem é uma medida de razão com base 100. É amplamente usada
+          para calcular descontos, juros e estatísticas.
+        </p>
+        <div className="w-full bg-gray-200 rounded-full h-6 mb-4 dark:bg-gray-700">
+          <div
+            className="bg-blue-600 h-6 rounded-full text-xs font-medium text-blue-100 text-center p-0.5 leading-none"
+            style={{ width: '75%' }}
+          >
+            {' '}
+            75%
+          </div>
+        </div>
+      </>
+    ),
+  },
+  {
+    id: 9,
+    title: 'Estatística Básica',
+    content: (
+      <>
+        <h2 className="text-2xl font-bold mt-8 mb-4 text-gray-700">
+          Estatística Básica
+        </h2>
+        <p className="mb-4 text-lg leading-relaxed">
+          Média, moda e mediana são conceitos centrais para analisar conjuntos
+          de dados.
+        </p>
+      </>
+    ),
+  },
+  {
+    id: 10,
+    title: 'Probabilidade',
+    content: (
+      <>
+        <h2 className="text-2xl font-bold mt-8 mb-4 text-gray-700">
+          Probabilidade
+        </h2>
+        <p className="mb-4 text-lg leading-relaxed">
+          Estuda as chances de um evento ocorrer. Fundamental para jogos,
+          previsões meteorológicas e riscos.
+        </p>
+      </>
+    ),
+  },
+  {
+    id: 11,
+    title: 'Teorema de Pitágoras',
+    content: (
+      <>
+        <h2 className="text-2xl font-bold mt-8 mb-4 text-gray-700">
+          Teorema de Pitágoras
+        </h2>
+        <p className="mb-4 text-lg leading-relaxed">
+          Em um triângulo retângulo, o quadrado da hipotenusa é igual à soma dos
+          quadrados dos catetos.
+        </p>
+        <div className="text-center text-2xl font-serif italic my-6">
+          a² + b² = c²
+        </div>
+      </>
+    ),
+  },
+  {
+    id: 12,
+    title: 'Trigonometria',
+    content: (
+      <>
+        <h2 className="text-2xl font-bold mt-8 mb-4 text-gray-700">
+          Trigonometria
+        </h2>
+        <p className="mb-4 text-lg leading-relaxed">
+          Estuda as relações entre os ângulos e os lados dos triângulos. Seno,
+          Cosseno e Tangente.
+        </p>
+      </>
+    ),
+  },
+  {
+    id: 13,
+    title: 'Funções',
+    content: (
+      <>
+        <h2 className="text-2xl font-bold mt-8 mb-4 text-gray-700">Funções</h2>
+        <p className="mb-4 text-lg leading-relaxed">
+          Uma relação entre dois conjuntos onde cada elemento do primeiro
+          conjunto se associa a um único elemento do segundo.
+        </p>
+        <div className="p-4 border border-dashed border-gray-400 rounded text-center">
+          f(x) = y
+        </div>
+      </>
+    ),
+  },
+  {
+    id: 14,
+    title: 'Logaritmos',
+    content: (
+      <>
+        <h2 className="text-2xl font-bold mt-8 mb-4 text-gray-700">
+          Logaritmos
+        </h2>
+        <p className="mb-4 text-lg leading-relaxed">
+          O inverso da exponenciação. Usado para medir escalas como Richter
+          (terremotos) e pH (química).
+        </p>
+      </>
+    ),
+  },
+  {
+    id: 15,
+    title: 'Conclusão',
+    content: (
+      <>
+        <h2 className="text-2xl font-bold mt-8 mb-4 text-gray-700">
+          Conclusão do Curso
+        </h2>
+        <p className="mb-4 text-lg leading-relaxed">
+          Parabéns por completar a introdução à matemática! Continue praticando
+          para dominar esses conceitos.
+        </p>
+        <div className="flex justify-center my-10">
+          <div className="text-6xl">🎓</div>
+        </div>
+      </>
+    ),
+  },
 ]

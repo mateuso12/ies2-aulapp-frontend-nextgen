@@ -6,6 +6,7 @@ import type { PageData } from '../components/VirtualClassroom/PageReel'
 export const VirtualClassroom: React.FC = () => {
   const [currentPageIndex, setCurrentPageIndex] = useState(0)
   const [visitedPages, setVisitedPages] = useState<number[]>([1])
+  const [maxReachedIndex, setMaxReachedIndex] = useState(0)
   const currentPage = mockContentPages[currentPageIndex]
   const totalPages = mockContentPages.length
 
@@ -17,7 +18,11 @@ export const VirtualClassroom: React.FC = () => {
       }
       return prev
     })
-  }, [currentPageIndex])
+
+    if (currentPageIndex > maxReachedIndex) {
+      setMaxReachedIndex(currentPageIndex)
+    }
+  }, [currentPageIndex, maxReachedIndex])
 
   const handleNext = () => {
     if (currentPageIndex < totalPages - 1) {
@@ -42,8 +47,8 @@ export const VirtualClassroom: React.FC = () => {
     const pageNumber = index + 1
     // Mock logic:
     // - Pages visited are completed
-    // - Pages after current + 2 are locked (just for demo)
-    const isLocked = pageNumber > currentPageIndex + 3
+    // - Pages after max reached + 2 are locked (just for demo)
+    const isLocked = pageNumber > maxReachedIndex + 3
     const isCompleted = visitedPages.includes(pageNumber)
 
     return {
@@ -60,7 +65,6 @@ export const VirtualClassroom: React.FC = () => {
 
   return (
     <VirtualClassroomLayout
-      variant="gamified"
       currentPage={currentPageIndex + 1}
       totalPages={totalPages}
       pages={pagesData}
