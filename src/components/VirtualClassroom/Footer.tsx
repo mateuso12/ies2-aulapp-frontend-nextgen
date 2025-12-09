@@ -1,9 +1,10 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import {
   Setting2,
   ArrowCircleRight,
   ArrowCircleLeft,
   Maximize3,
+  Minus,
   ReceiveSquare,
   Edit2,
   Stickynote,
@@ -29,6 +30,32 @@ export const Footer: React.FC<FooterProps> = ({
   onPrevious,
 }) => {
   const showTools = resourceType === 'content' || resourceType === 'material'
+  const [isFullscreen, setIsFullscreen] = useState(false)
+
+  useEffect(() => {
+    const handleFullscreenChange = () => {
+      setIsFullscreen(!!document.fullscreenElement)
+    }
+
+    document.addEventListener('fullscreenchange', handleFullscreenChange)
+    return () => {
+      document.removeEventListener('fullscreenchange', handleFullscreenChange)
+    }
+  }, [])
+
+  const toggleFullscreen = () => {
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen().catch((e) => {
+        console.error(
+          `Error attempting to enable fullscreen mode: ${e.message} (${e.name})`
+        )
+      })
+    } else {
+      if (document.exitFullscreen) {
+        document.exitFullscreen()
+      }
+    }
+  }
 
   return (
     <footer className="relative flex w-full items-center justify-center bg-[#2C2C2C] text-white max-md:h-20 max-md:rounded-t-2xl max-md:px-4 md:h-[105px] md:px-8">
@@ -66,8 +93,15 @@ export const Footer: React.FC<FooterProps> = ({
           <button className="p-3 rounded-lg hover:bg-black hover:text-white cursor-pointer transition-colors">
             <ReceiveSquare size="24" color="currentColor" variant="Linear" />
           </button>
-          <button className="p-3 rounded-lg hover:bg-black hover:text-white cursor-pointer transition-colors">
-            <Maximize3 size="24" color="currentColor" variant="Linear" />
+          <button
+            onClick={toggleFullscreen}
+            className="p-3 rounded-lg hover:bg-black hover:text-white cursor-pointer transition-colors"
+          >
+            {isFullscreen ? (
+              <Minus size="24" color="currentColor" variant="Linear" />
+            ) : (
+              <Maximize3 size="24" color="currentColor" variant="Linear" />
+            )}
           </button>
         </div>
       </div>
@@ -124,8 +158,15 @@ export const Footer: React.FC<FooterProps> = ({
               <ReceiveSquare size="24" color="currentColor" variant="Linear" />
             </button>
             {showTools && (
-              <button className="p-3 rounded-lg hover:bg-black hover:text-white cursor-pointer transition-colors">
-                <Maximize3 size="24" color="currentColor" variant="Linear" />
+              <button
+                onClick={toggleFullscreen}
+                className="p-3 rounded-lg hover:bg-black hover:text-white cursor-pointer transition-colors"
+              >
+                {isFullscreen ? (
+                  <Minus size="24" color="currentColor" variant="Linear" />
+                ) : (
+                  <Maximize3 size="24" color="currentColor" variant="Linear" />
+                )}
               </button>
             )}
           </div>
@@ -146,8 +187,15 @@ export const Footer: React.FC<FooterProps> = ({
       {/* Settings (Desktop Only) */}
       <div className="absolute right-8 hidden items-center gap-2 md:flex">
         {!showTools && (
-          <button className="p-3 rounded-lg hover:bg-black hover:text-white cursor-pointer transition-colors">
-            <Maximize3 size="24" color="currentColor" variant="Linear" />
+          <button
+            onClick={toggleFullscreen}
+            className="p-3 rounded-lg hover:bg-black hover:text-white cursor-pointer transition-colors"
+          >
+            {isFullscreen ? (
+              <Minus size="24" color="currentColor" variant="Linear" />
+            ) : (
+              <Maximize3 size="24" color="currentColor" variant="Linear" />
+            )}
           </button>
         )}
         <button className="p-3 rounded-lg hover:bg-black hover:text-white cursor-pointer transition-colors">
