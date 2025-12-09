@@ -6,6 +6,7 @@ import { Paper } from '../components/VirtualClassroom/Paper'
 import { DrawingArea } from '../components/Annotations/DrawingArea'
 import { useAnnotations } from '../hooks/useAnnotations'
 import { motion, useScroll, useTransform } from 'framer-motion'
+import type { PageData } from '../components/VirtualClassroom/PageReel'
 
 export type ResourceType =
   | 'content'
@@ -22,7 +23,7 @@ interface VirtualClassroomLayoutProps {
   resourceType?: ResourceType | string
   currentPage?: number
   totalPages?: number
-  pages?: { id: string | number; content: React.ReactNode }[]
+  pages?: PageData[]
   onNext?: () => void
   onPrevious?: () => void
   onPageSelect?: (page: number) => void

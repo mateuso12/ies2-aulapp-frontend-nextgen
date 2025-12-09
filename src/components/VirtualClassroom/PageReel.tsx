@@ -1,11 +1,22 @@
 import React, { useState } from 'react'
 import { Maximize2, Minimize2 } from 'lucide-react'
+import { TickCircle, Edit2, Stickynote, ArchiveAdd, Lock } from 'iconsax-react'
 import { motion, AnimatePresence } from 'framer-motion'
+
+export interface PageData {
+  id: string | number
+  content: React.ReactNode
+  isLocked?: boolean
+  isCompleted?: boolean
+  hasDrawings?: boolean
+  hasAnnotations?: boolean
+  isBookmarked?: boolean
+}
 
 interface PageReelProps {
   isOpen: boolean
   onClose: () => void
-  pages: { id: string | number; content: React.ReactNode }[]
+  pages: PageData[]
   currentPage: number
   onPageSelect: (pageIndex: number) => void
 }
@@ -56,22 +67,41 @@ export const PageReel: React.FC<PageReelProps> = ({
             {pages.map((page, index) => {
               const pageNumber = index + 1
               const isActive = currentPage === pageNumber
+              const isLocked = page.isLocked
+              const isCompleted = page.isCompleted && !isActive
+
+              // Styles based on state
+              let borderClass = 'border-transparent'
+              let shadowClass = ''
+              let overlayClass = 'bg-transparent'
+              let numberColorClass = 'text-white'
+
+              if (isActive) {
+                borderClass = 'border-[#487BFF] border-4'
+                shadowClass = 'shadow-[0_0_24px_rgba(72,123,255,1)]'
+                overlayClass = 'bg-transparent'
+                numberColorClass = 'text-white'
+              } else if (isCompleted) {
+                borderClass = 'border-[#46B35E] border-2'
+                overlayClass = 'bg-[#46B35E]/25'
+                numberColorClass = 'text-white'
+              } else if (isLocked) {
+                overlayClass = 'bg-white/40'
+                numberColorClass = 'text-white/50'
+              }
 
               return (
                 <button
                   key={index}
-                  onClick={() => onPageSelect(pageNumber)}
-                  className={`relative shrink-0 group flex flex-col items-center gap-2 transition-all cursor-pointer ${
-                    isMaximized ? 'w-full' : 'w-[198px]'
-                  }`}
+                  onClick={() => !isLocked && onPageSelect(pageNumber)}
+                  disabled={isLocked}
+                  className={`relative shrink-0 group flex flex-col items-center gap-2 transition-all ${
+                    isLocked ? 'cursor-not-allowed' : 'cursor-pointer'
+                  } ${isMaximized ? 'w-full' : 'w-[198px]'}`}
                 >
                   {/* Thumbnail Container */}
                   <div
-                    className={`relative w-full aspect-4/3 rounded-lg overflow-hidden bg-white border-2 transition-all ${
-                      isActive
-                        ? 'border-[#FF246E] shadow-[0_0_10px_rgba(255,36,110,0.5)]'
-                        : 'border-transparent group-hover:border-white/30'
-                    }`}
+                    className={`relative w-full aspect-4/3 rounded-lg overflow-hidden bg-white transition-all ${borderClass} ${shadowClass}`}
                   >
                     {/* Page Preview */}
                     <div className="absolute inset-0 overflow-hidden bg-white">
@@ -80,13 +110,55 @@ export const PageReel: React.FC<PageReelProps> = ({
                       </div>
                     </div>
 
-                    {/* Overlay for interaction handling */}
-                    <div className="absolute inset-0 bg-transparent" />
-
-                    {/* Page Number Badge */}
-                    <div className="absolute top-2 left-2 bg-white text-black font-bold text-xs px-2 py-1 rounded shadow-sm z-10">
-                      {pageNumber}
+                    {/* State Overlay */}
+                    <div
+                      className={`absolute inset-0 ${overlayClass} transition-colors flex items-center justify-center text-muted-foreground`}
+                    >
+                      {isLocked && (
+                        <Lock size={32} variant="Bold" color="currentColor" />
+                      )}
                     </div>
+
+                    {/* Feature Icons (Top Left) */}
+                    <div className="absolute top-2 left-2 flex gap-1">
+                      {page.hasAnnotations && (
+                        <div className="w-8 h-8 bg-[#8A5CCC] rounded-lg flex items-center justify-center shadow-sm text-white">
+                          <Stickynote
+                            size={24}
+                            variant="Outline"
+                            color="currentColor"
+                          />
+                        </div>
+                      )}
+                      {page.hasDrawings && (
+                        <div className="w-8 h-8 bg-[#F3C353] rounded-lg flex items-center justify-center shadow-sm text-black">
+                          <Edit2
+                            size={24}
+                            variant="Outline"
+                            color="currentColor"
+                          />
+                        </div>
+                      )}
+                      {page.isBookmarked && (
+                        <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center shadow-sm text-[#487BFF]">
+                          <ArchiveAdd
+                            size={24}
+                            variant="Bold"
+                            color="currentColor"
+                          />
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Footer: Page Number & Status */}
+                  <div className="flex items-center justify-center gap-2 mt-1">
+                    {isCompleted && (
+                      <TickCircle size={20} variant="Bold" color="#46B35E" />
+                    )}
+                    <span className={`font-bold text-lg ${numberColorClass}`}>
+                      {pageNumber}
+                    </span>
                   </div>
                 </button>
               )

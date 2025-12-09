@@ -11,14 +11,14 @@ import {
   Category,
   RefreshLeftSquare,
 } from 'iconsax-react'
-import { PageReel } from './PageReel'
+import { PageReel, type PageData } from './PageReel'
 
 interface FooterProps {
   onToggleAnnotations?: () => void
   resourceType?: string
   currentPage?: number
   totalPages?: number
-  pages?: { id: string | number; content: React.ReactNode }[]
+  pages?: PageData[]
   onNext?: () => void
   onPrevious?: () => void
   onPageSelect?: (page: number) => void
