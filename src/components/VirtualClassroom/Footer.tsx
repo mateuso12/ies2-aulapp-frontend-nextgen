@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react'
+import { Maximize2, Minimize2 } from 'lucide-react'
 import {
   Setting2,
   ArrowCircleRight,
   ArrowCircleLeft,
-  Maximize3,
-  Minus,
   ReceiveSquare,
   Edit2,
   Stickynote,
@@ -40,7 +39,7 @@ export const Footer: React.FC<FooterProps> = ({
   const [isFullscreen, setIsFullscreen] = useState(false)
   const [isPageReelOpen, setIsPageReelOpen] = useState(false)
   // Remove local state for annotations active, rely on prop or internal if not provided?
-  // Actually, to support both controlled and uncontrolled, we can use a local state initialized with prop, 
+  // Actually, to support both controlled and uncontrolled, we can use a local state initialized with prop,
   // but here the parent controls the visibility (overlay).
   // So we should rely on isAnnotationsVisible.
 
@@ -159,13 +158,9 @@ export const Footer: React.FC<FooterProps> = ({
             </button>
             <button
               onClick={toggleFullscreen}
-              className="p-3 rounded-lg hover:bg-black hover:text-white cursor-pointer transition-colors"
+              className="p-3.5 rounded-lg hover:bg-black hover:text-white cursor-pointer transition-colors"
             >
-              {isFullscreen ? (
-                <Minus size="24" color="currentColor" variant="Linear" />
-              ) : (
-                <Maximize3 size="24" color="currentColor" variant="Linear" />
-              )}
+              {isFullscreen ? <Minimize2 size={20} /> : <Maximize2 size={20} />}
             </button>
           </div>
         </div>
@@ -237,16 +232,12 @@ export const Footer: React.FC<FooterProps> = ({
               {showTools && (
                 <button
                   onClick={toggleFullscreen}
-                  className="p-3 rounded-lg hover:bg-black hover:text-white cursor-pointer transition-colors"
+                  className="p-3.5 rounded-lg hover:bg-black hover:text-white cursor-pointer transition-colors"
                 >
                   {isFullscreen ? (
-                    <Minus size="24" color="currentColor" variant="Linear" />
+                    <Minimize2 size={20} />
                   ) : (
-                    <Maximize3
-                      size="24"
-                      color="currentColor"
-                      variant="Linear"
-                    />
+                    <Maximize2 size={20} />
                   )}
                 </button>
               )}
@@ -270,13 +261,9 @@ export const Footer: React.FC<FooterProps> = ({
           {!showTools && (
             <button
               onClick={toggleFullscreen}
-              className="p-3 rounded-lg hover:bg-black hover:text-white cursor-pointer transition-colors"
+              className="p-3.5 rounded-lg hover:bg-black hover:text-white cursor-pointer transition-colors"
             >
-              {isFullscreen ? (
-                <Minus size="24" color="currentColor" variant="Linear" />
-              ) : (
-                <Maximize3 size="24" color="currentColor" variant="Linear" />
-              )}
+              {isFullscreen ? <Minimize2 size={20} /> : <Maximize2 size={20} />}
             </button>
           )}
           <button className="p-3 rounded-lg hover:bg-black hover:text-white cursor-pointer transition-colors">

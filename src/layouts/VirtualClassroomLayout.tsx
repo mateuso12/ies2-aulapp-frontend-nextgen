@@ -137,6 +137,7 @@ export const VirtualClassroomLayout: React.FC<VirtualClassroomLayoutProps> = ({
         isOpen={isBookmarksSidebarOpen}
         onClose={() => setIsBookmarksSidebarOpen(false)}
         bookmarks={bookmarks}
+        currentPage={currentPage}
         onRemoveBookmark={(page) => onRemoveBookmark?.(page)}
         onNavigate={(page) => onPageSelect?.(page)}
       />

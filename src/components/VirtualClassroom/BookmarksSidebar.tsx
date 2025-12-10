@@ -6,6 +6,7 @@ interface BookmarksSidebarProps {
   isOpen: boolean
   onClose: () => void
   bookmarks: number[]
+  currentPage?: number
   onRemoveBookmark: (page: number) => void
   onNavigate: (page: number) => void
 }
@@ -14,6 +15,7 @@ export const BookmarksSidebar: React.FC<BookmarksSidebarProps> = ({
   isOpen,
   onClose,
   bookmarks,
+  currentPage,
   onRemoveBookmark,
   onNavigate,
 }) => {
@@ -66,45 +68,59 @@ export const BookmarksSidebar: React.FC<BookmarksSidebarProps> = ({
                     Nenhuma página marcada.
                   </div>
                 ) : (
-                  bookmarks.map((page) => (
-                    <div
-                      key={page}
-                      className="flex flex-col gap-2 rounded-lg bg-white p-4 shadow-sm"
-                    >
-                      <div className="flex items-center justify-between">
-                        <span className="font-bold text-[#343A40]">
-                          Página {page}
-                        </span>
-                        <button
-                          onClick={() => onRemoveBookmark(page)}
-                          className="text-[#343A40] hover:text-red-500 transition-colors cursor-pointer"
+                  bookmarks.map((page) => {
+                    const isActive = currentPage === page
+                    return (
+                      <div
+                        key={page}
+                        onClick={() => {
+                          if (!isActive) {
+                            onNavigate(page)
+                            onClose()
+                          }
+                        }}
+                        className={`group flex w-full flex-col gap-4 rounded-lg bg-white p-4 transition-all border text-left ${
+                          isActive
+                            ? 'border-[#487BFF] cursor-default'
+                            : 'border-transparent hover:border-black cursor-pointer'
+                        }`}
+                      >
+                        <div className="flex w-full items-center justify-between">
+                          <span className="font-bold text-[#343A40]">
+                            Página {page}
+                          </span>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              onRemoveBookmark(page)
+                            }}
+                            className="text-[#343A40] hover:text-red-500 transition-colors cursor-pointer"
+                          >
+                            <Trash
+                              size="24"
+                              color="currentColor"
+                              variant="Linear"
+                            />
+                          </button>
+                        </div>
+
+                        <div
+                          className={`flex w-full items-center justify-end gap-2 text-[#6C757D] group-hover:text-[#487BFF] transition-colors ${
+                            isActive ? 'invisible' : ''
+                          }`}
                         >
-                          <Trash
-                            size="24"
+                          <span className="text-sm font-normal leading-[18px]">
+                            Ir para Marcador
+                          </span>
+                          <ArrowRight2
+                            size="16"
                             color="currentColor"
                             variant="Linear"
                           />
-                        </button>
+                        </div>
                       </div>
-
-                      <button
-                        onClick={() => {
-                          onNavigate(page)
-                          onClose()
-                        }}
-                        className="flex w-full items-center justify-center gap-2 mt-1 py-1 cursor-pointer text-[#6C757D] hover:text-[#487BFF] transition-colors"
-                      >
-                        <span className="text-sm font-normal flex items-center leading-none">
-                          Ir para Marcador
-                        </span>
-                        <ArrowRight2
-                          size="16"
-                          color="currentColor"
-                          variant="Linear"
-                        />
-                      </button>
-                    </div>
-                  ))
+                    )
+                  })
                 )}
               </div>
             </div>
