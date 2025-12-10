@@ -98,6 +98,32 @@ export const VirtualClassroomLayout: React.FC<VirtualClassroomLayoutProps> = ({
     </button>
   )
 
+  // Enhance pages with drawing status from localStorage/state
+  const enhancedPages = pages.map((page, index) => {
+    const pageNum = index + 1
+    const storageKey = `annotations-user-1-page-${pageNum}`
+    let hasStoredDrawings = false
+    try {
+      const stored = localStorage.getItem(storageKey)
+      if (stored) {
+        const parsed = JSON.parse(stored)
+        hasStoredDrawings = Array.isArray(parsed) && parsed.length > 0
+      }
+    } catch {
+      // Ignore storage errors
+    }
+
+    const isCurrentPage = pageNum === currentPage
+    const hasDrawings = isCurrentPage ? strokes.length > 0 : hasStoredDrawings
+
+    return {
+      ...page,
+      hasDrawings,
+      // Reset hasAnnotations as we only track drawings for now
+      hasAnnotations: false,
+    }
+  })
+
   return (
     <div className="flex h-screen w-full flex-col overflow-hidden bg-[#1E1E1E]">
       <Header
@@ -183,10 +209,11 @@ export const VirtualClassroomLayout: React.FC<VirtualClassroomLayoutProps> = ({
 
       <Footer
         onToggleAnnotations={() => setIsVisible(!isVisible)}
+        isAnnotationsVisible={isVisible}
         resourceType={resourceType}
         currentPage={currentPage}
         totalPages={totalPages}
-        pages={pages}
+        pages={enhancedPages}
         onNext={onNext}
         onPrevious={onPrevious}
         onPageSelect={onPageSelect}

@@ -50,9 +50,10 @@ export const PageReel: React.FC<PageReelProps> = ({
           <div className="absolute top-4 right-4 flex gap-2 z-10">
             <button
               onClick={() => setIsMaximized(!isMaximized)}
-              className="p-2 rounded-lg bg-white/10 hover:bg-white/20 text-white transition-colors cursor-pointer"
+              className="p-3 rounded-lg bg-black/50 hover:bg-black/70 text-white transition-colors cursor-pointer backdrop-blur-sm border border-white/10"
+              title={isMaximized ? 'Minimizar' : 'Maximizar'}
             >
-              {isMaximized ? <Minimize2 size={20} /> : <Maximize2 size={20} />}
+              {isMaximized ? <Minimize2 size={24} /> : <Maximize2 size={24} />}
             </button>
           </div>
 

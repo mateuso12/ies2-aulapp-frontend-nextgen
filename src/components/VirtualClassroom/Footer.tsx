@@ -15,6 +15,7 @@ import { PageReel, type PageData } from './PageReel'
 
 interface FooterProps {
   onToggleAnnotations?: () => void
+  isAnnotationsVisible?: boolean
   resourceType?: string
   currentPage?: number
   totalPages?: number
@@ -26,6 +27,7 @@ interface FooterProps {
 
 export const Footer: React.FC<FooterProps> = ({
   onToggleAnnotations,
+  isAnnotationsVisible = false,
   resourceType = 'content',
   currentPage = 1,
   totalPages = 1,
@@ -37,6 +39,10 @@ export const Footer: React.FC<FooterProps> = ({
   const showTools = resourceType === 'content' || resourceType === 'material'
   const [isFullscreen, setIsFullscreen] = useState(false)
   const [isPageReelOpen, setIsPageReelOpen] = useState(false)
+  // Remove local state for annotations active, rely on prop or internal if not provided?
+  // Actually, to support both controlled and uncontrolled, we can use a local state initialized with prop, 
+  // but here the parent controls the visibility (overlay).
+  // So we should rely on isAnnotationsVisible.
 
   useEffect(() => {
     const handleFullscreenChange = () => {
@@ -64,7 +70,25 @@ export const Footer: React.FC<FooterProps> = ({
   }
 
   const togglePageReel = () => {
+    if (!isPageReelOpen) {
+      // Closing other tools if opening reel
+      if (isAnnotationsVisible && onToggleAnnotations) {
+        onToggleAnnotations()
+      }
+    }
     setIsPageReelOpen(!isPageReelOpen)
+  }
+
+  const handleToggleAnnotations = () => {
+    if (onToggleAnnotations) {
+      if (!isAnnotationsVisible) {
+        // Closing other tools if opening annotations
+        if (isPageReelOpen) {
+          setIsPageReelOpen(false)
+        }
+      }
+      onToggleAnnotations()
+    }
   }
 
   const handlePageSelect = (page: number) => {
@@ -183,8 +207,10 @@ export const Footer: React.FC<FooterProps> = ({
                   </button>
                   {onToggleAnnotations && (
                     <button
-                      onClick={onToggleAnnotations}
-                      className="p-3 rounded-lg hover:bg-black hover:text-white cursor-pointer transition-colors"
+                      onClick={handleToggleAnnotations}
+                      className={`p-3 rounded-lg hover:bg-black hover:text-white cursor-pointer transition-colors ${
+                        isAnnotationsVisible ? 'bg-black text-white' : ''
+                      }`}
                     >
                       <Edit2 size="24" color="currentColor" variant="Linear" />
                     </button>
