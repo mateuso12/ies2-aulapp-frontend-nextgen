@@ -7,6 +7,8 @@ import { DrawingArea } from '../components/Annotations/DrawingArea'
 import { useAnnotations } from '../hooks/useAnnotations'
 import { motion, useScroll, useTransform } from 'framer-motion'
 import type { PageData } from '../components/VirtualClassroom/PageReel'
+import { ArchiveAdd } from 'iconsax-react'
+import { BookmarksSidebar } from '../components/VirtualClassroom/BookmarksSidebar'
 
 export type ResourceType =
   | 'content'
@@ -24,9 +26,12 @@ interface VirtualClassroomLayoutProps {
   currentPage?: number
   totalPages?: number
   pages?: PageData[]
+  bookmarks?: number[]
   onNext?: () => void
   onPrevious?: () => void
   onPageSelect?: (page: number) => void
+  onToggleBookmark?: (page: number) => void
+  onRemoveBookmark?: (page: number) => void
 }
 
 export const VirtualClassroomLayout: React.FC<VirtualClassroomLayoutProps> = ({
@@ -36,12 +41,16 @@ export const VirtualClassroomLayout: React.FC<VirtualClassroomLayoutProps> = ({
   currentPage = 1,
   totalPages = 1,
   pages = [],
+  bookmarks = [],
   onNext,
   onPrevious,
   onPageSelect,
+  onToggleBookmark,
+  onRemoveBookmark,
 }) => {
   const [variant, setVariant] = useState(initialVariant)
   const [resourceType, setResourceType] = useState(initialResourceType)
+  const [isBookmarksSidebarOpen, setIsBookmarksSidebarOpen] = useState(false)
 
   useEffect(() => {
     setVariant(initialVariant)
@@ -66,6 +75,29 @@ export const VirtualClassroomLayout: React.FC<VirtualClassroomLayoutProps> = ({
   const showPaper = variant === 'gamified'
   const enableDrawing = isContent
 
+  const isCurrentPageBookmarked = bookmarks.includes(currentPage)
+
+  const handleBookmarkClick = () => {
+    if (!isCurrentPageBookmarked) {
+      onToggleBookmark?.(currentPage)
+    }
+    setIsBookmarksSidebarOpen(true)
+  }
+
+  const BookmarkButton = () => (
+    <button
+      onClick={handleBookmarkClick}
+      className="flex items-center justify-center transition-colors cursor-pointer hover:opacity-80"
+      title={isCurrentPageBookmarked ? 'Ver marcadores' : 'Adicionar marcador'}
+    >
+      <ArchiveAdd
+        size="48"
+        color={isCurrentPageBookmarked ? '#487BFF' : '#6C757D'}
+        variant="Bold"
+      />
+    </button>
+  )
+
   return (
     <div className="flex h-screen w-full flex-col overflow-hidden bg-[#1E1E1E]">
       <Header
@@ -74,6 +106,26 @@ export const VirtualClassroomLayout: React.FC<VirtualClassroomLayoutProps> = ({
         totalPages={totalPages}
         resourceType={resourceType}
       />
+
+      <BookmarksSidebar
+        isOpen={isBookmarksSidebarOpen}
+        onClose={() => setIsBookmarksSidebarOpen(false)}
+        bookmarks={bookmarks}
+        onRemoveBookmark={(page) => onRemoveBookmark?.(page)}
+        onNavigate={(page) => onPageSelect?.(page)}
+      />
+
+      {/* Fixed Bookmark Button Layer */}
+      {isContent && (
+        <div className="absolute inset-0 z-30 pointer-events-none flex justify-center">
+          <div className="w-full max-w-[1400px] h-full relative px-12">
+            <div className="absolute right-12 top-[110px] pointer-events-auto">
+              <BookmarkButton />
+            </div>
+          </div>
+        </div>
+      )}
+
       <main
         ref={mainRef}
         className={`flex-1 overflow-auto relative ${
@@ -111,11 +163,11 @@ export const VirtualClassroomLayout: React.FC<VirtualClassroomLayoutProps> = ({
             onStrokesChange={setStrokes}
             className="w-full min-h-full flex justify-center pt-[180px] px-12 pb-12"
           >
-            <div className="w-full max-w-[1400px]">{children}</div>
+            <div className="w-full max-w-[1400px] relative">{children}</div>
           </DrawingArea>
         ) : (
           <div className="w-full min-h-full flex justify-center pt-[180px] px-12 pb-12">
-            <div className="w-full max-w-[1400px]">{children}</div>
+            <div className="w-full max-w-[1400px] relative">{children}</div>
           </div>
         )}
       </main>

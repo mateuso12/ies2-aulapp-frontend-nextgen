@@ -7,6 +7,7 @@ export const VirtualClassroom: React.FC = () => {
   const [currentPageIndex, setCurrentPageIndex] = useState(0)
   const [visitedPages, setVisitedPages] = useState<number[]>([1])
   const [maxReachedIndex, setMaxReachedIndex] = useState(0)
+  const [bookmarks, setBookmarks] = useState<number[]>([])
   const currentPage = mockContentPages[currentPageIndex]
   const totalPages = mockContentPages.length
 
@@ -42,6 +43,19 @@ export const VirtualClassroom: React.FC = () => {
     }
   }
 
+  const handleToggleBookmark = (page: number) => {
+    setBookmarks((prev) => {
+      if (prev.includes(page)) {
+        return prev.filter((p) => p !== page)
+      }
+      return [...prev, page].sort((a, b) => a - b)
+    })
+  }
+
+  const handleRemoveBookmark = (page: number) => {
+    setBookmarks((prev) => prev.filter((p) => p !== page))
+  }
+
   // Transform mock data to include status and features for the PageReel
   const pagesData: PageData[] = mockContentPages.map((page, index) => {
     const pageNumber = index + 1
@@ -59,7 +73,7 @@ export const VirtualClassroom: React.FC = () => {
       // Mock features
       hasDrawings: index === 1 || index === 3,
       hasAnnotations: index === 0 || index === 2,
-      isBookmarked: index === 0,
+      isBookmarked: bookmarks.includes(pageNumber),
     }
   })
 
@@ -68,9 +82,12 @@ export const VirtualClassroom: React.FC = () => {
       currentPage={currentPageIndex + 1}
       totalPages={totalPages}
       pages={pagesData}
+      bookmarks={bookmarks}
       onNext={handleNext}
       onPrevious={handlePrevious}
       onPageSelect={handlePageSelect}
+      onToggleBookmark={handleToggleBookmark}
+      onRemoveBookmark={handleRemoveBookmark}
     >
       <div className="text-gray-800">{currentPage.content}</div>
     </VirtualClassroomLayout>
