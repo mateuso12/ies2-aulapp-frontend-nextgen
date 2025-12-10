@@ -154,7 +154,7 @@ export const VirtualClassroomLayout: React.FC<VirtualClassroomLayoutProps> = ({
 
       <main
         ref={mainRef}
-        className={`flex-1 overflow-auto relative ${
+        className={`flex-1 overflow-auto relative custom-scrollbar ${
           variant === 'gamified' ? '' : 'bg-[#F5F7FB]'
         }`}
       >
