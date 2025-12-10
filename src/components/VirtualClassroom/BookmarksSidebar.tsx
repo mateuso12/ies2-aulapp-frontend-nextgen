@@ -60,7 +60,7 @@ export const BookmarksSidebar: React.FC<BookmarksSidebarProps> = ({
               </div>
 
               {/* List */}
-              <div className="flex flex-col gap-4 overflow-y-auto flex-1">
+              <div className="flex flex-col gap-4 overflow-y-auto flex-1 custom-scrollbar pr-2">
                 {bookmarks.length === 0 ? (
                   <div className="text-center text-gray-500 mt-10">
                     Nenhuma página marcada.
