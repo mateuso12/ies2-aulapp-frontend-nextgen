@@ -5,7 +5,7 @@ import { WritingToolbar } from '../components/Annotations/WritingToolbar'
 import { Paper } from '../components/VirtualClassroom/Paper'
 import { DrawingArea } from '../components/Annotations/DrawingArea'
 import { useAnnotations } from '../hooks/useAnnotations'
-import { motion, useScroll, useTransform } from 'framer-motion'
+import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion'
 import type { PageData } from '../components/VirtualClassroom/PageReel'
 import { ArchiveAdd } from 'iconsax-react'
 import { BookmarksSidebar } from '../components/VirtualClassroom/BookmarksSidebar'
@@ -199,14 +199,16 @@ export const VirtualClassroomLayout: React.FC<VirtualClassroomLayoutProps> = ({
         )}
       </main>
 
-      {enableDrawing && isVisible && (
-        <WritingToolbar
-          currentConfig={config}
-          onConfigChange={setConfig}
-          onClear={clearStrokes}
-          onClose={() => setIsVisible(false)}
-        />
-      )}
+      <AnimatePresence>
+        {enableDrawing && isVisible && (
+          <WritingToolbar
+            currentConfig={config}
+            onConfigChange={setConfig}
+            onClear={clearStrokes}
+            onClose={() => setIsVisible(false)}
+          />
+        )}
+      </AnimatePresence>
 
       <Footer
         onToggleAnnotations={() => setIsVisible(!isVisible)}

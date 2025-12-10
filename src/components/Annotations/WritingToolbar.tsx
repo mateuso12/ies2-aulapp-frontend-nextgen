@@ -1,4 +1,5 @@
 import React from 'react'
+import { motion } from 'framer-motion'
 import { COLORS, TOOL_CONFIGS } from './types'
 import type { ToolType, AnnotationConfig } from './types'
 
@@ -47,7 +48,13 @@ export const WritingToolbar: React.FC<WritingToolbarProps> = ({
     currentConfig.strokeWidth > TOOL_CONFIGS[currentConfig.tool].widths.medium
 
   return (
-    <div className="fixed bottom-[90px] md:bottom-[120px] left-1/2 bg-white rounded-full shadow-lg px-6 py-3 flex items-center gap-6 z-50 border border-gray-200 animate-slide-up">
+    <motion.div
+      initial={{ opacity: 0, y: 20, x: '-50%' }}
+      animate={{ opacity: 1, y: 0, x: '-50%' }}
+      exit={{ opacity: 0, y: 20, x: '-50%' }}
+      transition={{ duration: 0.2 }}
+      className="fixed bottom-[90px] md:bottom-[120px] left-1/2 bg-white rounded-full shadow-lg px-6 py-3 flex items-center gap-6 z-50 border border-gray-200"
+    >
       {/* Tools */}
       <div className="flex items-center gap-4 border-r border-gray-200 pr-6">
         <button
@@ -151,6 +158,6 @@ export const WritingToolbar: React.FC<WritingToolbarProps> = ({
           Fechar
         </button>
       </div>
-    </div>
+    </motion.div>
   )
 }
