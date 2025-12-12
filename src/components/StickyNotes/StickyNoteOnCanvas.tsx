@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { motion } from 'framer-motion'
+import { motion, useDragControls } from 'framer-motion'
+import { ArrowRight } from 'iconsax-react'
 import type { EmojiClickData } from 'emoji-picker-react'
 import type { StickyNote } from './types'
 import { StickyNoteHeader } from './components/StickyNoteHeader'
@@ -10,12 +11,14 @@ interface StickyNoteOnCanvasProps {
   note: StickyNote
   onUpdate: (note: StickyNote) => void
   onDelete: (id: string) => void
+  onOpenSidebar: () => void
 }
 
 export const StickyNoteOnCanvas: React.FC<StickyNoteOnCanvasProps> = ({
   note,
   onUpdate,
   onDelete,
+  onOpenSidebar,
 }) => {
   const [content, setContent] = useState(note.content)
   const [color, setColor] = useState(note.color)
@@ -24,6 +27,14 @@ export const StickyNoteOnCanvas: React.FC<StickyNoteOnCanvasProps> = ({
   const [showColors, setShowColors] = useState(false)
   const [isActive, setIsActive] = useState(false)
   const noteRef = useRef<HTMLDivElement>(null)
+  const dragControls = useDragControls()
+
+  // Sync local state with prop changes (e.g. from sidebar edits)
+  useEffect(() => {
+    setContent(note.content)
+    setColor(note.color)
+    setIsMinimized(note.isMinimized)
+  }, [note.content, note.color, note.isMinimized])
 
   // Handle click outside to deactivate
   useEffect(() => {
@@ -68,6 +79,8 @@ export const StickyNoteOnCanvas: React.FC<StickyNoteOnCanvasProps> = ({
     <motion.div
       ref={noteRef}
       drag={isActive}
+      dragControls={dragControls}
+      dragListener={false}
       dragMomentum={false}
       onDragEnd={(_, info) => {
         onUpdate({
@@ -77,7 +90,7 @@ export const StickyNoteOnCanvas: React.FC<StickyNoteOnCanvasProps> = ({
         })
       }}
       onClick={() => setIsActive(true)}
-      initial={{ x: note.x || 100, y: note.y || 100, scale: 0.8, opacity: 0 }}
+      initial={false}
       animate={{
         x: note.x || 100,
         y: note.y || 100,
@@ -100,44 +113,60 @@ export const StickyNoteOnCanvas: React.FC<StickyNoteOnCanvasProps> = ({
         onMinimize={handleMinimize}
         onDelete={() => onDelete(note.id)}
         isActive={isActive}
+        onPointerDown={(e) => {
+          if (isActive) {
+            dragControls.start(e)
+          }
+        }}
       />
 
       {/* Body */}
       {!isMinimized && (
         <div className="p-4 flex flex-col gap-4">
           <textarea
+            onPointerDown={(e) => e.stopPropagation()}
             value={content}
             onChange={(e) => setContent(e.target.value)}
             placeholder="Digite sua anotação aqui..."
-            className="w-full h-40 bg-transparent border-none outline-none resize-none text-[#343A40] text-sm placeholder-black/40"
+            className="w-full h-40 bg-transparent border-none outline-none resize-none text-[#343A40] text-sm placeholder-black/40 cursor-text"
             autoFocus={isActive}
           />
 
           {/* Footer / Color Picker */}
-          <div className="flex items-center justify-between pt-2 border-t border-black/10">
-            <div className="flex items-center gap-2 relative">
-              <ColorPicker
-                selectedColor={color}
-                onSelectColor={setColor}
-                isOpen={showColors}
-                onToggle={() => {
-                  setShowColors(!showColors)
-                  setShowEmojis(false)
-                }}
-              />
+          <div className="flex flex-col gap-2 pt-2 border-t border-black/10">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2 relative">
+                <ColorPicker
+                  selectedColor={color}
+                  onSelectColor={setColor}
+                  isOpen={showColors}
+                  onToggle={() => {
+                    setShowColors(!showColors)
+                    setShowEmojis(false)
+                  }}
+                />
 
-              <EmojiPickerButton
-                onEmojiClick={onEmojiClick}
-                isOpen={showEmojis}
-                onToggle={() => {
-                  setShowEmojis(!showEmojis)
-                  setShowColors(false)
-                }}
-              />
+                <EmojiPickerButton
+                  onEmojiClick={onEmojiClick}
+                  isOpen={showEmojis}
+                  onToggle={() => {
+                    setShowEmojis(!showEmojis)
+                    setShowColors(false)
+                  }}
+                />
+              </div>
+              <span className="text-[10px] text-black/40">
+                {content.length} chars
+              </span>
             </div>
-            <span className="text-[10px] text-black/40">
-              {content.length} chars
-            </span>
+
+            <button
+              onClick={onOpenSidebar}
+              className="w-full py-1.5 bg-black/5 flex items-center justify-center gap-2 hover:bg-black/10 transition-colors rounded text-[#343A40] text-xs"
+            >
+              <span>Ver todas as anotações</span>
+              <ArrowRight size={14} color="#343A40" />
+            </button>
           </div>
         </div>
       )}

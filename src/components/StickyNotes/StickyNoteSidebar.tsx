@@ -163,7 +163,6 @@ export const StickyNoteSidebar: React.FC<StickyNoteSidebarProps> = ({
                     color={newNoteColor}
                     onContentChange={setNewNoteContent}
                     onColorChange={setNewNoteColor}
-                    onClose={() => setIsDraftVisible(false)}
                     onDragStart={handleDraftDragStart}
                     onDragEnd={handleDraftDragEnd}
                   />

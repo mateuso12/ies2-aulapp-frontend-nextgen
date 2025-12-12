@@ -247,25 +247,6 @@ export const VirtualClassroomLayout: React.FC<VirtualClassroomLayoutProps> = ({
         onNavigate={(page) => onPageSelect?.(page)}
       />
 
-      <StickyNoteSidebar
-        isOpen={isStickyNoteSidebarOpen}
-        onClose={() => setIsStickyNoteSidebarOpen(false)}
-        notes={stickyNotes}
-        onAddNote={handleAddNote}
-        onEditNote={(note) => {
-          if (note.page !== currentPage && onPageSelect) {
-            onPageSelect(note.page)
-          }
-          handleUpdateNote({ ...note, isMinimized: false })
-        }}
-        onDeleteNote={handleDeleteNote}
-        onGoToNote={handleGoToNote}
-        onToggleVisibility={() =>
-          setAreStickyNotesVisible(!areStickyNotesVisible)
-        }
-        areNotesVisible={areStickyNotesVisible}
-      />
-
       {/* Fixed Bookmark Button Layer */}
       {isContent && (
         <div className="absolute inset-0 z-30 pointer-events-none flex justify-center">
@@ -331,6 +312,7 @@ export const VirtualClassroomLayout: React.FC<VirtualClassroomLayoutProps> = ({
               note={note}
               onUpdate={handleUpdateNote}
               onDelete={handleDeleteNote}
+              onOpenSidebar={() => setIsStickyNoteSidebarOpen(true)}
             />
           ))}
       </main>

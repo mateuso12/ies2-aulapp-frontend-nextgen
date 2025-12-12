@@ -6,6 +6,7 @@ interface StickyNoteHeaderProps {
   onMinimize: () => void
   onDelete: () => void
   isActive: boolean
+  onPointerDown?: (e: React.PointerEvent) => void
 }
 
 export const StickyNoteHeader: React.FC<StickyNoteHeaderProps> = ({
@@ -13,9 +14,11 @@ export const StickyNoteHeader: React.FC<StickyNoteHeaderProps> = ({
   onMinimize,
   onDelete,
   isActive,
+  onPointerDown,
 }) => {
   return (
     <div
+      onPointerDown={onPointerDown}
       className={`flex items-center justify-between p-2 ${
         isActive ? 'cursor-move' : 'cursor-default'
       } bg-black/5 border-b border-black/10 ${

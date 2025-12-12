@@ -1,15 +1,14 @@
 import React, { useState } from 'react'
-import { ArrowRight } from 'iconsax-react'
 import { ColorPicker } from './ColorPicker'
 import { EmojiPickerButton } from './EmojiPickerButton'
 import type { EmojiClickData } from 'emoji-picker-react'
+import { GripHorizontal } from 'lucide-react'
 
 interface DraftNoteCardProps {
   content: string
   color: string
   onContentChange: (content: string) => void
   onColorChange: (color: string) => void
-  onClose: () => void
   onDragStart: (e: React.DragEvent) => void
   onDragEnd: (e: React.DragEvent) => void
 }
@@ -19,7 +18,6 @@ export const DraftNoteCard: React.FC<DraftNoteCardProps> = ({
   color,
   onContentChange,
   onColorChange,
-  onClose,
   onDragStart,
   onDragEnd,
 }) => {
@@ -39,12 +37,22 @@ export const DraftNoteCard: React.FC<DraftNoteCardProps> = ({
       onDragEnd={onDragEnd}
     >
       <div
-        className="p-4 flex flex-col gap-2 transition-colors duration-200 cursor-grab active:cursor-grabbing rounded-t-lg"
+        className="p-4 flex flex-col gap-2 transition-colors duration-200 cursor-grab active:cursor-grabbing rounded-lg relative group"
         style={{ backgroundColor: color }}
       >
+        {/* Drag Handle Indicator */}
+        <div className="absolute top-2 right-2 opacity-30 group-hover:opacity-100 transition-opacity cursor-grab">
+          <GripHorizontal size="16" color="#343A40" />
+        </div>
+
         <textarea
+          draggable={false}
+          onDragStart={(e) => {
+            e.preventDefault()
+            e.stopPropagation()
+          }}
           placeholder="Faça sua anotação"
-          className="w-full bg-transparent border-none outline-none resize-none text-[#343A40] text-sm placeholder-[#6C757D] min-h-[60px]"
+          className="w-full bg-transparent border-none outline-none resize-none text-[#343A40] text-sm placeholder-[#6C757D] min-h-[60px] cursor-text pr-6"
           value={content}
           onChange={(e) => onContentChange(e.target.value)}
           autoFocus
@@ -74,14 +82,6 @@ export const DraftNoteCard: React.FC<DraftNoteCardProps> = ({
           </div>
         </div>
       </div>
-
-      <button
-        onClick={onClose}
-        className="w-full py-2 bg-[#E0E0E0] flex items-center justify-center gap-2 hover:bg-[#d0d0d0] transition-colors rounded-b-lg"
-      >
-        <span className="text-[#343A40] text-sm">Ver todas as anotações</span>
-        <ArrowRight size={16} color="#343A40" />
-      </button>
     </div>
   )
 }
