@@ -9,6 +9,10 @@ import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion'
 import type { PageData } from '../components/VirtualClassroom/PageReel'
 import { ArchiveAdd } from 'iconsax-react'
 import { BookmarksSidebar } from '../components/VirtualClassroom/BookmarksSidebar'
+import { StickyNoteSidebar } from '../components/StickyNotes/StickyNoteSidebar'
+import { StickyNoteOnCanvas } from '../components/StickyNotes/StickyNoteOnCanvas'
+import type { StickyNote } from '../components/StickyNotes/types'
+import { STICKY_NOTE_COLORS } from '../components/StickyNotes/types'
 
 export type ResourceType =
   | 'content'
@@ -51,6 +55,9 @@ export const VirtualClassroomLayout: React.FC<VirtualClassroomLayoutProps> = ({
   const [variant, setVariant] = useState(initialVariant)
   const [resourceType, setResourceType] = useState(initialResourceType)
   const [isBookmarksSidebarOpen, setIsBookmarksSidebarOpen] = useState(false)
+  const [isStickyNoteSidebarOpen, setIsStickyNoteSidebarOpen] = useState(false)
+  const [stickyNotes, setStickyNotes] = useState<StickyNote[]>([])
+  const [areStickyNotesVisible, setAreStickyNotesVisible] = useState(true)
 
   useEffect(() => {
     setVariant(initialVariant)
@@ -84,6 +91,104 @@ export const VirtualClassroomLayout: React.FC<VirtualClassroomLayoutProps> = ({
     setIsBookmarksSidebarOpen(true)
   }
 
+  const handleAddNote = (note?: Partial<StickyNote>) => {
+    const newNote: StickyNote = {
+      id: Date.now().toString(),
+      content: note?.content || '',
+      color:
+        note?.color ||
+        STICKY_NOTE_COLORS[
+          Math.floor(Math.random() * STICKY_NOTE_COLORS.length)
+        ],
+      page: currentPage,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      x: 100 + (stickyNotes.length % 5) * 20,
+      y: 100 + (stickyNotes.length % 5) * 20,
+      isMinimized: false,
+      isPlaced: false,
+    }
+    setStickyNotes([...stickyNotes, newNote])
+  }
+
+  const handleUpdateNote = (updatedNote: StickyNote) => {
+    setStickyNotes(
+      stickyNotes.map((n) => (n.id === updatedNote.id ? updatedNote : n))
+    )
+  }
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
+    const noteData = e.dataTransfer.getData('application/json')
+    if (noteData && mainRef.current) {
+      try {
+        const note = JSON.parse(noteData) as StickyNote
+        const rect = mainRef.current.getBoundingClientRect()
+
+        const x = e.clientX - rect.left + mainRef.current.scrollLeft
+        const y = e.clientY - rect.top + mainRef.current.scrollTop
+
+        const existingNote = stickyNotes.find((n) => n.id === note.id)
+
+        if (existingNote) {
+          handleUpdateNote({
+            ...note,
+            x,
+            y,
+            isPlaced: true,
+            isMinimized: false,
+            page: currentPage,
+          })
+        } else {
+          // New note dropped from sidebar draft
+          const newNote: StickyNote = {
+            ...note,
+            id: Date.now().toString(), // Ensure unique ID
+            x,
+            y,
+            isPlaced: true,
+            isMinimized: false,
+            page: currentPage,
+            createdAt: new Date(),
+            updatedAt: new Date(),
+          }
+          setStickyNotes([...stickyNotes, newNote])
+        }
+        setIsStickyNoteSidebarOpen(false)
+      } catch (err) {
+        console.error('Error dropping note:', err)
+      }
+    }
+  }
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault()
+  }
+
+  const handleDeleteNote = (id: string) => {
+    setStickyNotes(stickyNotes.filter((n) => n.id !== id))
+  }
+
+  const handleGoToNote = (note: StickyNote) => {
+    if (onPageSelect && note.page !== currentPage) {
+      onPageSelect(note.page)
+    }
+
+    // Scroll to note position if placed
+    if (note.isPlaced && mainRef.current) {
+      mainRef.current.scrollTo({
+        top: (note.y || 0) - 100, // Add some padding
+        left: (note.x || 0) - 100,
+        behavior: 'smooth',
+      })
+    }
+  }
+
+  const currentNotes = stickyNotes.filter(
+    (n) => n.page === currentPage && n.isPlaced
+  )
+
   const BookmarkButton = () => (
     <button
       onClick={handleBookmarkClick}
@@ -115,12 +220,12 @@ export const VirtualClassroomLayout: React.FC<VirtualClassroomLayoutProps> = ({
 
     const isCurrentPage = pageNum === currentPage
     const hasDrawings = isCurrentPage ? strokes.length > 0 : hasStoredDrawings
+    const hasStickyNotes = stickyNotes.some((n) => n.page === pageNum)
 
     return {
       ...page,
       hasDrawings,
-      // Reset hasAnnotations as we only track drawings for now
-      hasAnnotations: false,
+      hasAnnotations: hasStickyNotes,
     }
   })
 
@@ -142,6 +247,25 @@ export const VirtualClassroomLayout: React.FC<VirtualClassroomLayoutProps> = ({
         onNavigate={(page) => onPageSelect?.(page)}
       />
 
+      <StickyNoteSidebar
+        isOpen={isStickyNoteSidebarOpen}
+        onClose={() => setIsStickyNoteSidebarOpen(false)}
+        notes={stickyNotes}
+        onAddNote={handleAddNote}
+        onEditNote={(note) => {
+          if (note.page !== currentPage && onPageSelect) {
+            onPageSelect(note.page)
+          }
+          handleUpdateNote({ ...note, isMinimized: false })
+        }}
+        onDeleteNote={handleDeleteNote}
+        onGoToNote={handleGoToNote}
+        onToggleVisibility={() =>
+          setAreStickyNotesVisible(!areStickyNotesVisible)
+        }
+        areNotesVisible={areStickyNotesVisible}
+      />
+
       {/* Fixed Bookmark Button Layer */}
       {isContent && (
         <div className="absolute inset-0 z-30 pointer-events-none flex justify-center">
@@ -155,6 +279,8 @@ export const VirtualClassroomLayout: React.FC<VirtualClassroomLayoutProps> = ({
 
       <main
         ref={mainRef}
+        onDrop={handleDrop}
+        onDragOver={handleDragOver}
         className={`flex-1 overflow-auto relative custom-scrollbar ${
           variant === 'gamified' ? '' : 'bg-[#F5F7FB]'
         }`}
@@ -197,6 +323,16 @@ export const VirtualClassroomLayout: React.FC<VirtualClassroomLayoutProps> = ({
             <div className="w-full max-w-[1400px] relative">{children}</div>
           </div>
         )}
+
+        {areStickyNotesVisible &&
+          currentNotes.map((note) => (
+            <StickyNoteOnCanvas
+              key={note.id}
+              note={note}
+              onUpdate={handleUpdateNote}
+              onDelete={handleDeleteNote}
+            />
+          ))}
       </main>
 
       <AnimatePresence>
@@ -211,7 +347,10 @@ export const VirtualClassroomLayout: React.FC<VirtualClassroomLayoutProps> = ({
       </AnimatePresence>
 
       <Footer
-        onToggleAnnotations={() => setIsVisible(!isVisible)}
+        onToggleAnnotations={() => {
+          if (!isVisible) setIsStickyNoteSidebarOpen(false)
+          setIsVisible(!isVisible)
+        }}
         isAnnotationsVisible={isVisible}
         resourceType={resourceType}
         currentPage={currentPage}
@@ -220,6 +359,30 @@ export const VirtualClassroomLayout: React.FC<VirtualClassroomLayoutProps> = ({
         onNext={onNext}
         onPrevious={onPrevious}
         onPageSelect={onPageSelect}
+        onToggleStickyNotes={() => {
+          if (!isStickyNoteSidebarOpen) setIsVisible(false)
+          setIsStickyNoteSidebarOpen(!isStickyNoteSidebarOpen)
+        }}
+        isStickyNotesOpen={isStickyNoteSidebarOpen}
+      />
+
+      <StickyNoteSidebar
+        isOpen={isStickyNoteSidebarOpen}
+        onClose={() => setIsStickyNoteSidebarOpen(false)}
+        notes={stickyNotes}
+        onAddNote={handleAddNote}
+        onEditNote={(note) => {
+          if (note.page !== currentPage && onPageSelect) {
+            onPageSelect(note.page)
+          }
+          handleUpdateNote({ ...note, isMinimized: false })
+        }}
+        onDeleteNote={handleDeleteNote}
+        onGoToNote={handleGoToNote}
+        onToggleVisibility={() =>
+          setAreStickyNotesVisible(!areStickyNotesVisible)
+        }
+        areNotesVisible={areStickyNotesVisible}
       />
 
       {/* DevTools - Only visible in development */}

@@ -15,6 +15,8 @@ import { PageReel, type PageData } from './PageReel'
 interface FooterProps {
   onToggleAnnotations?: () => void
   isAnnotationsVisible?: boolean
+  onToggleStickyNotes?: () => void
+  isStickyNotesOpen?: boolean
   resourceType?: string
   currentPage?: number
   totalPages?: number
@@ -27,6 +29,8 @@ interface FooterProps {
 export const Footer: React.FC<FooterProps> = ({
   onToggleAnnotations,
   isAnnotationsVisible = false,
+  onToggleStickyNotes,
+  isStickyNotesOpen = false,
   resourceType = 'content',
   currentPage = 1,
   totalPages = 1,
@@ -193,7 +197,12 @@ export const Footer: React.FC<FooterProps> = ({
               </button>
               {showTools && (
                 <>
-                  <button className="p-3 rounded-lg hover:bg-black hover:text-white cursor-pointer transition-colors">
+                  <button
+                    onClick={onToggleStickyNotes}
+                    className={`p-3 rounded-lg hover:bg-black hover:text-white cursor-pointer transition-colors ${
+                      isStickyNotesOpen ? 'bg-black text-white' : ''
+                    }`}
+                  >
                     <Stickynote
                       size="24"
                       color="currentColor"

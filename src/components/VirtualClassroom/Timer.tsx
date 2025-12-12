@@ -39,7 +39,7 @@ export const Timer: React.FC<TimerProps> = ({
       style={{ borderColor: '#FFB6B6' }}
     >
       <Timer1 color="currentColor" variant="Bold" className="h-6 w-6" />
-      <span className="font-baloo text-xl font-bold tabular-nums text-[#343A40]">
+      <span className="font-baloo text-xl leading-2 font-bold tabular-nums text-[#343A40]">
         {moment.utc(timeLeft * 1000).format('mm:ss')}
       </span>
     </div>
