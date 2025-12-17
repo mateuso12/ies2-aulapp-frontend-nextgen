@@ -39,7 +39,14 @@ export const StickyNoteOnCanvas: React.FC<StickyNoteOnCanvasProps> = ({
   // Handle click outside to deactivate
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (noteRef.current && !noteRef.current.contains(event.target as Node)) {
+      const target = event.target as HTMLElement
+      const isInsidePopover = target.closest('[data-slot="popover-content"]')
+
+      if (
+        noteRef.current &&
+        !noteRef.current.contains(target as Node) &&
+        !isInsidePopover
+      ) {
         setIsActive(false)
         setShowColors(false)
         setShowEmojis(false)
