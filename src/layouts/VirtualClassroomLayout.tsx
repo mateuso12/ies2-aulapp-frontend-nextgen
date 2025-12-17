@@ -107,6 +107,8 @@ export const VirtualClassroomLayout: React.FC<VirtualClassroomLayoutProps> = ({
       onToggleBookmark?.(currentPage)
     }
     setIsBookmarksSidebarOpen(true)
+    setIsStickyNoteSidebarOpen(false)
+    setIsVisible(false)
   }
 
   const currentNotes = useMemo(
@@ -192,7 +194,11 @@ export const VirtualClassroomLayout: React.FC<VirtualClassroomLayoutProps> = ({
         areStickyNotesVisible={areStickyNotesVisible}
         onUpdateNote={updateNote}
         onDeleteNote={deleteNote}
-        onOpenSidebar={() => setIsStickyNoteSidebarOpen(true)}
+        onOpenSidebar={() => {
+          setIsStickyNoteSidebarOpen(true)
+          setIsBookmarksSidebarOpen(false)
+          setIsVisible(false)
+        }}
       >
         {children}
       </ContentArea>
@@ -210,7 +216,10 @@ export const VirtualClassroomLayout: React.FC<VirtualClassroomLayoutProps> = ({
 
       <Footer
         onToggleAnnotations={() => {
-          if (!isVisible) setIsStickyNoteSidebarOpen(false)
+          if (!isVisible) {
+            setIsStickyNoteSidebarOpen(false)
+            setIsBookmarksSidebarOpen(false)
+          }
           setIsVisible(!isVisible)
         }}
         isAnnotationsVisible={isVisible}
@@ -222,7 +231,10 @@ export const VirtualClassroomLayout: React.FC<VirtualClassroomLayoutProps> = ({
         onPrevious={onPrevious}
         onPageSelect={onPageSelect}
         onToggleStickyNotes={() => {
-          if (!isStickyNoteSidebarOpen) setIsVisible(false)
+          if (!isStickyNoteSidebarOpen) {
+            setIsVisible(false)
+            setIsBookmarksSidebarOpen(false)
+          }
           setIsStickyNoteSidebarOpen(!isStickyNoteSidebarOpen)
         }}
         isStickyNotesOpen={isStickyNoteSidebarOpen}
