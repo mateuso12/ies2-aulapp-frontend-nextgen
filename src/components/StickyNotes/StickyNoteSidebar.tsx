@@ -39,22 +39,22 @@ export const StickyNoteSidebar: React.FC<StickyNoteSidebarProps> = ({
     note.content.toLowerCase().includes(searchQuery.toLowerCase())
   )
 
-  // Auto-save debounce
-  useEffect(() => {
-    if (!newNoteContent.trim() || !isDraftVisible) return
+  const handleSaveDraft = () => {
+    if (!newNoteContent.trim()) return
+    onAddNote({
+      content: newNoteContent,
+      color: newNoteColor,
+    })
+    setNewNoteContent('')
+    setNewNoteColor(STICKY_NOTE_COLORS[0])
+    setIsDraftVisible(false)
+  }
 
-    const timer = setTimeout(() => {
-      onAddNote({
-        content: newNoteContent,
-        color: newNoteColor,
-      })
-      setNewNoteContent('')
-      setNewNoteColor(STICKY_NOTE_COLORS[0])
-      setIsDraftVisible(false)
-    }, 2000)
-
-    return () => clearTimeout(timer)
-  }, [newNoteContent, newNoteColor, isDraftVisible, onAddNote])
+  const handleCancelDraft = () => {
+    setNewNoteContent('')
+    setNewNoteColor(STICKY_NOTE_COLORS[0])
+    setIsDraftVisible(false)
+  }
 
   // Generate draft ID when opening draft
   useEffect(() => {
@@ -96,7 +96,7 @@ export const StickyNoteSidebar: React.FC<StickyNoteSidebarProps> = ({
           animate={{ x: 0, opacity: 1 }}
           exit={{ x: -350, opacity: 0 }}
           transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-          className="fixed left-0 top-0 h-full w-[350px] bg-[#EFEFEF] shadow-[1px_0px_26.8px_0px_rgba(0,0,0,0.25)] z-40 flex flex-col gap-6 p-4 rounded-r-lg font-['Plus_Jakarta_Sans']"
+          className="fixed left-0 top-0 h-full w-[350px] bg-[#EFEFEF] shadow-[1px_0px_26.8px_0px_rgba(0,0,0,0.25)] z-40 flex flex-col gap-6 p-4 rounded-r-lg font-['Plus_Jakarta_Sans'] overflow-hidden"
         >
           {/* Header Controls */}
           <div className="flex items-center justify-between w-full">
@@ -165,6 +165,8 @@ export const StickyNoteSidebar: React.FC<StickyNoteSidebarProps> = ({
                     onColorChange={setNewNoteColor}
                     onDragStart={handleDraftDragStart}
                     onDragEnd={handleDraftDragEnd}
+                    onSave={handleSaveDraft}
+                    onCancel={handleCancelDraft}
                   />
                 </motion.div>
               )}
@@ -172,16 +174,17 @@ export const StickyNoteSidebar: React.FC<StickyNoteSidebarProps> = ({
           </div>
 
           {/* Notes List */}
-          <div className="flex flex-col gap-4 overflow-y-auto flex-1 pr-1 custom-scrollbar">
+          <div className="flex flex-col gap-4 overflow-y-auto flex-1 pr-2 custom-scrollbar min-h-0">
             {filteredNotes.map((note) => (
-              <SidebarNoteItem
-                key={note.id}
-                note={note}
-                onDelete={onDeleteNote}
-                onDragStart={handleDragStart}
-                onGoTo={onGoToNote}
-                onEdit={onEditNote}
-              />
+              <div key={note.id} className="shrink-0">
+                <SidebarNoteItem
+                  note={note}
+                  onDelete={onDeleteNote}
+                  onDragStart={handleDragStart}
+                  onGoTo={onGoToNote}
+                  onEdit={onEditNote}
+                />
+              </div>
             ))}
           </div>
         </motion.div>
