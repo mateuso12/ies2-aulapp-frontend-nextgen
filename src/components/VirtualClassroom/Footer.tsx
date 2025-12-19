@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Maximize2, Minimize2 } from 'lucide-react'
 import {
-  Setting2,
   ArrowCircleRight,
   ArrowCircleLeft,
   ReceiveSquare,
@@ -11,6 +10,7 @@ import {
   RefreshLeftSquare,
 } from 'iconsax-react'
 import { PageReel, type PageData } from './PageReel'
+import { SettingsMenu } from './SettingsMenu'
 
 interface FooterProps {
   onToggleAnnotations?: () => void
@@ -166,6 +166,7 @@ export const Footer: React.FC<FooterProps> = ({
             >
               {isFullscreen ? <Minimize2 size={20} /> : <Maximize2 size={20} />}
             </button>
+            <SettingsMenu isMobile />
           </div>
         </div>
 
@@ -275,9 +276,7 @@ export const Footer: React.FC<FooterProps> = ({
               {isFullscreen ? <Minimize2 size={20} /> : <Maximize2 size={20} />}
             </button>
           )}
-          <button className="p-3 rounded-lg hover:bg-black hover:text-white cursor-pointer transition-colors">
-            <Setting2 size="24" color="currentColor" variant="Linear" />
-          </button>
+          <SettingsMenu />
         </div>
       </footer>
     </>

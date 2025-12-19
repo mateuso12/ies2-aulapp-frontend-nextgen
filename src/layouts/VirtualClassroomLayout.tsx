@@ -258,11 +258,11 @@ export const VirtualClassroomLayout: React.FC<VirtualClassroomLayoutProps> = ({
         }
         areNotesVisible={areStickyNotesVisible}
       />
-
+      {/* 
       <DevTools
         resourceType={resourceType}
         onResourceTypeChange={handleResourceTypeChange}
-      />
+      /> */}
     </div>
   )
 }
