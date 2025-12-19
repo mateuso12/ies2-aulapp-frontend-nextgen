@@ -6,6 +6,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { Setting2, Moon, Sun1, Global, EyeSlash } from 'iconsax-react'
+import { MoreVertical } from 'lucide-react'
 
 interface SettingsMenuProps {
   isMobile?: boolean
@@ -13,7 +14,7 @@ interface SettingsMenuProps {
 }
 
 export const SettingsMenu: React.FC<SettingsMenuProps> = ({
-  isMobile: _,
+  isMobile = false,
   onHideToolbar,
 }) => {
   const [isDarkMode, setIsDarkMode] = useState(false)
@@ -37,7 +38,11 @@ export const SettingsMenu: React.FC<SettingsMenuProps> = ({
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <button className="p-3 rounded-lg hover:bg-black hover:text-white cursor-pointer transition-colors outline-none">
-          <Setting2 size="24" color="currentColor" variant="Linear" />
+          {isMobile ? (
+            <MoreVertical className="h-5 w-5" />
+          ) : (
+            <Setting2 size="24" color="currentColor" variant="Linear" />
+          )}
         </button>
       </DropdownMenuTrigger>
       <DropdownMenuContent

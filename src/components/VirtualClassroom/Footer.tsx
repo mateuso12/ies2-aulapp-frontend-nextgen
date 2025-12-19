@@ -7,7 +7,6 @@ import {
   Edit2,
   Stickynote,
   Category,
-  RefreshLeftSquare,
 } from 'iconsax-react'
 import { PageReel, type PageData } from './PageReel'
 import { SettingsMenu } from './SettingsMenu'
@@ -123,49 +122,24 @@ export const Footer: React.FC<FooterProps> = ({
       <footer className="relative flex w-full items-center justify-center bg-[#2C2C2C] text-white max-md:h-20 max-md:rounded-t-2xl max-md:px-4 md:h-[105px] md:px-8">
         {/* Mobile Content */}
         <div className="hidden w-full items-center justify-between max-md:flex">
-          {/* Left Tools */}
-          <div className="flex items-center gap-4">
-            <button
-              onClick={togglePageReel}
-              className={`p-3 rounded-lg hover:bg-black hover:text-white cursor-pointer transition-colors ${
-                isPageReelOpen ? 'bg-black text-white' : ''
-              }`}
-            >
-              <Category size="24" color="currentColor" variant="Linear" />
-            </button>
-            <button className="p-3 rounded-lg hover:bg-black hover:text-white cursor-pointer transition-colors">
-              <RefreshLeftSquare
-                size="24"
-                color="currentColor"
-                variant="Linear"
-              />
-            </button>
-          </div>
+          {/* Left: Page reel */}
+          <button
+            onClick={togglePageReel}
+            className={`p-3 rounded-lg hover:bg-black hover:text-white cursor-pointer transition-colors ${
+              isPageReelOpen ? 'bg-black text-white' : ''
+            }`}
+            aria-label="Abrir menu de páginas"
+          >
+            <Category size="24" color="currentColor" variant="Linear" />
+          </button>
 
-          {/* Center: Counter & Dots */}
-          <div className="flex flex-col items-center gap-1">
-            <span className="font-plus-jakarta text-xl">
-              <span className="font-bold">{currentPage}</span> de{' '}
-              <span className="font-bold">{totalPages}</span>
-            </span>
-            <div className="flex gap-1">
-              <div className="h-1.5 w-1.5 rounded-full bg-white" />
-              <div className="h-1.5 w-1.5 rounded-full bg-white/30" />
-              <div className="h-1.5 w-1.5 rounded-full bg-white/30" />
-            </div>
-          </div>
+          {/* Center: Counter */}
+          <span className="font-plus-jakarta text-xl font-semibold">
+            {currentPage} de {totalPages}
+          </span>
 
-          {/* Right Tools */}
-          <div className="flex items-center gap-4">
-            <button className="p-3 rounded-lg hover:bg-black hover:text-white cursor-pointer transition-colors">
-              <ReceiveSquare size="24" color="currentColor" variant="Linear" />
-            </button>
-            <button
-              onClick={toggleFullscreen}
-              className="p-3.5 rounded-lg hover:bg-black hover:text-white cursor-pointer transition-colors"
-            >
-              {isFullscreen ? <Minimize2 size={20} /> : <Maximize2 size={20} />}
-            </button>
+          {/* Right: Settings */}
+          <div className="flex items-center gap-3">
             <SettingsMenu isMobile />
           </div>
         </div>

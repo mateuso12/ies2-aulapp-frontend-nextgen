@@ -35,7 +35,9 @@ export const SidebarMenu: React.FC<SidebarMenuProps> = ({ children }) => {
         >
           <SheetHeader className="sr-only">
             <SheetTitle>Menu de Conteúdo</SheetTitle>
-            <SheetDescription>Lista de módulos e aulas do curso</SheetDescription>
+            <SheetDescription>
+              Lista de módulos e aulas do curso
+            </SheetDescription>
           </SheetHeader>
           <div className="h-full overflow-y-auto bg-[#F8F9FA] custom-scrollbar">
             <ClassroomModules />
@@ -51,7 +53,9 @@ export const SidebarMenu: React.FC<SidebarMenuProps> = ({ children }) => {
       <DrawerContent className="h-[85vh] bg-[#F8F9FA] outline-none">
         <DrawerHeader className="sr-only">
           <DrawerTitle>Menu de Conteúdo</DrawerTitle>
-          <DrawerDescription>Lista de módulos e aulas do curso</DrawerDescription>
+          <DrawerDescription>
+            Lista de módulos e aulas do curso
+          </DrawerDescription>
         </DrawerHeader>
         <div className="h-full overflow-y-auto custom-scrollbar">
           <ClassroomModules />
