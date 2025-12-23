@@ -59,7 +59,7 @@ export const SettingsMenu: React.FC<SettingsMenuProps> = ({
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <button className="p-3 rounded-lg hover:bg-black hover:text-white cursor-pointer transition-colors outline-none">
-            <MoreVertical className="h-5 w-5" />
+            <MoreVertical size={30} />
           </button>
         </DropdownMenuTrigger>
         <DropdownMenuContent
