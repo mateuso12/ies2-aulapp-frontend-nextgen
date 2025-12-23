@@ -6,16 +6,13 @@
   justify-content: center;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
+  text-align: center;
 }
 
-.app h1 {
-  font-size: 4rem;
-  font-weight: 700;
-  margin-bottom: 1rem;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-}
-
-.app p {
-  font-size: 1.5rem;
-  opacity: 0.9;
-}
+/*
+  IMPORTANTE:
+  Evite estilizar tags (ex.: h1, p) aqui.
+  Este arquivo é importado globalmente por `src/App.tsx`.
+  Regras como `.app h1 { font-size: ... }` acabam sobrescrevendo
+  tipografia controlada por Tailwind dentro da rota `/sala-virtual`.
+*/

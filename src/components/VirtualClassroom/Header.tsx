@@ -3,6 +3,7 @@ import { HambergerMenu } from 'iconsax-react'
 import { HeaderActions } from './HeaderActions'
 import { HeaderStatus } from './HeaderStatus'
 import { SidebarMenu } from './SidebarMenu'
+import { FloatingBookmarkButton } from './FloatingBookmarkButton'
 import { motion } from 'framer-motion'
 
 interface HeaderProps {
@@ -14,6 +15,9 @@ interface HeaderProps {
   currentPage?: number
   totalPages?: number
   resourceType?: string
+  onBookmark?: () => void
+  isBookmarked?: boolean
+  title?: string
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -25,6 +29,9 @@ export const Header: React.FC<HeaderProps> = ({
   currentPage = 1,
   totalPages = 1,
   resourceType = 'content',
+  onBookmark,
+  isBookmarked = false,
+  title = 'Nome do conteúdo',
 }) => {
   if (variant === 'gamified') {
     const progress = Math.min(
@@ -73,30 +80,63 @@ export const Header: React.FC<HeaderProps> = ({
   }
 
   return (
-    <header className="relative z-20 flex w-full items-center justify-between bg-white shadow-[0px_4px_4px_rgba(0,0,0,0.25)] max-md:h-[60px] max-md:px-4 md:h-[88px] md:px-8">
-      {/* Left: Back & Title */}
-      <HeaderActions
-        variant="default"
-        title="Nome da Aula"
-        resourceType={resourceType}
-      />
+    <header className="relative z-20 w-full bg-white shadow-[0px_4px_4px_rgba(0,0,0,0.25)] max-md:h-[60px] md:h-[88px]">
+      {/* Mobile */}
+      <div className="hidden h-full w-full items-center justify-between max-md:flex max-md:px-4">
+        {/* Left: Back + Title */}
+        <div className="min-w-0 flex items-center gap-3">
+          <HeaderActions
+            variant="default"
+            title={title}
+            resourceType={resourceType}
+          />
+        </div>
 
-      {/* Center: Controls (Desktop Only) */}
-      <div className="flex items-center gap-8">
-        <HeaderStatus
+        {/* Right: Bookmark + Hamburger */}
+        <div className="flex items-center gap-2">
+          <FloatingBookmarkButton
+            isBookmarked={isBookmarked}
+            onClick={onBookmark || (() => {})}
+            variant="header"
+          />
+
+          <SidebarMenu>
+            <button
+              className="flex h-10 w-10 items-center justify-center rounded-full text-[#FF246E] hover:bg-gray-100 cursor-pointer"
+              aria-label="Abrir menu de aulas"
+            >
+              <HambergerMenu size="24" color="currentColor" variant="Linear" />
+            </button>
+          </SidebarMenu>
+        </div>
+      </div>
+
+      {/* Desktop */}
+      <div className="hidden h-full w-full items-center justify-between md:flex md:px-8">
+        {/* Left: Back & Title */}
+        <HeaderActions
           variant="default"
-          lives={lives}
-          score={score}
-          redoCurrent={redoCurrent}
-          redoTotal={redoTotal}
+          title={title}
+          resourceType={resourceType}
         />
 
-        {/* Right: Menu */}
-        <SidebarMenu>
-          <button className="flex h-10 w-10 items-center justify-center rounded-full text-[#FF246E] hover:bg-gray-100 cursor-pointer">
-            <HambergerMenu size="24" color="currentColor" variant="Linear" />
-          </button>
-        </SidebarMenu>
+        {/* Center: Controls */}
+        <div className="flex items-center gap-8">
+          <HeaderStatus
+            variant="default"
+            lives={lives}
+            score={score}
+            redoCurrent={redoCurrent}
+            redoTotal={redoTotal}
+          />
+
+          {/* Right: Menu */}
+          <SidebarMenu>
+            <button className="flex h-10 w-10 items-center justify-center rounded-full text-[#FF246E] hover:bg-gray-100 cursor-pointer">
+              <HambergerMenu size="24" color="currentColor" variant="Linear" />
+            </button>
+          </SidebarMenu>
+        </div>
       </div>
     </header>
   )

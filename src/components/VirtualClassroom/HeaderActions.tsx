@@ -81,10 +81,10 @@ export const HeaderActions: React.FC<HeaderActionsProps> = ({
         <ArrowLeft size="24" color="currentColor" variant="Linear" />
       </button>
 
-      {/* Mobile Title */}
-      <span className="hidden font-sans text-base font-semibold text-[#FF246E] max-md:inline">
-        Conteúdo
-      </span>
+      {/* Mobile Title (only the class name) */}
+      <h1 className="max-md:font-sans max-md:text-base max-md:font-semibold max-md:text-[#FF246E] max-md:truncate md:hidden">
+        {title}
+      </h1>
 
       {/* Desktop Title */}
       <h1 className="hidden font-sans text-2xl font-semibold text-[#FF246E] md:block">
@@ -106,7 +106,11 @@ export const HeaderActions: React.FC<HeaderActionsProps> = ({
       </div>
 
       {/* Search (Desktop Only) */}
-      {showSearch && <SearchPopover resultsCount={2} />}
+      {showSearch && (
+        <div className="hidden md:block">
+          <SearchPopover resultsCount={2} />
+        </div>
+      )}
     </div>
   )
 }

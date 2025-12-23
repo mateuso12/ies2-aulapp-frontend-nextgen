@@ -16,6 +16,11 @@ interface FooterProps {
   isAnnotationsVisible?: boolean
   onToggleStickyNotes?: () => void
   isStickyNotesOpen?: boolean
+  onBookmarkCurrentPage?: () => void
+  onSearchInPage?: () => void
+  onMarkText?: () => void
+  onMakeNote?: () => void
+  onOpenSettings?: () => void
   resourceType?: string
   currentPage?: number
   totalPages?: number
@@ -30,6 +35,11 @@ export const Footer: React.FC<FooterProps> = ({
   isAnnotationsVisible = false,
   onToggleStickyNotes,
   isStickyNotesOpen = false,
+  onBookmarkCurrentPage,
+  onSearchInPage,
+  onMarkText,
+  onMakeNote,
+  onOpenSettings,
   resourceType = 'content',
   currentPage = 1,
   totalPages = 1,
@@ -79,6 +89,38 @@ export const Footer: React.FC<FooterProps> = ({
       }
     }
     setIsPageReelOpen(!isPageReelOpen)
+  }
+
+  const handleSearchInPage = () => {
+    if (onSearchInPage) {
+      onSearchInPage()
+      return
+    }
+    togglePageReel()
+  }
+
+  const handleBookmarkPage = () => {
+    onBookmarkCurrentPage?.()
+  }
+
+  const handleMarkText = () => {
+    if (onMarkText) {
+      onMarkText()
+      return
+    }
+    handleToggleAnnotations()
+  }
+
+  const handleMakeNote = () => {
+    if (onMakeNote) {
+      onMakeNote()
+      return
+    }
+    onToggleStickyNotes?.()
+  }
+
+  const handleOpenSettings = () => {
+    onOpenSettings?.()
   }
 
   const handleToggleAnnotations = () => {
@@ -140,7 +182,14 @@ export const Footer: React.FC<FooterProps> = ({
 
           {/* Right: Settings */}
           <div className="flex items-center gap-3">
-            <SettingsMenu isMobile />
+            <SettingsMenu
+              isMobile
+              onSearchInPage={handleSearchInPage}
+              onBookmarkPage={handleBookmarkPage}
+              onMarkText={handleMarkText}
+              onMakeNote={handleMakeNote}
+              onOpenSettings={handleOpenSettings}
+            />
           </div>
         </div>
 

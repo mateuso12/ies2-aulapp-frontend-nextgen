@@ -15,7 +15,6 @@ import { BookmarksSidebar } from '../components/VirtualClassroom/BookmarksSideba
 import { StickyNoteSidebar } from '../components/StickyNotes/StickyNoteSidebar'
 import { useStickyNotes } from '../hooks/useStickyNotes'
 import { ContentArea } from '../components/VirtualClassroom/ContentArea'
-import { DevTools } from '../components/VirtualClassroom/DevTools'
 import { FloatingBookmarkButton } from '../components/VirtualClassroom/FloatingBookmarkButton'
 
 export type ResourceType =
@@ -144,22 +143,16 @@ export const VirtualClassroomLayout: React.FC<VirtualClassroomLayoutProps> = ({
     })
   }, [pages, currentPage, strokes.length, stickyNotes])
 
-  const handleResourceTypeChange = (type: string) => {
-    setResourceType(type)
-    if (type === 'gamified') {
-      setVariant('gamified')
-    } else {
-      setVariant('default')
-    }
-  }
-
   return (
     <div className="flex h-screen w-full flex-col overflow-hidden bg-[#1E1E1E]">
       <Header
         variant={variant}
+        title="Nome do conteúdo"
         currentPage={currentPage}
         totalPages={totalPages}
         resourceType={resourceType}
+        onBookmark={handleBookmarkClick}
+        isBookmarked={isCurrentPageBookmarked}
       />
 
       <BookmarksSidebar
@@ -238,6 +231,21 @@ export const VirtualClassroomLayout: React.FC<VirtualClassroomLayoutProps> = ({
           setIsStickyNoteSidebarOpen(!isStickyNoteSidebarOpen)
         }}
         isStickyNotesOpen={isStickyNoteSidebarOpen}
+        onBookmarkCurrentPage={handleBookmarkClick}
+        onMarkText={() => {
+          if (!isVisible) {
+            setIsStickyNoteSidebarOpen(false)
+            setIsBookmarksSidebarOpen(false)
+          }
+          setIsVisible(!isVisible)
+        }}
+        onMakeNote={() => {
+          if (!isStickyNoteSidebarOpen) {
+            setIsVisible(false)
+            setIsBookmarksSidebarOpen(false)
+          }
+          setIsStickyNoteSidebarOpen(true)
+        }}
       />
 
       <StickyNoteSidebar

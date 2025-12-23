@@ -24,7 +24,7 @@
     "i18next": "^25.6.1",
     "i18next-browser-languagedetector": "^8.2.0",
     "iconsax-react": "^0.0.8",
-    "ies2-aulapp-ui-kit": "^0.1.7",
+    "ies2-aulapp-ui-kit": "^0.1.11",
     "konva": "^10.0.12",
     "lucide-react": "^0.555.0",
     "moment": "^2.30.1",

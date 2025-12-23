@@ -10,6 +10,8 @@ import { ResourceBadge } from 'ies2-aulapp-ui-kit'
 import { cn } from '@/lib/utils'
 import { modules } from '@/mocks/courseModules'
 import { motion, useMotionValue, useTransform, animate } from 'framer-motion'
+import { SheetClose } from '@/components/ui/sheet'
+import { CloseCircle } from 'iconsax-react'
 
 const CircularProgress = ({ percentage }: { percentage: number }) => {
   const radius = 18
@@ -97,8 +99,16 @@ export const ClassroomModules: React.FC = () => {
   return (
     <div className="flex flex-col gap-8 px-3 py-6">
       {/* Header */}
-      <div className="px-2">
-        <h1 className="font-inter text-[32px] font-bold leading-tight text-black text-center">
+      <div className="flex px-2 items-center gap-3">
+        <SheetClose asChild>
+          <button
+            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-primary hover:bg-transparent cursor-pointer"
+            aria-label="Fechar menu"
+          >
+            <CloseCircle size="24" color="currentColor" variant="Linear" />
+          </button>
+        </SheetClose>
+        <h1 className="whitespace-nowrap md:text-[32px] text-2xl font-bold leading-none text-black -translate-y-px">
           4.2 Nome da Aula
         </h1>
       </div>

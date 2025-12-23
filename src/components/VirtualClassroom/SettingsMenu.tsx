@@ -5,17 +5,37 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { Setting2, Moon, Sun1, Global, EyeSlash } from 'iconsax-react'
+import {
+  Setting2,
+  Moon,
+  Sun1,
+  Global,
+  EyeSlash,
+  SearchNormal1,
+  Bookmark,
+  Edit2,
+  Stickynote,
+} from 'iconsax-react'
 import { MoreVertical } from 'lucide-react'
 
 interface SettingsMenuProps {
   isMobile?: boolean
   onHideToolbar?: () => void
+  onSearchInPage?: () => void
+  onBookmarkPage?: () => void
+  onMarkText?: () => void
+  onMakeNote?: () => void
+  onOpenSettings?: () => void
 }
 
 export const SettingsMenu: React.FC<SettingsMenuProps> = ({
   isMobile = false,
   onHideToolbar,
+  onSearchInPage,
+  onBookmarkPage,
+  onMarkText,
+  onMakeNote,
+  onOpenSettings,
 }) => {
   const [isDarkMode, setIsDarkMode] = useState(false)
 
@@ -34,15 +54,77 @@ export const SettingsMenu: React.FC<SettingsMenuProps> = ({
     }
   }
 
+  if (isMobile) {
+    return (
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <button className="p-3 rounded-lg hover:bg-black hover:text-white cursor-pointer transition-colors outline-none">
+            <MoreVertical className="h-5 w-5" />
+          </button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent
+          align="end"
+          className="w-72 bg-[#2C2C2C] text-white border-[#343A40] p-3 rounded-2xl shadow-xl space-y-1"
+        >
+          <DropdownMenuItem
+            className="flex items-center gap-3 p-3 rounded-xl hover:bg-white/5 focus:bg-white/5 cursor-pointer"
+            onClick={onSearchInPage}
+          >
+            <SearchNormal1 size="22" color="#E2E2E2" variant="Linear" />
+            <span className="text-base font-['Plus_Jakarta_Sans'] text-[#E2E2E2]">
+              Buscar na página
+            </span>
+          </DropdownMenuItem>
+
+          <DropdownMenuItem
+            className="flex items-center gap-3 p-3 rounded-xl hover:bg-white/5 focus:bg-white/5 cursor-pointer"
+            onClick={onBookmarkPage}
+          >
+            <Bookmark size="22" color="#E2E2E2" variant="Linear" />
+            <span className="text-base font-['Plus_Jakarta_Sans'] text-[#E2E2E2]">
+              Marcar página
+            </span>
+          </DropdownMenuItem>
+
+          <DropdownMenuItem
+            className="flex items-center gap-3 p-3 rounded-xl hover:bg-white/5 focus:bg-white/5 cursor-pointer"
+            onClick={onMarkText}
+          >
+            <Edit2 size="22" color="#E2E2E2" variant="Linear" />
+            <span className="text-base font-['Plus_Jakarta_Sans'] text-[#E2E2E2]">
+              Marcar texto
+            </span>
+          </DropdownMenuItem>
+
+          <DropdownMenuItem
+            className="flex items-center gap-3 p-3 rounded-xl hover:bg-white/5 focus:bg-white/5 cursor-pointer"
+            onClick={onMakeNote}
+          >
+            <Stickynote size="22" color="#E2E2E2" variant="Linear" />
+            <span className="text-base font-['Plus_Jakarta_Sans'] text-[#E2E2E2]">
+              Fazer anotação
+            </span>
+          </DropdownMenuItem>
+
+          <DropdownMenuItem
+            className="flex items-center gap-3 p-3 rounded-xl hover:bg-white/5 focus:bg-white/5 cursor-pointer"
+            onClick={onOpenSettings}
+          >
+            <Setting2 size="22" color="#E2E2E2" variant="Linear" />
+            <span className="text-base font-['Plus_Jakarta_Sans'] text-[#E2E2E2]">
+              Configurações
+            </span>
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    )
+  }
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <button className="p-3 rounded-lg hover:bg-black hover:text-white cursor-pointer transition-colors outline-none">
-          {isMobile ? (
-            <MoreVertical className="h-5 w-5" />
-          ) : (
-            <Setting2 size="24" color="currentColor" variant="Linear" />
-          )}
+          <Setting2 size="24" color="currentColor" variant="Linear" />
         </button>
       </DropdownMenuTrigger>
       <DropdownMenuContent
