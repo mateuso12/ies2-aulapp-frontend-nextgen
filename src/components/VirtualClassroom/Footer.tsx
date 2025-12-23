@@ -178,7 +178,8 @@ export const Footer: React.FC<FooterProps> = ({
             className={`rounded-lg transition-colors hover:bg-black hover:text-white ${
               isPageReelOpen ? 'bg-primary text-white hover:bg-primary' : ''
             }`}
-            aria-label="Abrir menu de páginas"
+            aria-label="Ver todas as páginas"
+            title="Ver todas as páginas"
           >
             <Category size="24" color="currentColor" variant="Linear" />
           </Button>
@@ -212,6 +213,8 @@ export const Footer: React.FC<FooterProps> = ({
             className={`h-[54px] w-[54px] rounded-full text-white hover:bg-white/10 ${
               currentPage <= 1 ? 'opacity-50' : ''
             }`}
+            aria-label="Página anterior"
+            title="Página anterior"
           >
             <ArrowCircleLeft size="45" color="currentColor" variant="Bold" />
           </Button>
@@ -229,7 +232,8 @@ export const Footer: React.FC<FooterProps> = ({
                     ? 'bg-[#FF246E] text-white hover:bg-primary'
                     : ''
                 }`}
-                aria-label="Menu"
+                aria-label="Ver todas as páginas"
+                title="Ver todas as páginas"
               >
                 <Category size="24" color="currentColor" variant="Linear" />
               </Button>
@@ -244,6 +248,8 @@ export const Footer: React.FC<FooterProps> = ({
                         ? 'bg-[#FF246E] text-white hover:bg-primary'
                         : ''
                     }`}
+                    aria-label="Anotações"
+                    title="Anotações"
                   >
                     <Stickynote
                       size="24"
@@ -261,6 +267,8 @@ export const Footer: React.FC<FooterProps> = ({
                           ? 'bg-[#FF246E] text-white hover:bg-primary'
                           : ''
                       }`}
+                      aria-label="Destaques"
+                      title="Destaques"
                     >
                       <Edit2 size="24" color="currentColor" variant="Linear" />
                     </Button>
@@ -286,6 +294,8 @@ export const Footer: React.FC<FooterProps> = ({
                     ? 'bg-[#FF246E] text-white hover:bg-primary'
                     : ''
                 }`}
+                aria-label="Downloads"
+                title="Downloads"
               >
                 <ReceiveSquare
                   size="24"
@@ -299,6 +309,8 @@ export const Footer: React.FC<FooterProps> = ({
                   variant="ghost"
                   size="icon"
                   className="rounded-lg transition-colors hover:bg-black text-white"
+                  aria-label={isFullscreen ? 'Sair da tela cheia' : 'Tela cheia'}
+                  title={isFullscreen ? 'Sair da tela cheia' : 'Tela cheia'}
                 >
                   {isFullscreen ? (
                     <Minimize2 size={20} />
@@ -319,6 +331,8 @@ export const Footer: React.FC<FooterProps> = ({
             className={`h-[54px] w-[54px] rounded-full text-white hover:bg-white/10 ${
               currentPage >= totalPages ? 'opacity-50' : ''
             }`}
+            aria-label="Próxima página"
+            title="Próxima página"
           >
             <ArrowCircleRight size="45" color="currentColor" variant="Bold" />
           </Button>
@@ -332,6 +346,8 @@ export const Footer: React.FC<FooterProps> = ({
               variant="ghost"
               size="icon"
               className="rounded-lg transition-colors hover:bg-black hover:text-white"
+              aria-label={isFullscreen ? 'Sair da tela cheia' : 'Tela cheia'}
+              title={isFullscreen ? 'Sair da tela cheia' : 'Tela cheia'}
             >
               {isFullscreen ? <Minimize2 size={20} /> : <Maximize2 size={20} />}
             </Button>

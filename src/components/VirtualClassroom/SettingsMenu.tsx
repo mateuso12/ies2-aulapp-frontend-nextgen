@@ -58,7 +58,11 @@ export const SettingsMenu: React.FC<SettingsMenuProps> = ({
     return (
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <button className="p-3 rounded-lg hover:bg-black hover:text-white cursor-pointer transition-colors outline-none">
+          <button
+            className="p-3 rounded-lg hover:bg-black hover:text-white cursor-pointer transition-colors outline-none"
+            aria-label="Menu"
+            title="Menu"
+          >
             <MoreVertical size={30} />
           </button>
         </DropdownMenuTrigger>
@@ -123,7 +127,11 @@ export const SettingsMenu: React.FC<SettingsMenuProps> = ({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <button className="p-3 rounded-lg hover:bg-black hover:text-white cursor-pointer transition-colors outline-none">
+        <button
+          className="p-3 rounded-lg hover:bg-black hover:text-white cursor-pointer transition-colors outline-none"
+          aria-label="Configurações"
+          title="Configurações"
+        >
           <Setting2 size="24" color="currentColor" variant="Linear" />
         </button>
       </DropdownMenuTrigger>
