@@ -8,6 +8,7 @@ import {
   Stickynote,
   Category,
 } from 'iconsax-react'
+import { Button } from 'ies2-aulapp-ui-kit'
 import { PageReel, type PageData } from './PageReel'
 import { SettingsMenu } from './SettingsMenu'
 
@@ -51,6 +52,7 @@ export const Footer: React.FC<FooterProps> = ({
   const showTools = resourceType === 'content' || resourceType === 'material'
   const [isFullscreen, setIsFullscreen] = useState(false)
   const [isPageReelOpen, setIsPageReelOpen] = useState(false)
+  const [isShareMenuOpen, setIsShareMenuOpen] = useState(false)
   // Remove local state for annotations active, rely on prop or internal if not provided?
   // Actually, to support both controlled and uncontrolled, we can use a local state initialized with prop,
   // but here the parent controls the visibility (overlay).
@@ -89,6 +91,10 @@ export const Footer: React.FC<FooterProps> = ({
       }
     }
     setIsPageReelOpen(!isPageReelOpen)
+  }
+
+  const toggleShareMenu = () => {
+    setIsShareMenuOpen(!isShareMenuOpen)
   }
 
   const handleSearchInPage = () => {
@@ -165,15 +171,17 @@ export const Footer: React.FC<FooterProps> = ({
         {/* Mobile Content */}
         <div className="hidden w-full items-center justify-between max-md:flex">
           {/* Left: Page reel */}
-          <button
+          <Button
             onClick={togglePageReel}
-            className={`p-3 rounded-lg hover:bg-black hover:text-white cursor-pointer transition-colors ${
-              isPageReelOpen ? 'bg-black text-white' : ''
+            variant="ghost"
+            size="icon"
+            className={`rounded-lg transition-colors hover:bg-black hover:text-white ${
+              isPageReelOpen ? 'bg-primary text-white hover:bg-primary' : ''
             }`}
             aria-label="Abrir menu de páginas"
           >
             <Category size="24" color="currentColor" variant="Linear" />
-          </button>
+          </Button>
 
           {/* Center: Counter */}
           <span className="font-plus-jakarta text-xl font-semibold">
@@ -196,35 +204,45 @@ export const Footer: React.FC<FooterProps> = ({
         {/* Desktop Content */}
         <div className="hidden w-full max-w-[1092px] items-center justify-between md:flex">
           {/* Left Arrow */}
-          <button
+          <Button
             onClick={onPrevious}
             disabled={currentPage <= 1}
-            className={`flex h-[54px] w-[54px] items-center justify-center rounded-full hover:bg-white/10 cursor-pointer ${
-              currentPage <= 1 ? 'opacity-50 cursor-not-allowed' : ''
+            variant="ghost"
+            size="icon"
+            className={`h-[54px] w-[54px] rounded-full text-white hover:bg-white/10 ${
+              currentPage <= 1 ? 'opacity-50' : ''
             }`}
           >
             <ArrowCircleLeft size="45" color="currentColor" variant="Bold" />
-          </button>
+          </Button>
 
           {/* Center Tools */}
           <div className="flex items-center gap-12">
             {/* Tools Group */}
             <div className="flex items-center gap-8">
-              <button
+              <Button
                 onClick={togglePageReel}
-                className={`p-3 rounded-lg hover:bg-black hover:text-white cursor-pointer transition-colors ${
-                  isPageReelOpen ? 'bg-black text-white' : ''
+                variant="ghost"
+                size="icon"
+                className={`rounded-lg transition-colors hover:bg-black text-white ${
+                  isPageReelOpen
+                    ? 'bg-[#FF246E] text-white hover:bg-primary'
+                    : ''
                 }`}
                 aria-label="Menu"
               >
                 <Category size="24" color="currentColor" variant="Linear" />
-              </button>
+              </Button>
               {showTools && (
                 <>
-                  <button
+                  <Button
                     onClick={onToggleStickyNotes}
-                    className={`p-3 rounded-lg hover:bg-black hover:text-white cursor-pointer transition-colors ${
-                      isStickyNotesOpen ? 'bg-black text-white' : ''
+                    variant="ghost"
+                    size="icon"
+                    className={`rounded-lg transition-colors hover:bg-black text-white ${
+                      isStickyNotesOpen
+                        ? 'bg-[#FF246E] text-white hover:bg-primary'
+                        : ''
                     }`}
                   >
                     <Stickynote
@@ -232,16 +250,20 @@ export const Footer: React.FC<FooterProps> = ({
                       color="currentColor"
                       variant="Linear"
                     />
-                  </button>
+                  </Button>
                   {onToggleAnnotations && (
-                    <button
+                    <Button
                       onClick={handleToggleAnnotations}
-                      className={`p-3 rounded-lg hover:bg-black hover:text-white cursor-pointer transition-colors ${
-                        isAnnotationsVisible ? 'bg-black text-white' : ''
+                      variant="ghost"
+                      size="icon"
+                      className={`rounded-lg transition-colors hover:bg-black text-white ${
+                        isAnnotationsVisible
+                          ? 'bg-[#FF246E] text-white hover:bg-primary'
+                          : ''
                       }`}
                     >
                       <Edit2 size="24" color="currentColor" variant="Linear" />
-                    </button>
+                    </Button>
                   )}
                 </>
               )}
@@ -255,49 +277,64 @@ export const Footer: React.FC<FooterProps> = ({
 
             {/* Right Tools */}
             <div className="flex items-center gap-8">
-              <button className="p-3 rounded-lg hover:bg-black hover:text-white cursor-pointer transition-colors">
+              <Button
+                onClick={toggleShareMenu}
+                variant="ghost"
+                size="icon"
+                className={`rounded-lg transition-colors hover:bg-black text-white ${
+                  isShareMenuOpen
+                    ? 'bg-[#FF246E] text-white hover:bg-primary'
+                    : ''
+                }`}
+              >
                 <ReceiveSquare
                   size="24"
                   color="currentColor"
                   variant="Linear"
                 />
-              </button>
+              </Button>
               {showTools && (
-                <button
+                <Button
                   onClick={toggleFullscreen}
-                  className="p-3.5 rounded-lg hover:bg-black hover:text-white cursor-pointer transition-colors"
+                  variant="ghost"
+                  size="icon"
+                  className="rounded-lg transition-colors hover:bg-black text-white"
                 >
                   {isFullscreen ? (
                     <Minimize2 size={20} />
                   ) : (
                     <Maximize2 size={20} />
                   )}
-                </button>
+                </Button>
               )}
             </div>
           </div>
 
           {/* Right Arrow */}
-          <button
+          <Button
             onClick={onNext}
             disabled={currentPage >= totalPages}
-            className={`flex h-[54px] w-[54px] items-center justify-center rounded-full hover:bg-white/10 cursor-pointer ${
-              currentPage >= totalPages ? 'opacity-50 cursor-not-allowed' : ''
+            variant="ghost"
+            size="icon"
+            className={`h-[54px] w-[54px] rounded-full text-white hover:bg-white/10 ${
+              currentPage >= totalPages ? 'opacity-50' : ''
             }`}
           >
             <ArrowCircleRight size="45" color="currentColor" variant="Bold" />
-          </button>
+          </Button>
         </div>
 
         {/* Settings (Desktop Only) */}
         <div className="absolute right-8 hidden items-center gap-2 md:flex">
           {!showTools && (
-            <button
+            <Button
               onClick={toggleFullscreen}
-              className="p-3.5 rounded-lg hover:bg-black hover:text-white cursor-pointer transition-colors"
+              variant="ghost"
+              size="icon"
+              className="rounded-lg transition-colors hover:bg-black hover:text-white"
             >
               {isFullscreen ? <Minimize2 size={20} /> : <Maximize2 size={20} />}
-            </button>
+            </Button>
           )}
           <SettingsMenu />
         </div>
