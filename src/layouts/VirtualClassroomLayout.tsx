@@ -16,6 +16,7 @@ import { StickyNoteSidebar } from '../components/StickyNotes/StickyNoteSidebar'
 import { useStickyNotes } from '../hooks/useStickyNotes'
 import { ContentArea } from '../components/VirtualClassroom/ContentArea'
 import { FloatingBookmarkButton } from '../components/VirtualClassroom/FloatingBookmarkButton'
+import { useAutoHideBars } from '../hooks/useAutoHideBars'
 
 export type ResourceType =
   | 'content'
@@ -58,11 +59,25 @@ export const VirtualClassroomLayout: React.FC<VirtualClassroomLayoutProps> = ({
   const [variant, setVariant] = useState(initialVariant)
   const [resourceType, setResourceType] = useState(initialResourceType)
   const [isBookmarksSidebarOpen, setIsBookmarksSidebarOpen] = useState(false)
+  const [isBarsAutoHidden, setIsBarsAutoHidden] = useState(false)
+  const [isHeaderHovered, setIsHeaderHovered] = useState(false)
+  const [isFooterHovered, setIsFooterHovered] = useState(false)
+  const [isFooterInteracting, setIsFooterInteracting] = useState(false)
+  const [isFooterMenusOpen, setIsFooterMenusOpen] = useState(false)
+  const [isHeaderMenusOpen, setIsHeaderMenusOpen] = useState(false)
 
   useEffect(() => {
     setVariant(initialVariant)
     setResourceType(initialResourceType)
   }, [initialVariant, initialResourceType])
+
+  const { isRevealed: isBarsRevealed } = useAutoHideBars({
+    enabled: isBarsAutoHidden,
+    lockVisible: isHeaderMenusOpen || isFooterMenusOpen,
+    isHeaderHovered,
+    isFooterHovered,
+    isFooterInteracting,
+  })
 
   const {
     strokes,
@@ -145,15 +160,28 @@ export const VirtualClassroomLayout: React.FC<VirtualClassroomLayoutProps> = ({
 
   return (
     <div className="flex h-screen w-full flex-col overflow-hidden bg-[#1E1E1E]">
-      <Header
-        variant={variant}
-        title="Nome do conteúdo"
-        currentPage={currentPage}
-        totalPages={totalPages}
-        resourceType={resourceType}
-        onBookmark={handleBookmarkClick}
-        isBookmarked={isCurrentPageBookmarked}
-      />
+      <div
+        className={
+          isBarsAutoHidden
+            ? `fixed left-0 top-0 z-50 w-full transform-gpu transition-transform duration-300 ease-out ${
+                isBarsRevealed ? 'translate-y-0' : '-translate-y-full'
+              }`
+            : ''
+        }
+        onMouseEnter={() => isBarsAutoHidden && setIsHeaderHovered(true)}
+        onMouseLeave={() => isBarsAutoHidden && setIsHeaderHovered(false)}
+      >
+        <Header
+          variant={variant}
+          title="Nome do conteúdo"
+          currentPage={currentPage}
+          totalPages={totalPages}
+          resourceType={resourceType}
+          onBookmark={handleBookmarkClick}
+          isBookmarked={isCurrentPageBookmarked}
+          onMenusOpenChange={setIsHeaderMenusOpen}
+        />
+      </div>
 
       <BookmarksSidebar
         isOpen={isBookmarksSidebarOpen}
@@ -207,46 +235,63 @@ export const VirtualClassroomLayout: React.FC<VirtualClassroomLayoutProps> = ({
         )}
       </AnimatePresence>
 
-      <Footer
-        onToggleAnnotations={() => {
-          if (!isVisible) {
-            setIsStickyNoteSidebarOpen(false)
-            setIsBookmarksSidebarOpen(false)
-          }
-          setIsVisible(!isVisible)
-        }}
-        isAnnotationsVisible={isVisible}
-        resourceType={resourceType}
-        currentPage={currentPage}
-        totalPages={totalPages}
-        pages={enhancedPages}
-        onNext={onNext}
-        onPrevious={onPrevious}
-        onPageSelect={onPageSelect}
-        onToggleStickyNotes={() => {
-          if (!isStickyNoteSidebarOpen) {
-            setIsVisible(false)
-            setIsBookmarksSidebarOpen(false)
-          }
-          setIsStickyNoteSidebarOpen(!isStickyNoteSidebarOpen)
-        }}
-        isStickyNotesOpen={isStickyNoteSidebarOpen}
-        onBookmarkCurrentPage={handleBookmarkClick}
-        onMarkText={() => {
-          if (!isVisible) {
-            setIsStickyNoteSidebarOpen(false)
-            setIsBookmarksSidebarOpen(false)
-          }
-          setIsVisible(!isVisible)
-        }}
-        onMakeNote={() => {
-          if (!isStickyNoteSidebarOpen) {
-            setIsVisible(false)
-            setIsBookmarksSidebarOpen(false)
-          }
-          setIsStickyNoteSidebarOpen(true)
-        }}
-      />
+      <div
+        className={
+          isBarsAutoHidden
+            ? `fixed bottom-0 left-0 z-50 w-full transform-gpu transition-transform duration-300 ease-out ${
+                isBarsRevealed ? 'translate-y-0' : 'translate-y-full'
+              }`
+            : ''
+        }
+        onMouseEnter={() => isBarsAutoHidden && setIsFooterHovered(true)}
+        onMouseLeave={() => isBarsAutoHidden && setIsFooterHovered(false)}
+      >
+        <Footer
+          onToggleAnnotations={() => {
+            if (!isVisible) {
+              setIsStickyNoteSidebarOpen(false)
+              setIsBookmarksSidebarOpen(false)
+            }
+            setIsVisible(!isVisible)
+          }}
+          isAnnotationsVisible={isVisible}
+          resourceType={resourceType}
+          currentPage={currentPage}
+          totalPages={totalPages}
+          pages={enhancedPages}
+          onNext={onNext}
+          onPrevious={onPrevious}
+          onPageSelect={onPageSelect}
+          onToggleStickyNotes={() => {
+            if (!isStickyNoteSidebarOpen) {
+              setIsVisible(false)
+              setIsBookmarksSidebarOpen(false)
+            }
+            setIsStickyNoteSidebarOpen(!isStickyNoteSidebarOpen)
+          }}
+          isStickyNotesOpen={isStickyNoteSidebarOpen}
+          onBookmarkCurrentPage={handleBookmarkClick}
+          onMarkText={() => {
+            if (!isVisible) {
+              setIsStickyNoteSidebarOpen(false)
+              setIsBookmarksSidebarOpen(false)
+            }
+            setIsVisible(!isVisible)
+          }}
+          onMakeNote={() => {
+            if (!isStickyNoteSidebarOpen) {
+              setIsVisible(false)
+              setIsBookmarksSidebarOpen(false)
+            }
+            setIsStickyNoteSidebarOpen(true)
+          }}
+          onHideToolbar={() => {
+            setIsBarsAutoHidden((v) => !v)
+          }}
+          onInteractiveStateChange={setIsFooterInteracting}
+          onMenusOpenChange={setIsFooterMenusOpen}
+        />
+      </div>
 
       <StickyNoteSidebar
         isOpen={isStickyNoteSidebarOpen}

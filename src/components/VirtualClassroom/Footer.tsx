@@ -22,6 +22,7 @@ interface FooterProps {
   onMarkText?: () => void
   onMakeNote?: () => void
   onOpenSettings?: () => void
+  onHideToolbar?: () => void
   resourceType?: string
   currentPage?: number
   totalPages?: number
@@ -29,6 +30,8 @@ interface FooterProps {
   onNext?: () => void
   onPrevious?: () => void
   onPageSelect?: (page: number) => void
+  onInteractiveStateChange?: (isInteracting: boolean) => void
+  onMenusOpenChange?: (isOpen: boolean) => void
 }
 
 export const Footer: React.FC<FooterProps> = ({
@@ -41,6 +44,7 @@ export const Footer: React.FC<FooterProps> = ({
   onMarkText,
   onMakeNote,
   onOpenSettings,
+  onHideToolbar,
   resourceType = 'content',
   currentPage = 1,
   totalPages = 1,
@@ -48,11 +52,15 @@ export const Footer: React.FC<FooterProps> = ({
   onNext,
   onPrevious,
   onPageSelect,
+  onInteractiveStateChange,
+  onMenusOpenChange,
 }) => {
   const showTools = resourceType === 'content' || resourceType === 'material'
   const [isFullscreen, setIsFullscreen] = useState(false)
   const [isPageReelOpen, setIsPageReelOpen] = useState(false)
   const [isShareMenuOpen, setIsShareMenuOpen] = useState(false)
+  const [isMenuHovered, setIsMenuHovered] = useState(false)
+  const [isSettingsMenuOpen, setIsSettingsMenuOpen] = useState(false)
   // Remove local state for annotations active, rely on prop or internal if not provided?
   // Actually, to support both controlled and uncontrolled, we can use a local state initialized with prop,
   // but here the parent controls the visibility (overlay).
@@ -97,6 +105,23 @@ export const Footer: React.FC<FooterProps> = ({
     setIsShareMenuOpen(!isShareMenuOpen)
   }
 
+  const isAnyFooterFeatureOpen =
+    isPageReelOpen ||
+    isShareMenuOpen ||
+    isSettingsMenuOpen ||
+    isAnnotationsVisible ||
+    isStickyNotesOpen
+
+  useEffect(() => {
+    onMenusOpenChange?.(isAnyFooterFeatureOpen)
+  }, [isAnyFooterFeatureOpen, onMenusOpenChange])
+
+  useEffect(() => {
+    onInteractiveStateChange?.(
+      isShareMenuOpen || (isPageReelOpen && isMenuHovered)
+    )
+  }, [isPageReelOpen, isShareMenuOpen, isMenuHovered, onInteractiveStateChange])
+
   const handleSearchInPage = () => {
     if (onSearchInPage) {
       onSearchInPage()
@@ -127,6 +152,10 @@ export const Footer: React.FC<FooterProps> = ({
 
   const handleOpenSettings = () => {
     onOpenSettings?.()
+  }
+
+  const handleHideToolbar = () => {
+    onHideToolbar?.()
   }
 
   const handleToggleAnnotations = () => {
@@ -163,6 +192,8 @@ export const Footer: React.FC<FooterProps> = ({
       <PageReel
         isOpen={isPageReelOpen}
         onClose={() => setIsPageReelOpen(false)}
+        onMouseEnter={() => setIsMenuHovered(true)}
+        onMouseLeave={() => setIsMenuHovered(false)}
         pages={displayPages}
         currentPage={currentPage}
         onPageSelect={handlePageSelect}
@@ -175,8 +206,8 @@ export const Footer: React.FC<FooterProps> = ({
             onClick={togglePageReel}
             variant="ghost"
             size="icon"
-            className={`rounded-lg transition-colors hover:bg-black hover:text-white ${
-              isPageReelOpen ? 'bg-primary text-white hover:bg-primary' : ''
+            className={`rounded-lg transition-colors hover:bg-black text-white ${
+              isPageReelOpen ? 'bg-[#FF246E] text-white' : ''
             }`}
             aria-label="Ver todas as páginas"
             title="Ver todas as páginas"
@@ -198,6 +229,8 @@ export const Footer: React.FC<FooterProps> = ({
               onMarkText={handleMarkText}
               onMakeNote={handleMakeNote}
               onOpenSettings={handleOpenSettings}
+              onHideToolbar={handleHideToolbar}
+              onOpenChange={setIsSettingsMenuOpen}
             />
           </div>
         </div>
@@ -228,9 +261,7 @@ export const Footer: React.FC<FooterProps> = ({
                 variant="ghost"
                 size="icon"
                 className={`rounded-lg transition-colors hover:bg-black text-white ${
-                  isPageReelOpen
-                    ? 'bg-[#FF246E] text-white hover:bg-primary'
-                    : ''
+                  isPageReelOpen ? 'bg-[#FF246E] text-white' : ''
                 }`}
                 aria-label="Ver todas as páginas"
                 title="Ver todas as páginas"
@@ -244,9 +275,7 @@ export const Footer: React.FC<FooterProps> = ({
                     variant="ghost"
                     size="icon"
                     className={`rounded-lg transition-colors hover:bg-black text-white ${
-                      isStickyNotesOpen
-                        ? 'bg-[#FF246E] text-white hover:bg-primary'
-                        : ''
+                      isStickyNotesOpen ? 'bg-[#FF246E] text-white' : ''
                     }`}
                     aria-label="Anotações"
                     title="Anotações"
@@ -264,7 +293,7 @@ export const Footer: React.FC<FooterProps> = ({
                       size="icon"
                       className={`rounded-lg transition-colors hover:bg-black text-white ${
                         isAnnotationsVisible
-                          ? 'bg-[#FF246E] text-white hover:bg-primary'
+                          ? 'bg-[#FF246E] text-white  hover:bg-[#FF246E]'
                           : ''
                       }`}
                       aria-label="Destaques"
@@ -291,7 +320,7 @@ export const Footer: React.FC<FooterProps> = ({
                 size="icon"
                 className={`rounded-lg transition-colors hover:bg-black text-white ${
                   isShareMenuOpen
-                    ? 'bg-[#FF246E] text-white hover:bg-primary'
+                    ? 'bg-[#FF246E] text-white hover:bg-[#FF246E]'
                     : ''
                 }`}
                 aria-label="Downloads"
@@ -309,7 +338,9 @@ export const Footer: React.FC<FooterProps> = ({
                   variant="ghost"
                   size="icon"
                   className="rounded-lg transition-colors hover:bg-black text-white"
-                  aria-label={isFullscreen ? 'Sair da tela cheia' : 'Tela cheia'}
+                  aria-label={
+                    isFullscreen ? 'Sair da tela cheia' : 'Tela cheia'
+                  }
                   title={isFullscreen ? 'Sair da tela cheia' : 'Tela cheia'}
                 >
                   {isFullscreen ? (
@@ -352,7 +383,10 @@ export const Footer: React.FC<FooterProps> = ({
               {isFullscreen ? <Minimize2 size={20} /> : <Maximize2 size={20} />}
             </Button>
           )}
-          <SettingsMenu />
+          <SettingsMenu
+            onHideToolbar={handleHideToolbar}
+            onOpenChange={setIsSettingsMenuOpen}
+          />
         </div>
       </footer>
     </>

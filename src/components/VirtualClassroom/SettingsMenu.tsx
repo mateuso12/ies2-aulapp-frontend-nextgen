@@ -26,6 +26,7 @@ interface SettingsMenuProps {
   onMarkText?: () => void
   onMakeNote?: () => void
   onOpenSettings?: () => void
+  onOpenChange?: (open: boolean) => void
 }
 
 export const SettingsMenu: React.FC<SettingsMenuProps> = ({
@@ -36,8 +37,10 @@ export const SettingsMenu: React.FC<SettingsMenuProps> = ({
   onMarkText,
   onMakeNote,
   onOpenSettings,
+  onOpenChange,
 }) => {
   const [isDarkMode, setIsDarkMode] = useState(false)
+  const [isOpen, setIsOpen] = useState(false)
 
   useEffect(() => {
     const isDark = document.documentElement.classList.contains('dark')
@@ -56,10 +59,18 @@ export const SettingsMenu: React.FC<SettingsMenuProps> = ({
 
   if (isMobile) {
     return (
-      <DropdownMenu>
+      <DropdownMenu
+        open={isOpen}
+        onOpenChange={(open) => {
+          setIsOpen(open)
+          onOpenChange?.(open)
+        }}
+      >
         <DropdownMenuTrigger asChild>
           <button
-            className="p-3 rounded-lg hover:bg-black hover:text-white cursor-pointer transition-colors outline-none"
+            className={`p-3 rounded-lg cursor-pointer transition-colors outline-none hover:bg-black hover:text-white ${
+              isOpen ? 'bg-[#FF246E] text-white hover:bg-primary' : ''
+            }`}
             aria-label="Menu"
             title="Menu"
           >
@@ -125,10 +136,18 @@ export const SettingsMenu: React.FC<SettingsMenuProps> = ({
   }
 
   return (
-    <DropdownMenu>
+    <DropdownMenu
+      open={isOpen}
+      onOpenChange={(open) => {
+        setIsOpen(open)
+        onOpenChange?.(open)
+      }}
+    >
       <DropdownMenuTrigger asChild>
         <button
-          className="p-3 rounded-lg hover:bg-black hover:text-white cursor-pointer transition-colors outline-none"
+          className={`p-3.5 rounded-lg cursor-pointer transition-colors outline-none hover:bg-black hover:text-white ${
+            isOpen ? 'bg-[#FF246E] text-white hover:bg-primary' : ''
+          }`}
           aria-label="Configurações"
           title="Configurações"
         >

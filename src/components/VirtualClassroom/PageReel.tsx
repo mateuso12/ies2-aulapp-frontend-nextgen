@@ -19,6 +19,8 @@ interface PageReelProps {
   pages: PageData[]
   currentPage: number
   onPageSelect: (pageIndex: number) => void
+  onMouseEnter?: () => void
+  onMouseLeave?: () => void
 }
 
 export const PageReel: React.FC<PageReelProps> = ({
@@ -27,6 +29,8 @@ export const PageReel: React.FC<PageReelProps> = ({
   pages,
   currentPage,
   onPageSelect,
+  onMouseEnter,
+  onMouseLeave,
 }) => {
   const [isMaximized, setIsMaximized] = useState(false)
 
@@ -41,6 +45,8 @@ export const PageReel: React.FC<PageReelProps> = ({
             animate={{ opacity: 1, y: 0, x: '-50%' }}
             exit={{ opacity: 0, y: 20, x: '-50%' }}
             transition={{ duration: 0.2 }}
+            onMouseEnter={onMouseEnter}
+            onMouseLeave={onMouseLeave}
             className={`absolute bottom-[120px] left-1/2 bg-[#2C2C2C] rounded-2xl shadow-xl z-50 transition-all duration-300 ease-in-out ${
               isMaximized
                 ? 'w-[90vw] h-[80vh] max-w-[1644px] max-h-[619px]'

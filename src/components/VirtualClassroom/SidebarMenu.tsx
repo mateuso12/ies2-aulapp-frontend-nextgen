@@ -12,14 +12,18 @@ import { useMediaQuery } from '@/hooks/use-media-query'
 
 interface SidebarMenuProps {
   children: React.ReactNode
+  onOpenChange?: (open: boolean) => void
 }
 
-export const SidebarMenu: React.FC<SidebarMenuProps> = ({ children }) => {
+export const SidebarMenu: React.FC<SidebarMenuProps> = ({
+  children,
+  onOpenChange,
+}) => {
   const isDesktop = useMediaQuery('(min-width: 768px)')
 
   if (isDesktop) {
     return (
-      <Sheet>
+      <Sheet onOpenChange={onOpenChange}>
         <SheetTrigger asChild>{children}</SheetTrigger>
         <SheetContent
           side="right"
@@ -40,7 +44,7 @@ export const SidebarMenu: React.FC<SidebarMenuProps> = ({ children }) => {
   }
 
   return (
-    <Sheet>
+    <Sheet onOpenChange={onOpenChange}>
       <SheetTrigger asChild>{children}</SheetTrigger>
       <SheetContent
         side="right"
