@@ -87,12 +87,12 @@ export const ContentArea = forwardRef<HTMLDivElement, ContentAreaProps>(
             currentConfig={currentConfig}
             isDrawingMode={isDrawingMode}
             onStrokesChange={onStrokesChange}
-            className="w-full min-h-full flex justify-center pt-[180px] px-12 pb-12"
+            className="w-full min-h-full flex justify-center pt-20 md:pt-32 px-4 md:px-12 pb-20 md:pb-32"
           >
             <div className="w-full max-w-[1400px] relative">{children}</div>
           </DrawingArea>
         ) : (
-          <div className="w-full min-h-full flex justify-center pt-[180px] px-12 pb-12">
+          <div className="w-full min-h-full flex justify-center pt-20 md:pt-32 px-4 md:px-12 pb-20 md:pb-32">
             <div className="w-full max-w-[1400px] relative">{children}</div>
           </div>
         )}

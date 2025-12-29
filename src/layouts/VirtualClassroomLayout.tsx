@@ -17,6 +17,7 @@ import { useStickyNotes } from '../hooks/useStickyNotes'
 import { ContentArea } from '../components/VirtualClassroom/ContentArea'
 import { FloatingBookmarkButton } from '../components/VirtualClassroom/FloatingBookmarkButton'
 import { useAutoHideBars } from '../hooks/useAutoHideBars'
+import { useImmersiveReadingMode } from '../hooks/useImmersiveReadingMode'
 
 export type ResourceType =
   | 'content'
@@ -66,6 +67,9 @@ export const VirtualClassroomLayout: React.FC<VirtualClassroomLayoutProps> = ({
   const [isFooterMenusOpen, setIsFooterMenusOpen] = useState(false)
   const [isHeaderMenusOpen, setIsHeaderMenusOpen] = useState(false)
 
+  // Lock global quando qualquer menu/ferramenta estiver aberta
+  const lockVisible = isHeaderMenusOpen || isFooterMenusOpen
+
   useEffect(() => {
     setVariant(initialVariant)
     setResourceType(initialResourceType)
@@ -73,7 +77,7 @@ export const VirtualClassroomLayout: React.FC<VirtualClassroomLayoutProps> = ({
 
   const { isRevealed: isBarsRevealed } = useAutoHideBars({
     enabled: isBarsAutoHidden,
-    lockVisible: isHeaderMenusOpen || isFooterMenusOpen,
+    lockVisible,
     isHeaderHovered,
     isFooterHovered,
     isFooterInteracting,
@@ -88,6 +92,24 @@ export const VirtualClassroomLayout: React.FC<VirtualClassroomLayoutProps> = ({
     setIsVisible,
     clearStrokes,
   } = useAnnotations(`page-${currentPage}`, 'user-1')
+
+  // Modo leitura (mobile): toque no centro alterna visibilidade das barras.
+  // Respeita lockVisible (menus/ferramentas abertas).
+  const {
+    isUiHidden,
+    overlayProps,
+    reveal: revealImmersiveUi,
+  } = useImmersiveReadingMode({
+    enabled: true,
+    lockVisible,
+    isBusy: isVisible, // desenho/anotações em uso
+  })
+
+  useEffect(() => {
+    if (lockVisible) {
+      revealImmersiveUi()
+    }
+  }, [lockVisible, revealImmersiveUi])
 
   const mainRef = useRef<HTMLDivElement>(null)
   const { scrollY } = useScroll({ container: mainRef })
@@ -158,16 +180,25 @@ export const VirtualClassroomLayout: React.FC<VirtualClassroomLayoutProps> = ({
     })
   }, [pages, currentPage, strokes.length, stickyNotes])
 
+  // Determine visibility state for bars
+  const isHeaderHidden = isUiHidden || (isBarsAutoHidden && !isBarsRevealed)
+  const isFooterHidden = isUiHidden || (isBarsAutoHidden && !isBarsRevealed)
+
   return (
     <div className="flex h-screen w-full flex-col overflow-hidden bg-[#1E1E1E]">
+      {/* Hotspot (mobile) para toque central alternar modo leitura.
+          Não bloqueia cliques/scroll no conteúdo fora da área central. */}
+      <div className="fixed inset-0 z-40 pointer-events-none md:hidden">
+        <div
+          className="absolute left-0 right-0 top-1/3 h-1/3 pointer-events-auto"
+          {...overlayProps}
+        />
+      </div>
+
       <div
-        className={
-          isBarsAutoHidden
-            ? `fixed left-0 top-0 z-50 w-full transform-gpu transition-transform duration-300 ease-out ${
-                isBarsRevealed ? 'translate-y-0' : '-translate-y-full'
-              }`
-            : ''
-        }
+        className={`fixed left-0 top-0 z-50 w-full transform-gpu transition-transform duration-300 ease-out ${
+          isHeaderHidden ? '-translate-y-full' : 'translate-y-0'
+        }`}
         onMouseEnter={() => isBarsAutoHidden && setIsHeaderHovered(true)}
         onMouseLeave={() => isBarsAutoHidden && setIsHeaderHovered(false)}
       >
@@ -236,13 +267,9 @@ export const VirtualClassroomLayout: React.FC<VirtualClassroomLayoutProps> = ({
       </AnimatePresence>
 
       <div
-        className={
-          isBarsAutoHidden
-            ? `fixed bottom-0 left-0 z-50 w-full transform-gpu transition-transform duration-300 ease-out ${
-                isBarsRevealed ? 'translate-y-0' : 'translate-y-full'
-              }`
-            : ''
-        }
+        className={`fixed bottom-0 left-0 z-50 w-full transform-gpu transition-transform duration-300 ease-out ${
+          isFooterHidden ? 'translate-y-full' : 'translate-y-0'
+        }`}
         onMouseEnter={() => isBarsAutoHidden && setIsFooterHovered(true)}
         onMouseLeave={() => isBarsAutoHidden && setIsFooterHovered(false)}
       >
