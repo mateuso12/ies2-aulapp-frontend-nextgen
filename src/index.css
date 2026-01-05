@@ -165,7 +165,8 @@
 
 /* Animação do hint de swipe */
 @keyframes swipeHint {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateX(0);
     opacity: 1;
   }

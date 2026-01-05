@@ -61,10 +61,6 @@ export const Footer: React.FC<FooterProps> = ({
   const [isShareMenuOpen, setIsShareMenuOpen] = useState(false)
   const [isMenuHovered, setIsMenuHovered] = useState(false)
   const [isSettingsMenuOpen, setIsSettingsMenuOpen] = useState(false)
-  // Remove local state for annotations active, rely on prop or internal if not provided?
-  // Actually, to support both controlled and uncontrolled, we can use a local state initialized with prop,
-  // but here the parent controls the visibility (overlay).
-  // So we should rely on isAnnotationsVisible.
 
   useEffect(() => {
     const handleFullscreenChange = () => {
@@ -122,17 +118,8 @@ export const Footer: React.FC<FooterProps> = ({
     )
   }, [isPageReelOpen, isShareMenuOpen, isMenuHovered, onInteractiveStateChange])
 
-  const handleSearchInPage = () => {
-    if (onSearchInPage) {
-      onSearchInPage()
-      return
-    }
-    togglePageReel()
-  }
-
-  const handleBookmarkPage = () => {
-    onBookmarkCurrentPage?.()
-  }
+  const handleSearchInPage = () => onSearchInPage?.()
+  const handleBookmarkPage = () => onBookmarkCurrentPage?.()
 
   const handleMarkText = () => {
     if (onMarkText) {
@@ -174,8 +161,6 @@ export const Footer: React.FC<FooterProps> = ({
     if (onPageSelect) {
       onPageSelect(page)
     }
-    // Optional: Close reel on select? The user didn't specify.
-    // setIsPageReelOpen(false)
   }
 
   // Use provided pages or fallback to mock based on totalPages

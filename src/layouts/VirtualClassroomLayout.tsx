@@ -20,6 +20,7 @@ import { useAutoHideBars } from '../hooks/useAutoHideBars'
 import { useImmersiveReadingMode } from '../hooks/useImmersiveReadingMode'
 import { useMediaQuery } from '../hooks/use-media-query'
 import { SwipeableContentWrapper } from '../components/VirtualClassroom/SwipeableContentWrapper'
+import { MobileSearchOverlay } from '../components/VirtualClassroom/MobileSearchOverlay'
 
 export type ResourceType =
   | 'content'
@@ -68,6 +69,10 @@ export const VirtualClassroomLayout: React.FC<VirtualClassroomLayoutProps> = ({
   const [isFooterInteracting, setIsFooterInteracting] = useState(false)
   const [isFooterMenusOpen, setIsFooterMenusOpen] = useState(false)
   const [isHeaderMenusOpen, setIsHeaderMenusOpen] = useState(false)
+  const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(false)
+
+  const openMobileSearch = () => setIsMobileSearchOpen(true)
+  const closeMobileSearch = () => setIsMobileSearchOpen(false)
 
   // Lock global quando qualquer menu/ferramenta estiver aberta
   const lockVisible = isHeaderMenusOpen || isFooterMenusOpen
@@ -190,6 +195,13 @@ export const VirtualClassroomLayout: React.FC<VirtualClassroomLayoutProps> = ({
 
   return (
     <div className="flex h-screen w-full flex-col overflow-hidden bg-[#1E1E1E]">
+      {/* Mobile Search Overlay */}
+      <MobileSearchOverlay
+        isOpen={isMobileSearchOpen}
+        onClose={closeMobileSearch}
+        resultsCount={2}
+      />
+
       {/* Hotspot (mobile) para toque central alternar modo leitura.
           Não bloqueia cliques/scroll no conteúdo fora da área central. */}
       <div className="fixed inset-0 z-40 pointer-events-none md:hidden">
@@ -311,6 +323,7 @@ export const VirtualClassroomLayout: React.FC<VirtualClassroomLayoutProps> = ({
           }}
           isStickyNotesOpen={isStickyNoteSidebarOpen}
           onBookmarkCurrentPage={handleBookmarkClick}
+          onSearchInPage={openMobileSearch}
           onMarkText={() => {
             if (!isVisible) {
               setIsStickyNoteSidebarOpen(false)
