@@ -54,7 +54,7 @@ export const ContentArea = forwardRef<HTMLDivElement, ContentAreaProps>(
         ref={ref}
         onDrop={onDrop}
         onDragOver={onDragOver}
-        className={`flex-1 overflow-auto relative custom-scrollbar ${
+        className={`flex-1 min-h-0 overflow-auto relative custom-scrollbar ${
           variant === 'gamified' ? '' : 'bg-[#F5F7FB]'
         }`}
       >

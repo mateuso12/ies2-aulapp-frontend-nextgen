@@ -18,6 +18,8 @@ import { ContentArea } from '../components/VirtualClassroom/ContentArea'
 import { FloatingBookmarkButton } from '../components/VirtualClassroom/FloatingBookmarkButton'
 import { useAutoHideBars } from '../hooks/useAutoHideBars'
 import { useImmersiveReadingMode } from '../hooks/useImmersiveReadingMode'
+import { useMediaQuery } from '../hooks/use-media-query'
+import { SwipeableContentWrapper } from '../components/VirtualClassroom/SwipeableContentWrapper'
 
 export type ResourceType =
   | 'content'
@@ -112,6 +114,8 @@ export const VirtualClassroomLayout: React.FC<VirtualClassroomLayoutProps> = ({
   }, [lockVisible, revealImmersiveUi])
 
   const mainRef = useRef<HTMLDivElement>(null)
+  const isMobile = useMediaQuery('(max-width: 768px)')
+
   const { scrollY } = useScroll({ container: mainRef })
   const bgY = useTransform(scrollY, [0, 1000], [0, 200])
 
@@ -229,31 +233,40 @@ export const VirtualClassroomLayout: React.FC<VirtualClassroomLayoutProps> = ({
         isVisible={isContent}
       />
 
-      <ContentArea
-        ref={mainRef}
-        variant={variant}
-        showPaper={showPaper}
-        enableDrawing={enableDrawing}
-        pageId={`page-${currentPage}`}
-        strokes={strokes}
-        currentConfig={config}
-        isDrawingMode={isVisible && enableDrawing}
-        onStrokesChange={setStrokes}
-        bgY={bgY}
-        onDrop={handleDrop}
-        onDragOver={handleDragOver}
-        stickyNotes={currentNotes}
-        areStickyNotesVisible={areStickyNotesVisible}
-        onUpdateNote={updateNote}
-        onDeleteNote={deleteNote}
-        onOpenSidebar={() => {
-          setIsStickyNoteSidebarOpen(true)
-          setIsBookmarksSidebarOpen(false)
-          setIsVisible(false)
-        }}
+      {/* Área de conteúdo com suporte a swipe (mobile) - ocupa toda a altura da viewport */}
+      <SwipeableContentWrapper
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onNext={onNext}
+        onPrevious={onPrevious}
+        enabled={isMobile}
       >
-        {children}
-      </ContentArea>
+        <ContentArea
+          ref={mainRef}
+          variant={variant}
+          showPaper={showPaper}
+          enableDrawing={enableDrawing}
+          pageId={`page-${currentPage}`}
+          strokes={strokes}
+          currentConfig={config}
+          isDrawingMode={isVisible && enableDrawing}
+          onStrokesChange={setStrokes}
+          bgY={bgY}
+          onDrop={handleDrop}
+          onDragOver={handleDragOver}
+          stickyNotes={currentNotes}
+          areStickyNotesVisible={areStickyNotesVisible}
+          onUpdateNote={updateNote}
+          onDeleteNote={deleteNote}
+          onOpenSidebar={() => {
+            setIsStickyNoteSidebarOpen(true)
+            setIsBookmarksSidebarOpen(false)
+            setIsVisible(false)
+          }}
+        >
+          {children}
+        </ContentArea>
+      </SwipeableContentWrapper>
 
       <AnimatePresence>
         {enableDrawing && isVisible && (

@@ -1,6 +1,6 @@
 @import 'tailwindcss';
-@source "../node_modules/ies2-aulapp-ui-kit/dist";
 @import 'tw-animate-css';
+@source "../node_modules/ies2-aulapp-ui-kit/dist";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -161,4 +161,28 @@
 
 .animate-slide-up {
   animation: slideUpFade 0.3s ease-out forwards;
+}
+
+/* Animação do hint de swipe */
+@keyframes swipeHint {
+  0%, 100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  25% {
+    transform: translateX(-30px);
+    opacity: 0.7;
+  }
+  50% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  75% {
+    transform: translateX(30px);
+    opacity: 0.7;
+  }
+}
+
+.animate-swipe-hint {
+  animation: swipeHint 2s ease-in-out infinite;
 }
