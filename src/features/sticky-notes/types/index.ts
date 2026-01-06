@@ -1,1 +1,1 @@
-export * from '@/components/StickyNotes/types'
+export * from './types'

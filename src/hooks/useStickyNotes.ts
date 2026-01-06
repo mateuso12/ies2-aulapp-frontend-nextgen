@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react'
-import type { StickyNote } from '../components/StickyNotes/types'
-import { STICKY_NOTE_COLORS } from '../components/StickyNotes/types'
+import type { StickyNote } from '@/features/sticky-notes/types'
+import { STICKY_NOTE_COLORS } from '@/features/sticky-notes/types'
 
 interface UseStickyNotesProps {
   currentPage: number

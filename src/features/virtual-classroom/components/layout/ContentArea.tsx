@@ -2,8 +2,8 @@ import React, { forwardRef, type ReactNode } from 'react'
 import { motion, type MotionValue } from 'framer-motion'
 import { Paper } from '../content/Paper'
 import { DrawingArea } from '@/features/annotations'
-import { StickyNoteOnCanvas } from '@/components/StickyNotes/StickyNoteOnCanvas'
-import type { StickyNote } from '@/components/StickyNotes/types'
+import { StickyNoteOnCanvas } from '@/features/sticky-notes'
+import type { StickyNote } from '@/features/sticky-notes/types'
 import type { AnnotationConfig, Stroke } from '@/features/annotations'
 
 interface ContentAreaProps {
