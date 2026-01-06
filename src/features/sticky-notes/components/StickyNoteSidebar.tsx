@@ -92,7 +92,7 @@ export const StickyNoteSidebar: React.FC<StickyNoteSidebarProps> = ({
     }
   }
 
-  const SidebarContent = () => (
+  const sidebarContent = (
     <div className="flex flex-col gap-6 p-4 h-full font-['Plus_Jakarta_Sans'] overflow-hidden">
       {/* Header Controls */}
       <div className="flex items-center justify-between w-full">
@@ -193,7 +193,7 @@ export const StickyNoteSidebar: React.FC<StickyNoteSidebarProps> = ({
           side="left"
           className="w-[350px] bg-[#EFEFEF] p-0 border-r-0 shadow-[1px_0px_26.8px_0px_rgba(0,0,0,0.25)]"
         >
-          <SidebarContent />
+          {sidebarContent}
         </SheetContent>
       </Sheet>
     )
@@ -202,7 +202,7 @@ export const StickyNoteSidebar: React.FC<StickyNoteSidebarProps> = ({
   return (
     <Drawer open={isOpen} onOpenChange={(open) => !open && onClose()}>
       <DrawerContent className="bg-[#EFEFEF] h-[80vh] outline-none">
-        <SidebarContent />
+        {sidebarContent}
       </DrawerContent>
     </Drawer>
   )
