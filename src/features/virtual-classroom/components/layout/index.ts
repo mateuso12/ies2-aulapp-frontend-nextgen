@@ -1,0 +1,6 @@
+export { Header } from '@/components/VirtualClassroom/Header'
+export { HeaderActions } from '@/components/VirtualClassroom/HeaderActions'
+export { HeaderStatus } from '@/components/VirtualClassroom/HeaderStatus'
+export { Footer } from '@/components/VirtualClassroom/Footer'
+export { SidebarMenu } from '@/components/VirtualClassroom/SidebarMenu'
+export { ContentArea } from '@/components/VirtualClassroom/ContentArea'

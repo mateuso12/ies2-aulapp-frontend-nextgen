@@ -7,7 +7,7 @@ import React, {
 } from 'react'
 import { Header } from '../components/VirtualClassroom/Header'
 import { Footer } from '../components/VirtualClassroom/Footer'
-import { WritingToolbar } from '../components/Annotations/WritingToolbar'
+import { WritingToolbar } from '@/features/annotations'
 import { useAnnotations } from '../hooks/useAnnotations'
 import { useScroll, useTransform, AnimatePresence } from 'framer-motion'
 import type { PageData } from '../components/VirtualClassroom/PageReel'

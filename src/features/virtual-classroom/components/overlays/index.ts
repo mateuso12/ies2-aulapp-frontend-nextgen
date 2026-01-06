@@ -1,0 +1,7 @@
+export { BookmarksSidebar } from '@/components/VirtualClassroom/BookmarksSidebar'
+export { FloatingBookmarkButton } from '@/components/VirtualClassroom/FloatingBookmarkButton'
+export { MobileSearchOverlay } from '@/components/VirtualClassroom/MobileSearchOverlay'
+export { SwipeableContentWrapper } from '@/components/VirtualClassroom/SwipeableContentWrapper'
+export { SwipeHintOverlay } from '@/components/VirtualClassroom/SwipeHintOverlay'
+export { DevTools } from '@/components/VirtualClassroom/DevTools'
+export { SettingsMenu } from '@/components/VirtualClassroom/SettingsMenu'

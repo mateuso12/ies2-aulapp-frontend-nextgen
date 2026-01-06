@@ -1,6 +1,6 @@
 import React from 'react'
-import { DrawingArea } from '../Annotations/DrawingArea'
-import type { Stroke, AnnotationConfig } from '../Annotations/types'
+import { DrawingArea } from '@/features/annotations'
+import type { Stroke, AnnotationConfig } from '@/features/annotations'
 
 interface PaperProps {
   children: React.ReactNode

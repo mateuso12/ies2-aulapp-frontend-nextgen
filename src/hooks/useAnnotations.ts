@@ -1,8 +1,11 @@
 import { useState, useEffect, useCallback } from 'react'
-import { TOOL_CONFIGS } from '../components/Annotations/types'
-import type { Stroke, AnnotationConfig } from '../components/Annotations/types'
+import { TOOL_CONFIGS } from '@/features/annotations/types/types'
+import type { Stroke, AnnotationConfig } from '@/features/annotations'
 
-export const useAnnotations = (pageId: string, userId: string = 'default-user') => {
+export const useAnnotations = (
+  pageId: string,
+  userId: string = 'default-user'
+) => {
   const [strokes, setStrokes] = useState<Stroke[]>([])
   const [config, setConfig] = useState<AnnotationConfig>({
     tool: 'pen',
