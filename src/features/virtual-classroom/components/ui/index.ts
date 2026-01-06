@@ -1,2 +1,2 @@
-export { Timer } from '@/components/VirtualClassroom/Timer'
-export { RedoCounter } from '@/components/VirtualClassroom/RedoCounter'
+export { Timer } from './Timer'
+export { RedoCounter } from './RedoCounter'

@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { VirtualClassroomLayout } from '../layouts/VirtualClassroomLayout'
 import { mockContentPages } from '../mocks/virtualClassroomContent'
-import type { PageData } from '../components/VirtualClassroom/PageReel'
+import type { PageData } from '@/features/virtual-classroom/components/content/PageReel'
 
 export const VirtualClassroom: React.FC = () => {
   const [currentPageIndex, setCurrentPageIndex] = useState(0)
