@@ -128,6 +128,29 @@
   }
 }
 
+@layer components {
+  /* DOM-based highlights (Medium-like). */
+  mark[data-highlight-id] {
+    @apply px-1 rounded;
+  }
+
+  .highlight-yellow {
+    @apply bg-yellow-200/60 dark:bg-yellow-800/60;
+  }
+
+  .highlight-blue {
+    @apply bg-blue-200/60 dark:bg-blue-800/60;
+  }
+
+  .highlight-green {
+    @apply bg-green-200/60 dark:bg-green-800/60;
+  }
+
+  .highlight-pink {
+    @apply bg-pink-200/60 dark:bg-pink-800/60;
+  }
+}
+
 @layer utilities {
   .custom-scrollbar {
     scrollbar-width: thin;
