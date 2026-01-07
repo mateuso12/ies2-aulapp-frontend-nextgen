@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import React, { useRef, useCallback, useEffect } from 'react'
 import { Stage, Layer, Line } from 'react-konva'
 import type { KonvaEventObject } from 'konva/lib/Node'
 import type { Stroke, AnnotationConfig } from '../types/types'
@@ -23,13 +23,60 @@ export const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
   onStrokesChange,
 }) => {
   const isDrawing = useRef(false)
+  const lastPoint = useRef<{ x: number; y: number } | null>(null)
 
-  const handleMouseDown = (e: KonvaEventObject<MouseEvent | TouchEvent>) => {
+  // Prevent default touch behaviors when in drawing mode
+  useEffect(() => {
     if (!isDrawingMode) return
+
+    const preventTouchDefaults = (e: TouchEvent) => {
+      // Only prevent if we're actually drawing on the canvas
+      if (isDrawing.current) {
+        e.preventDefault()
+      }
+    }
+
+    // Prevent scroll/zoom while drawing
+    document.addEventListener('touchmove', preventTouchDefaults, { passive: false })
+    
+    return () => {
+      document.removeEventListener('touchmove', preventTouchDefaults)
+    }
+  }, [isDrawingMode])
+
+  // Get pointer position with touch support and smoothing
+  const getPointerPosition = useCallback((e: KonvaEventObject<MouseEvent | TouchEvent>) => {
+    const stage = e.target.getStage()
+    if (!stage) return null
+
+    const pos = stage.getPointerPosition()
+    if (!pos) return null
+
+    // Apply basic smoothing for touch input
+    if (lastPoint.current) {
+      const smoothingFactor = 0.3
+      return {
+        x: lastPoint.current.x + (pos.x - lastPoint.current.x) * smoothingFactor,
+        y: lastPoint.current.y + (pos.y - lastPoint.current.y) * smoothingFactor,
+      }
+    }
+
+    return pos
+  }, [])
+
+  const handleDrawStart = useCallback((e: KonvaEventObject<MouseEvent | TouchEvent>) => {
+    if (!isDrawingMode) return
+
+    // Prevent default touch behavior
+    if ('evt' in e && e.evt.type.startsWith('touch')) {
+      e.evt.preventDefault()
+    }
 
     isDrawing.current = true
     const pos = e.target.getStage()?.getPointerPosition()
     if (!pos) return
+
+    lastPoint.current = pos
 
     const newStroke: Stroke = {
       id: Math.random().toString(36).substr(2, 9),
@@ -43,20 +90,34 @@ export const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
     }
 
     onStrokesChange([...strokes, newStroke])
-  }
+  }, [isDrawingMode, pageId, currentConfig, strokes, onStrokesChange])
 
-  const handleMouseMove = (e: KonvaEventObject<MouseEvent | TouchEvent>) => {
+  const handleDrawMove = useCallback((e: KonvaEventObject<MouseEvent | TouchEvent>) => {
     if (!isDrawingMode || !isDrawing.current) return
 
-    const stage = e.target.getStage()
-    const point = stage?.getPointerPosition()
-    if (!point) return
+    // Prevent default touch behavior
+    if ('evt' in e && e.evt.type.startsWith('touch')) {
+      e.evt.preventDefault()
+    }
+
+    const pos = getPointerPosition(e)
+    if (!pos) return
+
+    lastPoint.current = pos
 
     const lastStroke = strokes[strokes.length - 1]
-    // Append point to the last stroke
-    const newPoints = lastStroke.points.concat([point.x, point.y])
+    if (!lastStroke) return
 
-    // Update the last stroke in the array
+    // Distance threshold to reduce excessive points (improves performance)
+    const lastX = lastStroke.points[lastStroke.points.length - 2]
+    const lastY = lastStroke.points[lastStroke.points.length - 1]
+    const distance = Math.sqrt(Math.pow(pos.x - lastX, 2) + Math.pow(pos.y - lastY, 2))
+    
+    // Skip points that are too close (less than 2px apart)
+    if (distance < 2) return
+
+    const newPoints = lastStroke.points.concat([pos.x, pos.y])
+
     const updatedStrokes = [...strokes]
     updatedStrokes[strokes.length - 1] = {
       ...lastStroke,
@@ -64,13 +125,14 @@ export const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
     }
 
     onStrokesChange(updatedStrokes)
-  }
+  }, [isDrawingMode, strokes, onStrokesChange, getPointerPosition])
 
-  const handleMouseUp = () => {
+  const handleDrawEnd = useCallback(() => {
     isDrawing.current = false
-  }
+    lastPoint.current = null
+  }, [])
 
-  // Custom Cursor Logic
+  // Custom Cursor Logic (desktop only)
   const [cursorPos, setCursorPos] = React.useState<{
     x: number
     y: number
@@ -96,9 +158,13 @@ export const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
     return () => window.removeEventListener('mousemove', handleWindowMouseMove)
   }, [isDrawingMode]) // eslint-disable-line react-hooks/exhaustive-deps
 
+  // Detect if touch device
+  const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0
+
   return (
     <>
-      {isDrawingMode && cursorPos && (
+      {/* Custom cursor - only show on non-touch devices */}
+      {isDrawingMode && cursorPos && !isTouchDevice && (
         <div
           style={{
             position: 'fixed',
@@ -128,15 +194,15 @@ export const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
       <Stage
         width={width}
         height={height}
-        onMouseDown={handleMouseDown}
-        onMousemove={handleMouseMove}
-        onMouseup={handleMouseUp}
-        onTouchStart={handleMouseDown}
-        onTouchMove={handleMouseMove}
-        onTouchEnd={handleMouseUp}
+        onMouseDown={handleDrawStart}
+        onMousemove={handleDrawMove}
+        onMouseup={handleDrawEnd}
+        onTouchStart={handleDrawStart}
+        onTouchMove={handleDrawMove}
+        onTouchEnd={handleDrawEnd}
         onMouseEnter={(e) => {
           const container = e.target.getStage()?.container()
-          if (container) container.style.cursor = 'none'
+          if (container && !isTouchDevice) container.style.cursor = 'none'
         }}
         onMouseLeave={(e) => {
           const container = e.target.getStage()?.container()
@@ -148,6 +214,7 @@ export const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
           top: 0,
           left: 0,
           pointerEvents: isDrawingMode ? 'auto' : 'none',
+          touchAction: isDrawingMode ? 'none' : 'auto', // Disable browser touch handling when drawing
         }}
       >
         <Layer>
