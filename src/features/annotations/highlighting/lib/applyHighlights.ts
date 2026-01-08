@@ -1,17 +1,8 @@
-import type { Highlight } from './types'
-
-// Apply highlights to a rendered HTML tree by splitting text nodes and wrapping ranges.
-//
-// Strategy (practical, DOM-based, responsive):
-// 1) Render HTML to a real DOM container (not canvas).
-// 2) For each highlight, resolve its range (via xpath-range in runtime against container).
-// 3) Use Range.surroundContents() with a <mark> element.
-//
-// This file exports helpers used by <TextHighlighter />.
+import type { Highlight, HighlightColor } from '../types/highlight'
 
 export const HIGHLIGHT_ATTR = 'data-highlight-id'
 
-export function highlightClassName(color: Highlight['color']) {
+export function highlightClassName(color: HighlightColor): string {
   switch (color) {
     case 'yellow':
       return 'highlight-yellow'
@@ -26,7 +17,10 @@ export function highlightClassName(color: Highlight['color']) {
   }
 }
 
-export function createMarkElement(doc: Document, highlight: Highlight) {
+export function createMarkElement(
+  doc: Document,
+  highlight: Highlight
+): HTMLElement {
   const mark = doc.createElement('mark')
   mark.setAttribute(HIGHLIGHT_ATTR, highlight.id)
   mark.className = highlightClassName(highlight.color)
@@ -36,7 +30,7 @@ export function createMarkElement(doc: Document, highlight: Highlight) {
   return mark
 }
 
-export function unwrapHighlightElements(container: HTMLElement) {
+export function unwrapHighlightElements(container: HTMLElement): void {
   const marks = container.querySelectorAll(`mark[${HIGHLIGHT_ATTR}]`)
   marks.forEach((mark) => {
     const parent = mark.parentNode
@@ -62,10 +56,10 @@ export function findHighlightByTarget(
   return highlights.find((h) => h.id === id) ?? null
 }
 
-// Small helper to swallow errors when the range can't be surrounded (e.g. invalid range)
-export function safeSurround(range: Range, wrapper: HTMLElement) {
+// Range.surroundContents() pode falhar quando o range cruza elementos.
+// Nesse caso, envolvemos os text nodes individualmente.
+export function safeSurround(range: Range, wrapper: HTMLElement): boolean {
   try {
-    // Range.surroundContents() throws if range splits non-text nodes
     range.surroundContents(wrapper)
     return true
   } catch {
@@ -73,10 +67,13 @@ export function safeSurround(range: Range, wrapper: HTMLElement) {
   }
 }
 
-function fallbackWrapTextNodes(range: Range, wrapper: HTMLElement) {
+function fallbackWrapTextNodes(range: Range, wrapper: HTMLElement): boolean {
   try {
     const common = range.commonAncestorContainer
-    const root = common.nodeType === Node.ELEMENT_NODE ? (common as Element) : common.parentElement
+    const root =
+      common.nodeType === Node.ELEMENT_NODE
+        ? (common as Element)
+        : common.parentElement
     if (!root) return false
 
     const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT)
@@ -84,7 +81,10 @@ function fallbackWrapTextNodes(range: Range, wrapper: HTMLElement) {
 
     let node = walker.nextNode() as Text | null
     while (node) {
-      if (range.intersectsNode(node) && (node.textContent ?? '').trim().length > 0) {
+      if (
+        range.intersectsNode(node) &&
+        (node.textContent ?? '').trim().length > 0
+      ) {
         selectedTextNodes.push(node)
       }
       node = walker.nextNode() as Text | null
@@ -92,10 +92,13 @@ function fallbackWrapTextNodes(range: Range, wrapper: HTMLElement) {
 
     if (selectedTextNodes.length === 0) return false
 
-    // Wrap each intersecting text node piece-by-piece.
     for (const textNode of selectedTextNodes) {
-      const startOffset = textNode === range.startContainer ? range.startOffset : 0
-      const endOffset = textNode === range.endContainer ? range.endOffset : (textNode.textContent ?? '').length
+      const startOffset =
+        textNode === range.startContainer ? range.startOffset : 0
+      const endOffset =
+        textNode === range.endContainer
+          ? range.endOffset
+          : (textNode.textContent ?? '').length
 
       if (endOffset <= startOffset) continue
 

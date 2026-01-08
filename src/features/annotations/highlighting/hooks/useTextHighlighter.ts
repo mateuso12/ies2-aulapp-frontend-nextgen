@@ -1,8 +1,8 @@
 import React from 'react'
-import type { Highlight, HighlightColor } from './types'
-import { loadHighlights, saveHighlights } from './storage'
-import { rangeToAnchor } from './xpath-range'
-import { extractExactText, extractPrefixSuffix } from './text-quote'
+import type { Highlight, HighlightColor } from '../types/highlight'
+import { localStorageHighlightRepository } from '../repositories'
+import { rangeToAnchor } from '../lib/xpathRange'
+import { extractExactText, extractPrefixSuffix } from '../lib/textQuote'
 
 export interface FloatingMenuState {
   open: boolean
@@ -11,15 +11,34 @@ export interface FloatingMenuState {
 }
 
 export interface UseTextHighlighterOptions {
+  /** Identificador único do documento/conteúdo */
   documentId: string
+  /** Modo atual da ferramenta */
   mode: 'highlight' | 'pencil'
+  /** Ref para o elemento raiz do conteúdo */
   rootRef?: React.RefObject<HTMLElement | null>
+  /** Callback quando um highlight é salvo */
   onSaveHighlight?: (highlight: Highlight) => void
+  /** Callback quando um highlight é removido */
+  onRemoveHighlight?: (highlightId: string) => void
 }
 
-const COLORS: HighlightColor[] = ['yellow', 'blue', 'green', 'pink']
+export interface UseTextHighlighterReturn {
+  highlights: Highlight[]
+  setHighlights: React.Dispatch<React.SetStateAction<Highlight[]>>
+  menu: FloatingMenuState
+  colors: readonly HighlightColor[]
+  saveCurrentSelection: (color: HighlightColor) => void
+  cancelSelection: () => void
+  closeMenu: () => void
+  removeHighlight: (id: string) => void
+  clearHighlights: () => void
+  setIsInteractingWithMenu: (value: boolean) => void
+}
 
-function clamp(value: number, min: number, max: number) {
+const COLORS: readonly HighlightColor[] = ['yellow', 'blue', 'green', 'pink'] as const
+
+function clamp(value: number, min: number, max: number): number {
   return Math.min(Math.max(value, min), max)
 }
 
@@ -28,22 +47,71 @@ function getSelectionRange(): Range | null {
   if (!selection || selection.rangeCount === 0) return null
   const range = selection.getRangeAt(0)
   if (range.collapsed) return null
+  const text = range.toString().trim()
+  if (!text) return null
   return range
 }
 
-function getMenuPositionFromRange(range: Range) {
+function getMenuPositionFromRange(range: Range): { x: number; y: number } {
   const rect = range.getBoundingClientRect()
+  
+  if (rect.width === 0 && rect.height === 0) {
+    const rects = range.getClientRects()
+    for (let i = 0; i < rects.length; i++) {
+      const r = rects[i]
+      if (r.width > 0 && r.height > 0) {
+        return {
+          x: r.left + r.width / 2,
+          y: r.top - 8,
+        }
+      }
+    }
+    return {
+      x: window.innerWidth / 2,
+      y: window.innerHeight / 3,
+    }
+  }
+  
   const centerX = rect.left + rect.width / 2
   const yAbove = rect.top - 8
   return { x: centerX, y: yAbove }
 }
 
-export function useTextHighlighter(options: UseTextHighlighterOptions) {
-  const { documentId, mode, onSaveHighlight, rootRef } = options
+function rangeIsInsideRoot(range: Range, root: HTMLElement | null): boolean {
+  if (!root) return true
+  return root.contains(range.startContainer) && root.contains(range.endContainer)
+}
 
-  const [highlights, setHighlights] = React.useState<Highlight[]>(() =>
-    typeof window === 'undefined' ? [] : loadHighlights(documentId)
-  )
+export function useTextHighlighter(
+  options: UseTextHighlighterOptions
+): UseTextHighlighterReturn {
+  const { documentId, mode, onSaveHighlight, onRemoveHighlight, rootRef } = options
+
+  const [highlights, setHighlights] = React.useState<Highlight[]>([])
+
+  // Evita sobrescrever o localStorage com [] antes do carregamento inicial terminar.
+  const isLoadedRef = React.useRef(false)
+
+  React.useEffect(() => {
+    if (typeof window === 'undefined') return
+    isLoadedRef.current = false
+    localStorageHighlightRepository
+      .findByDocumentId(documentId)
+      .then((data) => {
+        setHighlights(data)
+        isLoadedRef.current = true
+      })
+      .catch(() => {
+        setHighlights([])
+        isLoadedRef.current = true
+      })
+  }, [documentId])
+
+  React.useEffect(() => {
+    if (typeof window === 'undefined') return
+    if (!isLoadedRef.current) return
+    localStorageHighlightRepository.saveAll(documentId, highlights)
+  }, [documentId, highlights])
 
   const [menu, setMenu] = React.useState<FloatingMenuState>({
     open: false,
@@ -51,20 +119,11 @@ export function useTextHighlighter(options: UseTextHighlighterOptions) {
     y: 0,
   })
 
-  // *** CRITICAL: Store the captured range in a ref so it survives focus changes ***
   const capturedRangeRef = React.useRef<Range | null>(null)
 
-  // Track if the user is interacting with the menu itself.
   const isInteractingWithMenuRef = React.useRef(false)
 
-  // Keep a ref so we can debounce resize recalculations
   const resizeTimerRef = React.useRef<number | null>(null)
-
-  // Persist highlights
-  React.useEffect(() => {
-    if (typeof window === 'undefined') return
-    saveHighlights(documentId, highlights)
-  }, [documentId, highlights])
 
   const closeMenu = React.useCallback(() => {
     setMenu((m) => ({ ...m, open: false }))
@@ -77,32 +136,31 @@ export function useTextHighlighter(options: UseTextHighlighterOptions) {
     closeMenu()
   }, [closeMenu])
 
-  // Handle selection and show menu
   const handleSelectionEnd = React.useCallback(() => {
     if (mode !== 'highlight') {
       closeMenu()
       return
     }
 
-    // If user is clicking on the menu, don't process
     if (isInteractingWithMenuRef.current) return
 
     const range = getSelectionRange()
     if (!range) {
-      // Only close if we don't have a captured range (user clicked elsewhere)
       if (!capturedRangeRef.current) {
         closeMenu()
       }
       return
     }
 
-    // Clone the range so it survives selection changes
+    if (!rangeIsInsideRoot(range, rootRef?.current ?? null)) {
+      return
+    }
+
     const clonedRange = range.cloneRange()
     capturedRangeRef.current = clonedRange
 
     const { x, y } = getMenuPositionFromRange(clonedRange)
 
-    // Mobile-first positioning: keep within viewport
     const padding = 12
     const menuWidth = 240
     const menuHeight = 56
@@ -110,7 +168,11 @@ export function useTextHighlighter(options: UseTextHighlighterOptions) {
     const viewportW = window.innerWidth
     const viewportH = window.innerHeight
 
-    const clampedX = clamp(x, padding + menuWidth / 2, viewportW - padding - menuWidth / 2)
+    const clampedX = clamp(
+      x,
+      padding + menuWidth / 2,
+      viewportW - padding - menuWidth / 2
+    )
     const clampedY = clamp(y, padding + menuHeight, viewportH - padding)
 
     setMenu({
@@ -118,32 +180,48 @@ export function useTextHighlighter(options: UseTextHighlighterOptions) {
       x: clampedX,
       y: clampedY,
     })
-  }, [closeMenu, mode])
+  }, [closeMenu, mode, rootRef])
 
-  // Open menu only when the user completes selection (mouse up / touch end).
+  const selectionTimerRef = React.useRef<number | null>(null)
+
   React.useEffect(() => {
     if (typeof document === 'undefined') return
 
-    const handler = (e: MouseEvent | TouchEvent) => {
-      // If clicking on the menu itself, ignore
+    const selectionChangeHandler = () => {
+      if (selectionTimerRef.current) {
+        window.clearTimeout(selectionTimerRef.current)
+      }
+      selectionTimerRef.current = window.setTimeout(() => {
+        handleSelectionEnd()
+      }, 150)
+    }
+
+    const pointerUpHandler = (e: MouseEvent | TouchEvent) => {
       const target = e.target as HTMLElement
       if (target.closest?.('[data-highlight-menu]')) {
         return
       }
-
-      // Small delay to let selection settle
-      requestAnimationFrame(() => handleSelectionEnd())
+      const delay = 'changedTouches' in e ? 100 : 0
+      setTimeout(() => {
+        handleSelectionEnd()
+      }, delay)
     }
 
-    document.addEventListener('mouseup', handler)
-    document.addEventListener('touchend', handler)
+    document.addEventListener('selectionchange', selectionChangeHandler)
+    document.addEventListener('mouseup', pointerUpHandler)
+    document.addEventListener('touchend', pointerUpHandler)
+    
     return () => {
-      document.removeEventListener('mouseup', handler)
-      document.removeEventListener('touchend', handler)
+      document.removeEventListener('selectionchange', selectionChangeHandler)
+      document.removeEventListener('mouseup', pointerUpHandler)
+      document.removeEventListener('touchend', pointerUpHandler)
+      if (selectionTimerRef.current) {
+        window.clearTimeout(selectionTimerRef.current)
+      }
     }
   }, [handleSelectionEnd])
 
-  // Reposition menu on resize/scroll (debounced)
+  // Reposiciona menu em resize/scroll
   React.useEffect(() => {
     if (!menu.open) return
 
@@ -163,7 +241,11 @@ export function useTextHighlighter(options: UseTextHighlighterOptions) {
         const viewportW = window.innerWidth
         const viewportH = window.innerHeight
 
-        const clampedX = clamp(x, padding + menuWidth / 2, viewportW - padding - menuWidth / 2)
+        const clampedX = clamp(
+          x,
+          padding + menuWidth / 2,
+          viewportW - padding - menuWidth / 2
+        )
         const clampedY = clamp(y, padding + menuHeight, viewportH - padding)
 
         setMenu({ open: true, x: clampedX, y: clampedY })
@@ -183,57 +265,38 @@ export function useTextHighlighter(options: UseTextHighlighterOptions) {
     }
   }, [menu.open])
 
-  const removeHighlight = React.useCallback((id: string) => {
-    setHighlights((prev) => prev.filter((h) => h.id !== id))
-  }, [])
+  const removeHighlight = React.useCallback(
+    (id: string) => {
+      setHighlights((prev) => prev.filter((h) => h.id !== id))
+      onRemoveHighlight?.(id)
+    },
+    [onRemoveHighlight]
+  )
 
-  // Create a new highlight from the captured range
+  const clearHighlights = React.useCallback(() => {
+    setHighlights([])
+    closeMenu()
+  }, [closeMenu])
+
   const saveCurrentSelection = React.useCallback(
     (color: HighlightColor) => {
-      console.log('[Highlight Debug] saveCurrentSelection called', { color, mode })
-      
-      if (mode !== 'highlight') {
-        console.log('[Highlight Debug] ❌ mode is not highlight')
-        return
-      }
+      if (mode !== 'highlight') return
 
-      // Use the captured range (stored in ref) - this survives focus changes
       const range = capturedRangeRef.current
-      console.log('[Highlight Debug] capturedRangeRef.current:', range)
-      
-      if (!range) {
-        console.log('[Highlight Debug] ❌ No captured range')
-        return
-      }
+      if (!range) return
 
       const root = rootRef?.current
-      console.log('[Highlight Debug] rootRef.current:', root)
-      
-      if (!root) {
-        console.log('[Highlight Debug] ❌ No root element')
-        return
-      }
+      if (!root) return
 
-      // Ensure selection belongs to this root container
       const startNode = range.startContainer
       const endNode = range.endContainer
       const startContained = root.contains(startNode)
       const endContained = root.contains(endNode)
-      console.log('[Highlight Debug] Range containment:', { startContained, endContained, startNode, endNode })
-      
-      if (!startContained || !endContained) {
-        console.log('[Highlight Debug] ❌ Range not inside root')
-        return
-      }
+      if (!startContained || !endContained) return
 
-      // Serialize range relative to the highlight container.
-      console.log('[Highlight Debug] Calling rangeToAnchor...')
       const anchor = rangeToAnchor(range, root)
-      console.log('[Highlight Debug] anchor:', anchor)
-
       const exactText = extractExactText(range)
       const { prefix, suffix } = extractPrefixSuffix(range)
-      console.log('[Highlight Debug] Text:', { exactText, prefix, suffix })
 
       const highlight: Highlight = {
         id: crypto.randomUUID(),
@@ -249,7 +312,6 @@ export function useTextHighlighter(options: UseTextHighlighterOptions) {
         documentId,
       }
 
-      console.log('[Highlight Debug] ✅ Creating highlight:', highlight)
       setHighlights((prev) => [...prev, highlight])
       onSaveHighlight?.(highlight)
       cancelSelection()
@@ -266,6 +328,7 @@ export function useTextHighlighter(options: UseTextHighlighterOptions) {
     cancelSelection,
     closeMenu,
     removeHighlight,
+    clearHighlights,
     setIsInteractingWithMenu: (value: boolean) => {
       isInteractingWithMenuRef.current = value
     },

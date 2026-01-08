@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
+import parse from 'html-react-parser'
 import { VirtualClassroomLayout } from '../layouts/VirtualClassroomLayout'
 import { mockContentPages } from '../mocks/virtualClassroomContent'
+import { TextHighlighter } from '@/features/annotations/highlighting'
 import type { PageData } from '@/features/virtual-classroom/components/content/PageReel'
 
 export const VirtualClassroom: React.FC = () => {
@@ -57,20 +59,17 @@ export const VirtualClassroom: React.FC = () => {
   }
 
   // Transform mock data to include status and features for the PageReel
+  // Parse HTML strings to ReactNode for the preview
   const pagesData: PageData[] = mockContentPages.map((page, index) => {
     const pageNumber = index + 1
-    // Mock logic:
-    // - Pages visited are completed
-    // - Pages after max reached + 2 are locked (just for demo)
     const isLocked = pageNumber > maxReachedIndex + 3
     const isCompleted = visitedPages.includes(pageNumber)
 
     return {
       id: page.id,
-      content: page.content,
+      content: parse(page.contentHtml || ''),
       isLocked,
       isCompleted,
-      // Mock features
       hasDrawings: index === 1 || index === 3,
       hasAnnotations: index === 0 || index === 2,
       isBookmarked: bookmarks.includes(pageNumber),
@@ -89,7 +88,13 @@ export const VirtualClassroom: React.FC = () => {
       onToggleBookmark={handleToggleBookmark}
       onRemoveBookmark={handleRemoveBookmark}
     >
-      <div className="text-gray-800">{currentPage.content}</div>
+      {({ isOtherToolActive }) => (
+        <TextHighlighter
+          documentId={`virtual-classroom-page-${currentPage.id}`}
+          contentHtml={currentPage.contentHtml || ''}
+          disabled={isOtherToolActive}
+        />
+      )}
     </VirtualClassroomLayout>
   )
 }

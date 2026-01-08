@@ -32,7 +32,7 @@ export type ResourceType =
   | 'material'
 
 interface VirtualClassroomLayoutProps {
-  children: ReactNode
+  children: ReactNode | ((props: { isOtherToolActive: boolean }) => ReactNode)
   variant?: 'default' | 'gamified'
   resourceType?: ResourceType | string
   currentPage?: number
@@ -276,7 +276,15 @@ export const VirtualClassroomLayout: React.FC<VirtualClassroomLayoutProps> = ({
             setIsVisible(false)
           }}
         >
-          {children}
+          {typeof children === 'function'
+            ? children({
+                isOtherToolActive:
+                  isVisible ||
+                  isStickyNoteSidebarOpen ||
+                  isBookmarksSidebarOpen ||
+                  isMobileSearchOpen,
+              })
+            : children}
         </ContentArea>
       </SwipeableContentWrapper>
 
