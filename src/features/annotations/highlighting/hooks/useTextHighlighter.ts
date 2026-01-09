@@ -36,7 +36,12 @@ export interface UseTextHighlighterReturn {
   setIsInteractingWithMenu: (value: boolean) => void
 }
 
-const COLORS: readonly HighlightColor[] = ['yellow', 'blue', 'green', 'pink'] as const
+const COLORS: readonly HighlightColor[] = [
+  'yellow',
+  'blue',
+  'green',
+  'pink',
+] as const
 
 function clamp(value: number, min: number, max: number): number {
   return Math.min(Math.max(value, min), max)
@@ -54,7 +59,7 @@ function getSelectionRange(): Range | null {
 
 function getMenuPositionFromRange(range: Range): { x: number; y: number } {
   const rect = range.getBoundingClientRect()
-  
+
   if (rect.width === 0 && rect.height === 0) {
     const rects = range.getClientRects()
     for (let i = 0; i < rects.length; i++) {
@@ -71,7 +76,7 @@ function getMenuPositionFromRange(range: Range): { x: number; y: number } {
       y: window.innerHeight / 3,
     }
   }
-  
+
   const centerX = rect.left + rect.width / 2
   const yAbove = rect.top - 8
   return { x: centerX, y: yAbove }
@@ -79,13 +84,16 @@ function getMenuPositionFromRange(range: Range): { x: number; y: number } {
 
 function rangeIsInsideRoot(range: Range, root: HTMLElement | null): boolean {
   if (!root) return true
-  return root.contains(range.startContainer) && root.contains(range.endContainer)
+  return (
+    root.contains(range.startContainer) && root.contains(range.endContainer)
+  )
 }
 
 export function useTextHighlighter(
   options: UseTextHighlighterOptions
 ): UseTextHighlighterReturn {
-  const { documentId, mode, onSaveHighlight, onRemoveHighlight, rootRef } = options
+  const { documentId, mode, onSaveHighlight, onRemoveHighlight, rootRef } =
+    options
 
   const [highlights, setHighlights] = React.useState<Highlight[]>([])
 
@@ -125,6 +133,9 @@ export function useTextHighlighter(
 
   const resizeTimerRef = React.useRef<number | null>(null)
 
+  // Evita reabertura imediata do menu após cancelamento
+  const cancelledAtRef = React.useRef<number>(0)
+
   const closeMenu = React.useCallback(() => {
     setMenu((m) => ({ ...m, open: false }))
     capturedRangeRef.current = null
@@ -134,6 +145,8 @@ export function useTextHighlighter(
     const sel = window.getSelection()
     sel?.removeAllRanges()
     closeMenu()
+    // Marca o momento do cancelamento para evitar reabertura imediata
+    cancelledAtRef.current = Date.now()
   }, [closeMenu])
 
   const handleSelectionEnd = React.useCallback(() => {
@@ -143,6 +156,12 @@ export function useTextHighlighter(
     }
 
     if (isInteractingWithMenuRef.current) return
+
+    // Se cancelou há menos de 300ms, ignora para evitar reabertura imediata
+    const now = Date.now()
+    if (now - cancelledAtRef.current < 300) {
+      return
+    }
 
     const range = getSelectionRange()
     if (!range) {
@@ -188,6 +207,11 @@ export function useTextHighlighter(
     if (typeof document === 'undefined') return
 
     const selectionChangeHandler = () => {
+      // Se cancelou recentemente, ignora mudanças de seleção
+      if (Date.now() - cancelledAtRef.current < 300) {
+        return
+      }
+
       if (selectionTimerRef.current) {
         window.clearTimeout(selectionTimerRef.current)
       }
@@ -198,7 +222,11 @@ export function useTextHighlighter(
 
     const pointerUpHandler = (e: MouseEvent | TouchEvent) => {
       const target = e.target as HTMLElement
-      if (target.closest?.('[data-highlight-menu]')) {
+      // Ignora cliques em qualquer menu de highlight
+      if (
+        target.closest?.('[data-highlight-menu]') ||
+        target.closest?.('[data-highlight-remove-menu]')
+      ) {
         return
       }
       const delay = 'changedTouches' in e ? 100 : 0
@@ -210,7 +238,7 @@ export function useTextHighlighter(
     document.addEventListener('selectionchange', selectionChangeHandler)
     document.addEventListener('mouseup', pointerUpHandler)
     document.addEventListener('touchend', pointerUpHandler)
-    
+
     return () => {
       document.removeEventListener('selectionchange', selectionChangeHandler)
       document.removeEventListener('mouseup', pointerUpHandler)

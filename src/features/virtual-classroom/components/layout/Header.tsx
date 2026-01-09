@@ -1,10 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { HambergerMenu } from 'iconsax-react'
+import { Edit2, HambergerMenu, Stickynote } from 'iconsax-react'
 import { HeaderActions } from './HeaderActions'
 import { HeaderStatus } from './HeaderStatus'
 import { SidebarMenu } from './SidebarMenu'
 import { FloatingBookmarkButton } from '../overlays/FloatingBookmarkButton'
 import { motion } from 'framer-motion'
+import { Button } from 'ies2-aulapp-ui-kit'
 
 interface HeaderProps {
   variant?: 'default' | 'gamified'
@@ -173,9 +174,9 @@ export const Header: React.FC<HeaderProps> = ({
   return (
     <header className="relative z-20 w-full bg-white shadow-[0px_4px_4px_rgba(0,0,0,0.25)] max-md:h-[60px] md:h-[88px]">
       {/* Mobile */}
-      <div className="hidden h-full w-full items-center justify-between max-md:flex max-md:px-4">
+      <div className="hidden h-full w-full items-center justify-between max-md:flex">
         {/* Left: Back + Title */}
-        <div className="min-w-0 flex items-center gap-3">
+        <div className="min-w-0 flex items-center">
           <HeaderActions
             variant="default"
             title={title}
@@ -184,21 +185,33 @@ export const Header: React.FC<HeaderProps> = ({
         </div>
 
         {/* Right: Bookmark + Hamburger */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-0">
+          <Button
+            type="button"
+            variant="ghost"
+            size="icon"
+            aria-label="Sticky notes"
+            className="gap-0"
+            onClick={() => {}}
+          >
+            <Stickynote size="24" color="#6C757D" variant="Linear" />
+          </Button>
+          <Button
+            type="button"
+            variant="ghost"
+            size="icon"
+            aria-label="Anotações"
+            className="gap-0"
+            onClick={() => {}}
+          >
+            <Edit2 size="24" color="#6C757D" variant="Linear" />
+          </Button>
+
           <FloatingBookmarkButton
             isBookmarked={isBookmarked}
             onClick={onBookmark || (() => {})}
             variant="header"
           />
-
-          <SidebarMenu onOpenChange={setIsSidebarOpen}>
-            <button
-              className="flex h-10 w-10 items-center justify-center rounded-full text-[#FF246E] hover:bg-gray-100 cursor-pointer"
-              aria-label="Abrir menu de aulas"
-            >
-              <HambergerMenu size="24" color="currentColor" variant="Linear" />
-            </button>
-          </SidebarMenu>
         </div>
       </div>
 

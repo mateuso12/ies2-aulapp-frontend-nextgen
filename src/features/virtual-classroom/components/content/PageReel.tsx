@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { createPortal } from 'react-dom'
 import { Maximize2, Minimize2 } from 'lucide-react'
 import { TickCircle, Edit2, Stickynote, ArchiveAdd, Lock } from 'iconsax-react'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -34,12 +35,12 @@ export const PageReel: React.FC<PageReelProps> = ({
 }) => {
   const [isMaximized, setIsMaximized] = useState(false)
 
-  return (
+  return createPortal(
     <AnimatePresence>
       {isOpen && (
         <>
           {/* Backdrop to close on click outside */}
-          <div className="fixed inset-0 z-40" onClick={onClose} />
+          <div className="fixed inset-0 z-[60]" onClick={onClose} />
           <motion.div
             initial={{ opacity: 0, y: 20, x: '-50%' }}
             animate={{ opacity: 1, y: 0, x: '-50%' }}
@@ -47,7 +48,7 @@ export const PageReel: React.FC<PageReelProps> = ({
             transition={{ duration: 0.2 }}
             onMouseEnter={onMouseEnter}
             onMouseLeave={onMouseLeave}
-            className={`absolute bottom-[120px] left-1/2 bg-[#2C2C2C] rounded-2xl shadow-xl z-50 transition-all duration-300 ease-in-out ${
+            className={`fixed bottom-[120px] left-1/2 bg-[#2C2C2C] rounded-2xl shadow-xl z-[70] transition-all duration-300 ease-in-out ${
               isMaximized
                 ? 'w-[90vw] h-[80vh] max-w-[1644px] max-h-[619px]'
                 : 'w-[90vw] h-[258px] max-w-[1644px]'
@@ -195,6 +196,7 @@ export const PageReel: React.FC<PageReelProps> = ({
           </motion.div>
         </>
       )}
-    </AnimatePresence>
+    </AnimatePresence>,
+    document.body
   )
 }

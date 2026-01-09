@@ -131,23 +131,43 @@
 @layer components {
   /* DOM-based highlights (Medium-like). */
   mark[data-highlight-id] {
-    @apply px-1 rounded;
+    @apply px-1 rounded cursor-pointer transition-all duration-150;
+  }
+
+  mark[data-highlight-id]:hover {
+    @apply ring-2 ring-offset-1;
   }
 
   .highlight-yellow {
     @apply bg-yellow-200/60 dark:bg-yellow-800/60;
   }
 
+  .highlight-yellow:hover {
+    @apply bg-yellow-300/80 dark:bg-yellow-700/80 ring-yellow-400 dark:ring-yellow-600;
+  }
+
   .highlight-blue {
     @apply bg-blue-200/60 dark:bg-blue-800/60;
+  }
+
+  .highlight-blue:hover {
+    @apply bg-blue-300/80 dark:bg-blue-700/80 ring-blue-400 dark:ring-blue-600;
   }
 
   .highlight-green {
     @apply bg-green-200/60 dark:bg-green-800/60;
   }
 
+  .highlight-green:hover {
+    @apply bg-green-300/80 dark:bg-green-700/80 ring-green-400 dark:ring-green-600;
+  }
+
   .highlight-pink {
     @apply bg-pink-200/60 dark:bg-pink-800/60;
+  }
+
+  .highlight-pink:hover {
+    @apply bg-pink-300/80 dark:bg-pink-700/80 ring-pink-400 dark:ring-pink-600;
   }
 }
 
