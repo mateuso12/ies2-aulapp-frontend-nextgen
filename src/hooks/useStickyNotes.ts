@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useEffect } from 'react'
 import type { StickyNote } from '@/features/sticky-notes/types'
 import { STICKY_NOTE_COLORS } from '@/features/sticky-notes/types'
 
@@ -8,14 +8,39 @@ interface UseStickyNotesProps {
   mainRef: React.RefObject<HTMLDivElement | null>
 }
 
+const STORAGE_KEY = 'aulapp:sticky-notes'
+
 export const useStickyNotes = ({
   currentPage,
   onPageSelect,
   mainRef,
 }: UseStickyNotesProps) => {
-  const [stickyNotes, setStickyNotes] = useState<StickyNote[]>([])
+  const [stickyNotes, setStickyNotes] = useState<StickyNote[]>(() => {
+    try {
+      const stored = localStorage.getItem(STORAGE_KEY)
+      if (stored) {
+        const parsed = JSON.parse(stored) as StickyNote[]
+        return parsed.map((note) => ({
+          ...note,
+          createdAt: new Date(note.createdAt),
+          updatedAt: new Date(note.updatedAt),
+        }))
+      }
+    } catch (error) {
+      console.error('Error loading sticky notes:', error)
+    }
+    return []
+  })
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)
   const [areNotesVisible, setAreNotesVisible] = useState(true)
+
+  useEffect(() => {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(stickyNotes))
+    } catch (error) {
+      console.error('Error saving sticky notes:', error)
+    }
+  }, [stickyNotes])
 
   const addNote = useCallback(
     (note?: Partial<StickyNote>) => {
@@ -73,6 +98,7 @@ export const useStickyNotes = ({
       e.preventDefault()
       e.stopPropagation()
       const noteData = e.dataTransfer.getData('application/json')
+      
       if (noteData && mainRef.current) {
         try {
           const note = JSON.parse(noteData) as StickyNote

@@ -157,8 +157,14 @@ export const VirtualClassroomLayout: React.FC<VirtualClassroomLayoutProps> = ({
   }
 
   const currentNotes = useMemo(
-    () => stickyNotes.filter((n) => n.page === currentPage && n.isPlaced),
+    () => stickyNotes.filter((n) => n.page === currentPage),
     [stickyNotes, currentPage]
+  )
+
+  // Notas colocadas visualmente na página (para renderização)
+  const placedNotes = useMemo(
+    () => currentNotes.filter((n) => n.isPlaced),
+    [currentNotes]
   )
 
   // Verifica se há highlights (marcações de texto) na página atual
@@ -179,7 +185,11 @@ export const VirtualClassroomLayout: React.FC<VirtualClassroomLayoutProps> = ({
     return pages.map((page, index) => {
       const pageNum = index + 1
       const storageKey = `annotations-user-1-page-${pageNum}`
+      const highlightKey = `aulapp:highlights:page-${pageNum}`
+
       let hasStoredDrawings = false
+      let hasStoredHighlights = false
+
       try {
         const stored = localStorage.getItem(storageKey)
         if (stored) {
@@ -190,8 +200,20 @@ export const VirtualClassroomLayout: React.FC<VirtualClassroomLayoutProps> = ({
         // Ignore storage errors
       }
 
+      try {
+        const stored = localStorage.getItem(highlightKey)
+        if (stored) {
+          const parsed = JSON.parse(stored)
+          hasStoredHighlights = Array.isArray(parsed) && parsed.length > 0
+        }
+      } catch {
+        // Ignore storage errors
+      }
+
       const isCurrentPage = pageNum === currentPage
-      const hasDrawings = isCurrentPage ? strokes.length > 0 : hasStoredDrawings
+      const hasDrawings = isCurrentPage
+        ? strokes.length > 0 || hasCurrentPageHighlights
+        : hasStoredDrawings || hasStoredHighlights
       const hasStickyNotes = stickyNotes.some((n) => n.page === pageNum)
 
       return {
@@ -200,7 +222,13 @@ export const VirtualClassroomLayout: React.FC<VirtualClassroomLayoutProps> = ({
         hasAnnotations: hasStickyNotes,
       }
     })
-  }, [pages, currentPage, strokes.length, stickyNotes])
+  }, [
+    pages,
+    currentPage,
+    strokes.length,
+    stickyNotes,
+    hasCurrentPageHighlights,
+  ])
 
   // Determine visibility state for bars
   const isHeaderHidden = isUiHidden || (isBarsAutoHidden && !isBarsRevealed)
@@ -297,7 +325,7 @@ export const VirtualClassroomLayout: React.FC<VirtualClassroomLayoutProps> = ({
           bgY={bgY}
           onDrop={handleDrop}
           onDragOver={handleDragOver}
-          stickyNotes={currentNotes}
+          stickyNotes={placedNotes}
           areStickyNotesVisible={areStickyNotesVisible}
           onUpdateNote={updateNote}
           onDeleteNote={deleteNote}

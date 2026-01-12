@@ -6,7 +6,6 @@ import { STICKY_NOTE_COLORS } from '../types/types'
 import { DraftNoteCard } from './internal/DraftNoteCard'
 import { SidebarNoteItem } from './internal/SidebarNoteItem'
 import { useMediaQuery } from '@/hooks/use-media-query'
-import { Sheet, SheetContent } from '@/components/ui/sheet'
 import { Drawer, DrawerContent } from '@/components/ui/drawer'
 
 interface StickyNoteSidebarProps {
@@ -188,14 +187,19 @@ export const StickyNoteSidebar: React.FC<StickyNoteSidebarProps> = ({
 
   if (isDesktop) {
     return (
-      <Sheet open={isOpen} onOpenChange={(open) => !open && onClose()}>
-        <SheetContent
-          side="left"
-          className="w-[350px] bg-[#EFEFEF] p-0 border-r-0 shadow-[1px_0px_26.8px_0px_rgba(0,0,0,0.25)]"
-        >
-          {sidebarContent}
-        </SheetContent>
-      </Sheet>
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ x: -350, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            exit={{ x: -350, opacity: 0 }}
+            transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+            className="fixed left-0 top-0 h-full w-[350px] bg-[#EFEFEF] shadow-[1px_0px_26.8px_0px_rgba(0,0,0,0.25)] z-60 rounded-r-lg"
+          >
+            {sidebarContent}
+          </motion.div>
+        )}
+      </AnimatePresence>
     )
   }
 

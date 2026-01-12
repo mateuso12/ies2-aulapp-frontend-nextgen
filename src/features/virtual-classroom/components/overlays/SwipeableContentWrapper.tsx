@@ -211,11 +211,7 @@ export const SwipeableContentWrapper: React.FC<
   }, [showSwipeHint, dismissHint])
 
   if (!enabled) {
-    return (
-      <div className={`absolute inset-0 flex flex-col ${className}`}>
-        {children}
-      </div>
-    )
+    return <>{children}</>
   }
 
   return (
