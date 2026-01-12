@@ -161,6 +161,19 @@ export const VirtualClassroomLayout: React.FC<VirtualClassroomLayoutProps> = ({
     [stickyNotes, currentPage]
   )
 
+  // Verifica se há highlights (marcações de texto) na página atual
+  const hasCurrentPageHighlights = useMemo(() => {
+    const highlightKey = `aulapp:highlights:page-${currentPage}`
+    try {
+      const stored = localStorage.getItem(highlightKey)
+      if (!stored) return false
+      const highlights = JSON.parse(stored)
+      return Array.isArray(highlights) && highlights.length > 0
+    } catch {
+      return false
+    }
+  }, [currentPage])
+
   // Enhance pages with drawing status from localStorage/state
   const enhancedPages = useMemo(() => {
     return pages.map((page, index) => {
@@ -227,6 +240,24 @@ export const VirtualClassroomLayout: React.FC<VirtualClassroomLayoutProps> = ({
           onBookmark={handleBookmarkClick}
           isBookmarked={isCurrentPageBookmarked}
           onMenusOpenChange={setIsHeaderMenusOpen}
+          hasCurrentPageNotes={currentNotes.length > 0}
+          hasCurrentPageAnnotations={
+            strokes.length > 0 || hasCurrentPageHighlights
+          }
+          onToggleStickyNotes={() => {
+            if (!isStickyNoteSidebarOpen) {
+              setIsVisible(false)
+              setIsBookmarksSidebarOpen(false)
+            }
+            setIsStickyNoteSidebarOpen(!isStickyNoteSidebarOpen)
+          }}
+          onToggleAnnotations={() => {
+            if (!isVisible) {
+              setIsStickyNoteSidebarOpen(false)
+              setIsBookmarksSidebarOpen(false)
+            }
+            setIsVisible(!isVisible)
+          }}
         />
       </div>
 

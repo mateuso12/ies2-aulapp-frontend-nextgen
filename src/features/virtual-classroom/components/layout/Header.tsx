@@ -1,11 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { Edit2, HambergerMenu, Stickynote } from 'iconsax-react'
+import { HambergerMenu } from 'iconsax-react'
 import { HeaderActions } from './HeaderActions'
 import { HeaderStatus } from './HeaderStatus'
 import { SidebarMenu } from './SidebarMenu'
 import { FloatingBookmarkButton } from '../overlays/FloatingBookmarkButton'
+import { HeaderStickyNoteButton } from '../overlays/HeaderStickyNoteButton'
+import { HeaderAnnotationButton } from '../overlays/HeaderAnnotationButton'
 import { motion } from 'framer-motion'
-import { Button } from 'ies2-aulapp-ui-kit'
 
 interface HeaderProps {
   variant?: 'default' | 'gamified'
@@ -20,6 +21,10 @@ interface HeaderProps {
   isBookmarked?: boolean
   title?: string
   onMenusOpenChange?: (open: boolean) => void
+  hasCurrentPageNotes?: boolean
+  hasCurrentPageAnnotations?: boolean
+  onToggleStickyNotes?: () => void
+  onToggleAnnotations?: () => void
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -35,6 +40,10 @@ export const Header: React.FC<HeaderProps> = ({
   isBookmarked = false,
   title = 'Nome do conteúdo',
   onMenusOpenChange,
+  hasCurrentPageNotes = false,
+  hasCurrentPageAnnotations = false,
+  onToggleStickyNotes,
+  onToggleAnnotations,
 }) => {
   const [isSearchActive, setIsSearchActive] = useState(false)
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)
@@ -186,26 +195,18 @@ export const Header: React.FC<HeaderProps> = ({
 
         {/* Right: Bookmark + Hamburger */}
         <div className="flex items-center gap-0">
-          <Button
-            type="button"
-            variant="ghost"
-            size="icon"
-            aria-label="Sticky notes"
-            className="gap-0"
-            onClick={() => {}}
-          >
-            <Stickynote size="24" color="#6C757D" variant="Linear" />
-          </Button>
-          <Button
-            type="button"
-            variant="ghost"
-            size="icon"
-            aria-label="Anotações"
-            className="gap-0"
-            onClick={() => {}}
-          >
-            <Edit2 size="24" color="#6C757D" variant="Linear" />
-          </Button>
+          {onToggleStickyNotes && (
+            <HeaderStickyNoteButton
+              hasNotes={hasCurrentPageNotes}
+              onClick={onToggleStickyNotes}
+            />
+          )}
+          {onToggleAnnotations && (
+            <HeaderAnnotationButton
+              hasAnnotations={hasCurrentPageAnnotations}
+              onClick={onToggleAnnotations}
+            />
+          )}
 
           <FloatingBookmarkButton
             isBookmarked={isBookmarked}
