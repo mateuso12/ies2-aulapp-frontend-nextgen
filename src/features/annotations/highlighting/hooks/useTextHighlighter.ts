@@ -43,6 +43,19 @@ const COLORS: readonly HighlightColor[] = [
   'pink',
 ] as const
 
+function generateUUID(): string {
+  // Fallback para navegadores que não suportam crypto.randomUUID (mobile antigo)
+  if (typeof crypto !== 'undefined' && crypto.randomUUID) {
+    return crypto.randomUUID()
+  }
+  // Implementação alternativa compatível com mobile
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
+    const r = (Math.random() * 16) | 0
+    const v = c === 'x' ? r : (r & 0x3) | 0x8
+    return v.toString(16)
+  })
+}
+
 function clamp(value: number, min: number, max: number): number {
   return Math.min(Math.max(value, min), max)
 }
@@ -311,23 +324,35 @@ export function useTextHighlighter(
       if (mode !== 'highlight') return
 
       const range = capturedRangeRef.current
-      if (!range) return
+      if (!range) {
+        console.log('[highlight] Nenhum range capturado')
+        return
+      }
 
       const root = rootRef?.current
-      if (!root) return
+      if (!root) {
+        console.log('[highlight] rootRef.current não encontrado')
+        return
+      }
 
       const startNode = range.startContainer
       const endNode = range.endContainer
       const startContained = root.contains(startNode)
       const endContained = root.contains(endNode)
-      if (!startContained || !endContained) return
+      if (!startContained || !endContained) {
+        console.log('[highlight] Range fora do root', {
+          startContained,
+          endContained,
+        })
+        return
+      }
 
       const anchor = rangeToAnchor(range, root)
       const exactText = extractExactText(range)
       const { prefix, suffix } = extractPrefixSuffix(range)
 
       const highlight: Highlight = {
-        id: crypto.randomUUID(),
+        id: generateUUID(),
         color,
         xpathStart: anchor.xpathStart,
         xpathEnd: anchor.xpathEnd,
@@ -340,6 +365,7 @@ export function useTextHighlighter(
         documentId,
       }
 
+      console.log('[highlight] Criando highlight', highlight)
       setHighlights((prev) => [...prev, highlight])
       onSaveHighlight?.(highlight)
       cancelSelection()

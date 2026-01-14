@@ -102,11 +102,8 @@ export const VirtualClassroomLayout: React.FC<VirtualClassroomLayoutProps> = ({
 
   // Modo leitura (mobile): toque no centro alterna visibilidade das barras.
   // Respeita lockVisible (menus/ferramentas abertas).
-  const {
-    isUiHidden,
-    overlayProps,
-    reveal: revealImmersiveUi,
-  } = useImmersiveReadingMode({
+  // DESABILITADO: o overlay bloqueia seleção de texto e scroll
+  const { isUiHidden, reveal: revealImmersiveUi } = useImmersiveReadingMode({
     enabled: true,
     lockVisible,
     isBusy: isVisible, // desenho/anotações em uso
@@ -243,14 +240,16 @@ export const VirtualClassroomLayout: React.FC<VirtualClassroomLayoutProps> = ({
         resultsCount={2}
       />
 
-      {/* Hotspot (mobile) para toque central alternar modo leitura.
-          Não bloqueia cliques/scroll no conteúdo fora da área central. */}
+      {/* Hotspot (mobile) para toque central alternar modo leitura - DESABILITADO
+          pois bloqueia seleção de texto e scroll. Modo de leitura pode ser ativado
+          por outros meios (botões, gestos específicos, etc).
       <div className="fixed inset-0 z-40 pointer-events-none md:hidden">
         <div
           className="absolute left-0 right-0 top-1/3 h-1/3 pointer-events-auto"
           {...overlayProps}
         />
       </div>
+      */}
 
       <div
         className={`fixed left-0 top-0 z-50 w-full transform-gpu transition-transform duration-300 ease-out ${
