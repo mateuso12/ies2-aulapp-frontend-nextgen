@@ -39,6 +39,7 @@ export function VirtualClassroomLayout({
   const [isHeaderMenusOpen, setIsHeaderMenusOpen] = useState(false)
   const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(false)
   const [isFocusModeActive, setIsFocusModeActive] = useState(false)
+  const [highlightsTrigger, setHighlightsTrigger] = useState(0)
 
   const mainRef = useRef<HTMLDivElement>(null)
   const isMobile = useMediaQuery('(max-width: 768px)')
@@ -55,6 +56,27 @@ export function VirtualClassroomLayout({
     setVariant(initialVariant)
     setResourceType(initialResourceType)
   }, [initialVariant, initialResourceType])
+
+  // Listen to localStorage changes for highlights
+  useEffect(() => {
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key?.startsWith('aulapp:highlights:')) {
+        setHighlightsTrigger((prev) => prev + 1)
+      }
+    }
+
+    const handleCustomStorageChange = () => {
+      setHighlightsTrigger((prev) => prev + 1)
+    }
+
+    window.addEventListener('storage', handleStorageChange)
+    window.addEventListener('highlightsChanged', handleCustomStorageChange)
+
+    return () => {
+      window.removeEventListener('storage', handleStorageChange)
+      window.removeEventListener('highlightsChanged', handleCustomStorageChange)
+    }
+  }, [])
 
   // Hooks
   const { isRevealed: isBarsRevealed } = useAutoHideBars({
@@ -134,7 +156,7 @@ export function VirtualClassroomLayout({
   )
 
   const hasCurrentPageHighlights = useMemo(() => {
-    const highlightKey = `aulapp:highlights:page-${currentPage}`
+    const highlightKey = `aulapp:highlights:virtual-classroom-page-${currentPage}`
     try {
       const stored = localStorage.getItem(highlightKey)
       if (!stored) return false
@@ -143,13 +165,14 @@ export function VirtualClassroomLayout({
     } catch {
       return false
     }
-  }, [currentPage])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentPage, highlightsTrigger])
 
   const enhancedPages = useMemo(() => {
     return pages.map((page, index) => {
       const pageNum = index + 1
       const storageKey = `annotations-user-1-page-${pageNum}`
-      const highlightKey = `aulapp:highlights:page-${pageNum}`
+      const highlightKey = `aulapp:highlights:virtual-classroom-page-${pageNum}`
 
       let hasStoredDrawings = false
       let hasStoredHighlights = false
@@ -175,18 +198,28 @@ export function VirtualClassroomLayout({
       }
 
       const isCurrentPage = pageNum === currentPage
-      const hasDrawings = isCurrentPage
-        ? strokes.length > 0 || hasCurrentPageHighlights
-        : hasStoredDrawings || hasStoredHighlights
+      const hasDrawings = isCurrentPage ? strokes.length > 0 : hasStoredDrawings
+      const hasHighlights = isCurrentPage
+        ? hasCurrentPageHighlights
+        : hasStoredHighlights
       const hasStickyNotes = stickyNotes.some((n) => n.page === pageNum)
 
       return {
         ...page,
         hasDrawings,
+        hasHighlights,
         hasAnnotations: hasStickyNotes,
       }
     })
-  }, [pages, currentPage, strokes.length, stickyNotes, hasCurrentPageHighlights])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    pages,
+    currentPage,
+    strokes.length,
+    stickyNotes,
+    hasCurrentPageHighlights,
+    highlightsTrigger,
+  ])
 
   const isHeaderHidden =
     isFocusModeActive || isUiHidden || (isBarsAutoHidden && !isBarsRevealed)
@@ -209,7 +242,7 @@ export function VirtualClassroomLayout({
     setIsStickyNoteSidebarOpen(!isStickyNoteSidebarOpen)
   }
 
-  const handleEditNote = (note: typeof stickyNotes[0]) => {
+  const handleEditNote = (note: (typeof stickyNotes)[0]) => {
     if (note.page !== currentPage && onPageSelect) {
       onPageSelect(note.page)
     }

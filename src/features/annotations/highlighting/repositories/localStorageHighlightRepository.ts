@@ -46,6 +46,7 @@ export class LocalStorageHighlightRepository implements HighlightRepository {
     const highlights = await this.findByDocumentId(data.documentId)
     highlights.push(highlight)
     localStorage.setItem(makeKey(data.documentId), JSON.stringify(highlights))
+    window.dispatchEvent(new Event('highlightsChanged'))
 
     return highlight
   }
@@ -72,6 +73,7 @@ export class LocalStorageHighlightRepository implements HighlightRepository {
       makeKey(existing.documentId),
       JSON.stringify(highlights)
     )
+    window.dispatchEvent(new Event('highlightsChanged'))
 
     return updated
   }
@@ -86,6 +88,8 @@ export class LocalStorageHighlightRepository implements HighlightRepository {
     if (filtered.length === highlights.length) return false
 
     localStorage.setItem(makeKey(existing.documentId), JSON.stringify(filtered))
+    window.dispatchEvent(new Event('highlightsChanged'))
+
     return true
   }
 
@@ -93,11 +97,14 @@ export class LocalStorageHighlightRepository implements HighlightRepository {
     const highlights = await this.findByDocumentId(documentId)
     const count = highlights.length
     localStorage.removeItem(makeKey(documentId))
+    window.dispatchEvent(new Event('highlightsChanged'))
+
     return count
   }
 
   async saveAll(documentId: string, highlights: Highlight[]): Promise<void> {
     localStorage.setItem(makeKey(documentId), JSON.stringify(highlights))
+    window.dispatchEvent(new Event('highlightsChanged'))
   }
 
   private getAllDocumentKeys(): string[] {

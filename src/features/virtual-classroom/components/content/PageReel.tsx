@@ -1,6 +1,13 @@
 import React, { useEffect } from 'react'
 import { createPortal } from 'react-dom'
-import { TickCircle, Edit2, Stickynote, ArchiveAdd, Lock } from 'iconsax-react'
+import {
+  TickCircle,
+  Edit2,
+  Stickynote,
+  ArchiveAdd,
+  Lock,
+  LampOn,
+} from 'iconsax-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useMediaQuery } from '@/hooks/use-media-query'
 
@@ -12,6 +19,7 @@ export interface PageData {
   hasDrawings?: boolean
   hasAnnotations?: boolean
   isBookmarked?: boolean
+  hasHighlights?: boolean
 }
 
 interface PageReelProps {
@@ -165,6 +173,19 @@ export const PageReel: React.FC<PageReelProps> = ({
 
                           {/* Feature Icons (Top Left) */}
                           <div className="absolute top-1.5 left-1.5 flex gap-1">
+                            {page.hasHighlights && (
+                              <div
+                                className={`bg-[#F3C353] rounded-md flex items-center justify-center shadow-sm text-white ${
+                                  isMobile ? 'w-6 h-6' : 'w-8 h-8'
+                                }`}
+                              >
+                                <LampOn
+                                  size={isMobile ? 16 : 24}
+                                  variant="Linear"
+                                  color="currentColor"
+                                />
+                              </div>
+                            )}
                             {page.hasAnnotations && (
                               <div
                                 className={`bg-[#8A5CCC] rounded-md flex items-center justify-center shadow-sm text-white ${

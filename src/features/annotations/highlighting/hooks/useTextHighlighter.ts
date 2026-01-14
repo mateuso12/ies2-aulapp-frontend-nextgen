@@ -325,13 +325,11 @@ export function useTextHighlighter(
 
       const range = capturedRangeRef.current
       if (!range) {
-        console.log('[highlight] Nenhum range capturado')
         return
       }
 
       const root = rootRef?.current
       if (!root) {
-        console.log('[highlight] rootRef.current não encontrado')
         return
       }
 
@@ -340,10 +338,6 @@ export function useTextHighlighter(
       const startContained = root.contains(startNode)
       const endContained = root.contains(endNode)
       if (!startContained || !endContained) {
-        console.log('[highlight] Range fora do root', {
-          startContained,
-          endContained,
-        })
         return
       }
 
@@ -365,7 +359,6 @@ export function useTextHighlighter(
         documentId,
       }
 
-      console.log('[highlight] Criando highlight', highlight)
       setHighlights((prev) => [...prev, highlight])
       onSaveHighlight?.(highlight)
       cancelSelection()
