@@ -21,6 +21,7 @@ interface ContentAreaProps {
   onDragOver: (e: React.DragEvent) => void
   stickyNotes: StickyNote[]
   areStickyNotesVisible: boolean
+  isMobile: boolean
   onUpdateNote: (note: StickyNote) => void
   onDeleteNote: (id: string) => void
   onOpenSidebar: () => void
@@ -43,6 +44,7 @@ export const ContentArea = forwardRef<HTMLDivElement, ContentAreaProps>(
       onDragOver,
       stickyNotes,
       areStickyNotesVisible,
+      isMobile,
       onUpdateNote,
       onDeleteNote,
       onOpenSidebar,
@@ -98,6 +100,7 @@ export const ContentArea = forwardRef<HTMLDivElement, ContentAreaProps>(
         )}
 
         {areStickyNotesVisible &&
+          !isMobile &&
           stickyNotes.map((note) => (
             <StickyNoteOnCanvas
               key={note.id}

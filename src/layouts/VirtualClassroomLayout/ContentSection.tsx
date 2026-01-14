@@ -88,6 +88,7 @@ export function ContentSection({
           onDragOver={onDragOver}
           stickyNotes={placedNotes}
           areStickyNotesVisible={areStickyNotesVisible}
+          isMobile={isMobile}
           onUpdateNote={onUpdateNote}
           onDeleteNote={onDeleteNote}
           onOpenSidebar={onOpenSidebar}
