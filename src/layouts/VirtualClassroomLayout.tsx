@@ -5,6 +5,7 @@ import React, {
   useEffect,
   useMemo,
 } from 'react'
+import { Minimize2 } from 'lucide-react'
 import { Header } from '@/features/virtual-classroom/components/layout/Header'
 import { Footer } from '@/features/virtual-classroom/components/layout/Footer'
 import { WritingToolbar } from '@/features/annotations'
@@ -70,9 +71,14 @@ export const VirtualClassroomLayout: React.FC<VirtualClassroomLayoutProps> = ({
   const [isFooterMenusOpen, setIsFooterMenusOpen] = useState(false)
   const [isHeaderMenusOpen, setIsHeaderMenusOpen] = useState(false)
   const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(false)
+  const [isFocusModeActive, setIsFocusModeActive] = useState(false)
 
   const openMobileSearch = () => setIsMobileSearchOpen(true)
   const closeMobileSearch = () => setIsMobileSearchOpen(false)
+
+  const toggleFocusMode = () => {
+    setIsFocusModeActive(!isFocusModeActive)
+  }
 
   // Lock global quando qualquer menu/ferramenta estiver aberta
   const lockVisible = isHeaderMenusOpen || isFooterMenusOpen
@@ -228,8 +234,11 @@ export const VirtualClassroomLayout: React.FC<VirtualClassroomLayoutProps> = ({
   ])
 
   // Determine visibility state for bars
-  const isHeaderHidden = isUiHidden || (isBarsAutoHidden && !isBarsRevealed)
-  const isFooterHidden = isUiHidden || (isBarsAutoHidden && !isBarsRevealed)
+  // Modo foco manual tem prioridade sobre outros estados
+  const isHeaderHidden =
+    isFocusModeActive || isUiHidden || (isBarsAutoHidden && !isBarsRevealed)
+  const isFooterHidden =
+    isFocusModeActive || isUiHidden || (isBarsAutoHidden && !isBarsRevealed)
 
   return (
     <div className="flex h-screen w-full flex-col overflow-hidden bg-[#1E1E1E]">
@@ -302,6 +311,18 @@ export const VirtualClassroomLayout: React.FC<VirtualClassroomLayoutProps> = ({
         onClick={handleBookmarkClick}
         isVisible={isContent}
       />
+
+      {/* Botão flutuante para sair do modo foco (mobile) */}
+      {isFocusModeActive && isMobile && (
+        <button
+          onClick={toggleFocusMode}
+          className="fixed bottom-4 right-4 z-50 flex h-10 w-10 items-center justify-center rounded-full bg-black/50 text-white backdrop-blur-sm transition-all hover:bg-black/70 active:scale-95"
+          aria-label="Sair da tela cheia"
+          title="Sair da tela cheia"
+        >
+          <Minimize2 size={18} />
+        </button>
+      )}
 
       {/* Área de conteúdo com suporte a swipe (mobile) - ocupa toda a altura da viewport */}
       <SwipeableContentWrapper
@@ -409,6 +430,8 @@ export const VirtualClassroomLayout: React.FC<VirtualClassroomLayoutProps> = ({
           }}
           onInteractiveStateChange={setIsFooterInteracting}
           onMenusOpenChange={setIsFooterMenusOpen}
+          isFocusModeActive={isFocusModeActive}
+          onToggleFocusMode={toggleFocusMode}
         />
       </div>
 

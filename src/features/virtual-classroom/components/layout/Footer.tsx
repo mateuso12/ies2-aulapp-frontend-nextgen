@@ -32,6 +32,8 @@ interface FooterProps {
   onPageSelect?: (page: number) => void
   onInteractiveStateChange?: (isInteracting: boolean) => void
   onMenusOpenChange?: (isOpen: boolean) => void
+  isFocusModeActive?: boolean
+  onToggleFocusMode?: () => void
 }
 
 export const Footer: React.FC<FooterProps> = ({
@@ -54,6 +56,8 @@ export const Footer: React.FC<FooterProps> = ({
   onPageSelect,
   onInteractiveStateChange,
   onMenusOpenChange,
+  isFocusModeActive = false,
+  onToggleFocusMode,
 }) => {
   const showTools = resourceType === 'content' || resourceType === 'material'
   const [isFullscreen, setIsFullscreen] = useState(false)
@@ -185,28 +189,46 @@ export const Footer: React.FC<FooterProps> = ({
       />
       <footer className="relative flex w-full items-center justify-center bg-[#2C2C2C] text-white max-md:h-20 max-md:px-4 md:h-[105px] md:px-8">
         {/* Mobile Content */}
-        <div className="hidden w-full items-center justify-between max-md:flex">
+        <div className="hidden w-full max-md:grid max-md:grid-cols-3 max-md:items-center">
           {/* Left: Page reel */}
-          <Button
-            onClick={togglePageReel}
-            variant="ghost"
-            size="icon"
-            className={`rounded-lg transition-colors hover:bg-black text-white ${
-              isPageReelOpen ? 'bg-[#FF246E] text-white' : ''
-            }`}
-            aria-label="Ver todas as páginas"
-            title="Ver todas as páginas"
-          >
-            <Category size="24" color="currentColor" variant="Linear" />
-          </Button>
+          <div className="flex justify-start">
+            <Button
+              onClick={togglePageReel}
+              variant="ghost"
+              size="icon"
+              className={`rounded-lg transition-colors hover:bg-black text-white ${
+                isPageReelOpen ? 'bg-[#FF246E] text-white' : ''
+              }`}
+              aria-label="Ver todas as páginas"
+              title="Ver todas as páginas"
+            >
+              <Category size="24" color="currentColor" variant="Linear" />
+            </Button>
+          </div>
 
           {/* Center: Counter */}
-          <span className="font-plus-jakarta text-xl font-semibold">
+          <span className="font-plus-jakarta text-xl font-semibold text-center">
             {currentPage} de {totalPages}
           </span>
 
-          {/* Right: Settings */}
-          <div className="flex items-center gap-3">
+          {/* Right: Settings and Fullscreen (Mobile only) */}
+          <div className="flex items-center justify-end gap-3">
+            <Button
+              onClick={onToggleFocusMode}
+              variant="ghost"
+              size="icon"
+              className="rounded-lg transition-colors hover:bg-black text-white"
+              aria-label={
+                isFocusModeActive ? 'Sair da tela cheia' : 'Tela cheia'
+              }
+              title={isFocusModeActive ? 'Sair da tela cheia' : 'Tela cheia'}
+            >
+              {isFocusModeActive ? (
+                <Minimize2 size={24} />
+              ) : (
+                <Maximize2 size={24} />
+              )}
+            </Button>
             <SettingsMenu
               isMobile
               onSearchInPage={handleSearchInPage}
