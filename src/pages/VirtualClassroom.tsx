@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import parse from 'html-react-parser'
-import { VirtualClassroomLayout } from '../layouts/VirtualClassroomLayout'
+import { VirtualClassroomLayout } from '../layouts/VirtualClassroomLayout/index'
 import { mockContentPages } from '../mocks/virtualClassroomContent'
 import { TextHighlighter } from '@/features/annotations/highlighting'
 import type { PageData } from '@/features/virtual-classroom/components/content/PageReel'
