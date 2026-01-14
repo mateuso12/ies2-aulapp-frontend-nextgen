@@ -1,4 +1,4 @@
-export type ToolType = 'pen' | 'marker' | 'pencil' | 'eraser'
+export type ToolType = 'pen' | 'pencil' | 'eraser'
 
 export interface Stroke {
   id: string
@@ -30,11 +30,6 @@ export const TOOL_CONFIGS: Record<
     defaultWidth: 2,
     defaultOpacity: 1,
     widths: { thin: 2, medium: 4, thick: 6 },
-  },
-  marker: {
-    defaultWidth: 10,
-    defaultOpacity: 0.5,
-    widths: { thin: 8, medium: 12, thick: 16 },
   },
   pencil: {
     defaultWidth: 1,

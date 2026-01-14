@@ -100,18 +100,6 @@ export const WritingToolbar: React.FC<WritingToolbarProps> = ({
             </button>
 
             <button
-              onClick={() => handleToolSelect('marker')}
-              className={`min-w-12 min-h-12 flex items-center justify-center rounded-xl transition-all ${
-                currentConfig.tool === 'marker'
-                  ? 'bg-blue-100 text-blue-600 scale-105'
-                  : 'text-gray-600 active:bg-gray-100'
-              }`}
-              aria-label="Marcador"
-            >
-              <img src="/icons/highlighter.svg" alt="Marker" className="w-7 h-7" />
-            </button>
-
-            <button
               onClick={() => handleToolSelect('eraser')}
               className={`min-w-12 min-h-12 flex items-center justify-center rounded-xl transition-all ${
                 currentConfig.tool === 'eraser'
@@ -268,17 +256,6 @@ export const WritingToolbar: React.FC<WritingToolbarProps> = ({
           title="Caneta"
         >
           <img src="/icons/pencil.svg" alt="Pen" className="w-6 h-6" />
-        </button>
-        <button
-          onClick={() => handleToolSelect('marker')}
-          className={`p-2 rounded-lg transition-all ${
-            currentConfig.tool === 'marker'
-              ? 'bg-blue-50 text-blue-600 scale-110'
-              : 'hover:bg-gray-50 text-gray-600'
-          }`}
-          title="Marcador"
-        >
-          <img src="/icons/highlighter.svg" alt="Marker" className="w-6 h-6" />
         </button>
         <button
           onClick={() => handleToolSelect('eraser')}
