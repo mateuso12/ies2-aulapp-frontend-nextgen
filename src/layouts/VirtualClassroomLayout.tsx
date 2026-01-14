@@ -7,7 +7,7 @@ import React, {
 } from 'react'
 import { Minimize2 } from 'lucide-react'
 import { Header } from '@/features/virtual-classroom/components/layout/Header'
-import { Footer } from '@/features/virtual-classroom/components/layout/Footer'
+import { Footer } from '@/features/virtual-classroom/components/layout/Footer/index'
 import { WritingToolbar } from '@/features/annotations'
 import { useAnnotations } from '../hooks/useAnnotations'
 import { useScroll, useTransform, AnimatePresence } from 'framer-motion'

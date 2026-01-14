@@ -1,6 +1,6 @@
 export { Header } from './Header'
 export { HeaderActions } from './HeaderActions'
 export { HeaderStatus } from './HeaderStatus'
-export { Footer } from './Footer'
+export { Footer } from './Footer/index'
 export { SidebarMenu } from './SidebarMenu'
 export { ContentArea } from './ContentArea'
