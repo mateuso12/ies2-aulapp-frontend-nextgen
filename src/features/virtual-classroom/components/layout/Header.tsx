@@ -194,7 +194,7 @@ export const Header: React.FC<HeaderProps> = ({
         </div>
 
         {/* Right: Bookmark + Hamburger */}
-        <div className="flex items-center gap-0">
+        <div className="flex items-center gap-4 mr-4">
           {onToggleStickyNotes && (
             <HeaderStickyNoteButton
               hasNotes={hasCurrentPageNotes}

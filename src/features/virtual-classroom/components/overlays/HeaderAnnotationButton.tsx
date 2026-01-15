@@ -1,6 +1,5 @@
 import React from 'react'
 import { Edit2 } from 'iconsax-react'
-import { Button } from 'ies2-aulapp-ui-kit'
 
 interface HeaderAnnotationButtonProps {
   hasAnnotations: boolean
@@ -16,10 +15,8 @@ export const HeaderAnnotationButton: React.FC<HeaderAnnotationButtonProps> = ({
   onClick,
 }) => {
   return (
-    <Button
+    <button
       type="button"
-      variant="ghost"
-      size="icon"
       aria-label={hasAnnotations ? 'Ver anotações' : 'Adicionar anotação'}
       className="gap-0 relative"
       onClick={onClick}
@@ -29,10 +26,10 @@ export const HeaderAnnotationButton: React.FC<HeaderAnnotationButtonProps> = ({
       )}
       <Edit2
         size="24"
-        color={hasAnnotations ? '#000000' : '#6C757D'}
+        color={hasAnnotations ? '#000' : '#6C757D'}
         variant="Outline"
         className="relative z-10"
       />
-    </Button>
+    </button>
   )
 }

@@ -19,18 +19,16 @@ export const FloatingBookmarkButton: React.FC<FloatingBookmarkButtonProps> = ({
 
   if (variant === 'header') {
     return (
-      <Button
+      <button
         onClick={onClick}
-        variant="ghost"
-        size="icon"
         aria-label={isBookmarked ? 'Remover marca-página' : 'Marcar página'}
       >
         <ArchiveAdd
-          size="24"
+          size="26"
           color={isBookmarked ? '#487BFF' : '#6C757D'}
           variant={isBookmarked ? 'Bold' : 'Linear'}
         />
-      </Button>
+      </button>
     )
   }
 

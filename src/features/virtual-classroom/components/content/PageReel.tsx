@@ -188,7 +188,7 @@ export const PageReel: React.FC<PageReelProps> = ({
                             )}
                             {page.hasAnnotations && (
                               <div
-                                className={`bg-[#8A5CCC] rounded-md flex items-center justify-center shadow-sm text-white ${
+                                className={`bg-[#46B35E] rounded-md flex items-center justify-center shadow-sm text-white ${
                                   isMobile ? 'w-6 h-6' : 'w-8 h-8'
                                 }`}
                               >
@@ -201,7 +201,7 @@ export const PageReel: React.FC<PageReelProps> = ({
                             )}
                             {page.hasDrawings && (
                               <div
-                                className={`bg-[#F3C353] rounded-md flex items-center justify-center shadow-sm text-black ${
+                                className={`bg-[#8A5CCC] rounded-md flex items-center justify-center shadow-sm text-white ${
                                   isMobile ? 'w-6 h-6' : 'w-8 h-8'
                                 }`}
                               >

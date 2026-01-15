@@ -148,7 +148,11 @@ export const WritingToolbar: React.FC<WritingToolbarProps> = ({
                         }`}
                         aria-label="Fino"
                       >
-                        <img src="/icons/thin.svg" alt="Thin" className="w-7 h-7" />
+                        <img
+                          src="/icons/thin.svg"
+                          alt="Thin"
+                          className="w-7 h-7"
+                        />
                       </button>
                       <button
                         onClick={() => handleThicknessSelect('thick')}
@@ -159,7 +163,11 @@ export const WritingToolbar: React.FC<WritingToolbarProps> = ({
                         }`}
                         aria-label="Grosso"
                       >
-                        <img src="/icons/thick.svg" alt="Thick" className="w-7 h-7" />
+                        <img
+                          src="/icons/thick.svg"
+                          alt="Thick"
+                          className="w-7 h-7"
+                        />
                       </button>
 
                       <div className="w-8 h-px bg-gray-200 my-1" />
@@ -168,9 +176,7 @@ export const WritingToolbar: React.FC<WritingToolbarProps> = ({
                       <button
                         onClick={() => setShowColorPicker(!showColorPicker)}
                         className={`min-w-12 min-h-12 flex items-center justify-center rounded-xl transition-all ${
-                          showColorPicker
-                            ? 'bg-gray-200'
-                            : 'active:bg-gray-100'
+                          showColorPicker ? 'bg-gray-200' : 'active:bg-gray-100'
                         }`}
                         aria-label="Cores"
                       >
