@@ -33,7 +33,7 @@ export const HeaderStatus: React.FC<HeaderStatusProps> = ({
               />
             ))}
           </div>
-          <span className="font-sans text-base font-bold text-[#343A40]">
+          <span className="font-baloo text-xl font-bold text-[#343A40]">
             {redoCurrent}/{redoTotal}
           </span>
         </div>
@@ -83,7 +83,7 @@ export const HeaderStatus: React.FC<HeaderStatusProps> = ({
           >
             <Timer
               variant="minimal"
-              className="text-[#FF246E]! gap-0! [&>span]:hidden"
+              className="font-baloo text-[#FF246E]! gap-0! [&>span]:hidden"
             />
           </div>
           <div className="-ml-4 flex h-8 items-center rounded-[5.41px] bg-white pl-6 pr-4">
@@ -97,8 +97,8 @@ export const HeaderStatus: React.FC<HeaderStatusProps> = ({
 
       {/* Hanging Lives */}
       {lives > 5 ? (
-        <div className="absolute -bottom-5 flex items-center gap-2 rounded-[80px] border-[3.38px] border-black/20 bg-white px-8 py-4 shadow-md">
-          <span className="font-baloo text-[24.56px] font-normal leading-[1.3] text-[#ED3237]">
+        <div className="absolute -bottom-7 flex items-center gap-2 rounded-[80px] border-[3.38px] border-black/20 bg-white px-4 py-2 shadow-md">
+          <span className="font-baloo text-[24.56px] font-bold leading-[1.3] text-[#ED3237]">
             {lives}x
           </span>
           <Heart size="28.8" color="#ED3237" variant="Bold" />

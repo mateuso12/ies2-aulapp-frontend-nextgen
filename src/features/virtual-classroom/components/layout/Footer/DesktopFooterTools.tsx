@@ -112,7 +112,11 @@ export function DesktopFooterTools({
             aria-label={isFullscreen ? 'Sair da tela cheia' : 'Tela cheia'}
             title={isFullscreen ? 'Sair da tela cheia' : 'Tela cheia'}
           >
-            {isFullscreen ? <Minimize2 size={20} /> : <Maximize2 size={20} />}
+            {isFullscreen ? (
+              <Minimize2 size={20} color="currentColor" />
+            ) : (
+              <Maximize2 size={20} color="currentColor" />
+            )}
           </Button>
         )}
       </div>

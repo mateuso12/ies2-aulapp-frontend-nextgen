@@ -29,7 +29,7 @@ interface HeaderProps {
 
 export const Header: React.FC<HeaderProps> = ({
   variant = 'default',
-  lives = 5,
+  lives = 14,
   score = 0,
   redoCurrent = 1,
   redoTotal = 3,

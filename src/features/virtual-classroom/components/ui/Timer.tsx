@@ -26,7 +26,7 @@ export const Timer: React.FC<TimerProps> = ({
     return (
       <div className={`flex items-center gap-2 ${className}`}>
         <Timer1 color="currentColor" variant="Bold" className="h-6 w-6" />
-        <span className="font-sans text-base font-bold tabular-nums">
+        <span className="font-baloo text-xl font-bold tabular-nums">
           {moment.utc(timeLeft * 1000).format('mm:ss')}
         </span>
       </div>
