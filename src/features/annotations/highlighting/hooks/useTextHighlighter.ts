@@ -1,6 +1,7 @@
 import React from 'react'
 import type { Highlight, HighlightColor } from '../types/highlight'
 import { localStorageHighlightRepository } from '../repositories'
+import type { HighlightRepository } from '../repositories'
 import { rangeToAnchor } from '../lib/xpathRange'
 import { extractExactText, extractPrefixSuffix } from '../lib/textQuote'
 
@@ -21,6 +22,8 @@ export interface UseTextHighlighterOptions {
   onSaveHighlight?: (highlight: Highlight) => void
   /** Callback quando um highlight é removido */
   onRemoveHighlight?: (highlightId: string) => void
+  /** Repositório customizado (Firebase, API, etc.) - padrão: localStorage */
+  repository?: HighlightRepository
 }
 
 export interface UseTextHighlighterReturn {
@@ -105,34 +108,46 @@ function rangeIsInsideRoot(range: Range, root: HTMLElement | null): boolean {
 export function useTextHighlighter(
   options: UseTextHighlighterOptions
 ): UseTextHighlighterReturn {
-  const { documentId, mode, onSaveHighlight, onRemoveHighlight, rootRef } =
+  const { documentId, mode, onSaveHighlight, onRemoveHighlight, rootRef, repository } =
     options
+
+  // Usa o repositório fornecido ou fallback para localStorage
+  const repo = repository || localStorageHighlightRepository
 
   const [highlights, setHighlights] = React.useState<Highlight[]>([])
 
   // Evita sobrescrever o localStorage com [] antes do carregamento inicial terminar.
   const isLoadedRef = React.useRef(false)
+  const lastRepoRef = React.useRef<HighlightRepository | null>(null)
 
   React.useEffect(() => {
     if (typeof window === 'undefined') return
-    isLoadedRef.current = false
-    localStorageHighlightRepository
+    
+    // Se o repository mudou, precisamos recarregar
+    const repoChanged = lastRepoRef.current !== repo
+    if (repoChanged) {
+      isLoadedRef.current = false
+      lastRepoRef.current = repo
+    }
+    
+    repo
       .findByDocumentId(documentId)
       .then((data) => {
         setHighlights(data)
         isLoadedRef.current = true
       })
-      .catch(() => {
+      .catch((error) => {
+        console.error('[useTextHighlighter] Error loading highlights:', error)
         setHighlights([])
         isLoadedRef.current = true
       })
-  }, [documentId])
+  }, [documentId, repo])
 
   React.useEffect(() => {
     if (typeof window === 'undefined') return
     if (!isLoadedRef.current) return
-    localStorageHighlightRepository.saveAll(documentId, highlights)
-  }, [documentId, highlights])
+    repo.saveAll(documentId, highlights)
+  }, [documentId, highlights, repo])
 
   const [menu, setMenu] = React.useState<FloatingMenuState>({
     open: false,

@@ -1,12 +1,15 @@
-import React, { useState } from 'react'
+import React, { useState, useMemo } from 'react'
 import parse from 'html-react-parser'
 import { VirtualClassroomLayout } from '../layouts/VirtualClassroomLayout/index'
 import { mockContentPages } from '../mocks/virtualClassroomContent'
 import { TextHighlighter } from '@/features/annotations/highlighting'
+import { createFirebaseHighlightRepository } from '@/features/annotations/highlighting/repositories'
+import { useUser } from '@/hooks/useUser'
 import { DevTools } from '@/features/virtual-classroom/components/overlays'
 import type { PageData } from '@/features/virtual-classroom/components/content/PageReel'
 
 export const VirtualClassroom: React.FC = () => {
+  const { userId } = useUser()
   const [currentPageIndex, setCurrentPageIndex] = useState(0)
   const [visitedPages, setVisitedPages] = useState<number[]>([1])
   const [maxReachedIndex, setMaxReachedIndex] = useState(0)
@@ -78,6 +81,12 @@ export const VirtualClassroom: React.FC = () => {
     }
   })
 
+  // Cria repositório Firebase para highlights do usuário
+  const highlightRepository = useMemo(() => {
+    if (!userId) return undefined
+    return createFirebaseHighlightRepository(userId)
+  }, [userId])
+
   return (
     <>
       <DevTools
@@ -99,9 +108,11 @@ export const VirtualClassroom: React.FC = () => {
       >
         {({ isOtherToolActive }) => (
           <TextHighlighter
+            key={`${currentPage.id}-${userId || 'loading'}`}
             documentId={`virtual-classroom-page-${currentPage.id}`}
             contentHtml={currentPage.contentHtml || ''}
             disabled={isOtherToolActive}
+            repository={highlightRepository}
           />
         )}
       </VirtualClassroomLayout>

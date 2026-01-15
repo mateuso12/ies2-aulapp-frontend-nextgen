@@ -179,7 +179,7 @@ export const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
             style={{
               width: Math.max(currentConfig.strokeWidth, 8),
               height: Math.max(currentConfig.strokeWidth, 8),
-              borderRadius: currentConfig.tool === 'marker' ? '2px' : '50%',
+              borderRadius: currentConfig.tool === 'pencil' ? '2px' : '50%',
               border: '1px solid rgba(0,0,0,0.5)',
               backgroundColor:
                 currentConfig.tool === 'eraser'

@@ -13,6 +13,13 @@ dist-ssr
 *.local
 pnpm-lock.yaml
 
+# Environment files (except .env.example)
+.env
+.env.local
+.env.development
+.env.homologation
+.env.production
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

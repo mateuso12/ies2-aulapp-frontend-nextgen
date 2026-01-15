@@ -6,6 +6,9 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
+    "build:dev": "tsc -b && vite build --mode development",
+    "build:hlg": "tsc -b && vite build --mode homologation",
+    "build:prod": "tsc -b && vite build --mode production",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "format": "prettier --write \"src/**/*.{ts,tsx,css}\"",
@@ -20,6 +23,7 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "emoji-picker-react": "^4.16.1",
+    "firebase": "^12.8.0",
     "framer-motion": "^12.23.25",
     "html-react-parser": "^5.2.11",
     "i18next": "^25.6.1",
