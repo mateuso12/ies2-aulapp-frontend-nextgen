@@ -3,6 +3,7 @@ import parse from 'html-react-parser'
 import { VirtualClassroomLayout } from '../layouts/VirtualClassroomLayout/index'
 import { mockContentPages } from '../mocks/virtualClassroomContent'
 import { TextHighlighter } from '@/features/annotations/highlighting'
+import { DevTools } from '@/features/virtual-classroom/components/overlays'
 import type { PageData } from '@/features/virtual-classroom/components/content/PageReel'
 
 export const VirtualClassroom: React.FC = () => {
@@ -10,6 +11,7 @@ export const VirtualClassroom: React.FC = () => {
   const [visitedPages, setVisitedPages] = useState<number[]>([1])
   const [maxReachedIndex, setMaxReachedIndex] = useState(0)
   const [bookmarks, setBookmarks] = useState<number[]>([])
+  const [resourceType, setResourceType] = useState('content')
   const currentPage = mockContentPages[currentPageIndex]
   const totalPages = mockContentPages.length
 
@@ -77,24 +79,32 @@ export const VirtualClassroom: React.FC = () => {
   })
 
   return (
-    <VirtualClassroomLayout
-      currentPage={currentPageIndex + 1}
-      totalPages={totalPages}
-      pages={pagesData}
-      bookmarks={bookmarks}
-      onNext={handleNext}
-      onPrevious={handlePrevious}
-      onPageSelect={handlePageSelect}
-      onToggleBookmark={handleToggleBookmark}
-      onRemoveBookmark={handleRemoveBookmark}
-    >
-      {({ isOtherToolActive }) => (
-        <TextHighlighter
-          documentId={`virtual-classroom-page-${currentPage.id}`}
-          contentHtml={currentPage.contentHtml || ''}
-          disabled={isOtherToolActive}
-        />
-      )}
-    </VirtualClassroomLayout>
+    <>
+      <DevTools
+        resourceType={resourceType}
+        onResourceTypeChange={setResourceType}
+      />
+      <VirtualClassroomLayout
+        variant={resourceType === 'gamified' ? 'gamified' : 'default'}
+        resourceType={resourceType}
+        currentPage={currentPageIndex + 1}
+        totalPages={totalPages}
+        pages={pagesData}
+        bookmarks={bookmarks}
+        onNext={handleNext}
+        onPrevious={handlePrevious}
+        onPageSelect={handlePageSelect}
+        onToggleBookmark={handleToggleBookmark}
+        onRemoveBookmark={handleRemoveBookmark}
+      >
+        {({ isOtherToolActive }) => (
+          <TextHighlighter
+            documentId={`virtual-classroom-page-${currentPage.id}`}
+            contentHtml={currentPage.contentHtml || ''}
+            disabled={isOtherToolActive}
+          />
+        )}
+      </VirtualClassroomLayout>
+    </>
   )
 }
