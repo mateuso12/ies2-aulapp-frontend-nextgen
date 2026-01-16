@@ -33,7 +33,7 @@ const CircularProgress = ({ percentage }: { percentage: number }) => {
     <div className="relative flex h-11 w-11 items-center justify-center">
       <svg className="h-full w-full -rotate-90 transform">
         <circle
-          className="text-gray-200"
+          className="text-gray-200 dark:text-gray-600"
           strokeWidth="4"
           stroke="currentColor"
           fill="transparent"
@@ -42,7 +42,7 @@ const CircularProgress = ({ percentage }: { percentage: number }) => {
           cy="22"
         />
         <motion.circle
-          className="text-[#FF246E]"
+          className="text-[#FF246E] dark:text-[#FF5A82]"
           strokeWidth="4"
           strokeDasharray={circumference}
           initial={{ strokeDashoffset: circumference }}
@@ -56,7 +56,7 @@ const CircularProgress = ({ percentage }: { percentage: number }) => {
           cy="22"
         />
       </svg>
-      <span className="absolute text-[10px] font-bold text-[#FF246E] flex items-center justify-center">
+      <span className="absolute text-[10px] font-bold text-[#FF246E] dark:text-[#FF5A82] flex items-center justify-center">
         <motion.span>{rounded}</motion.span>%
       </span>
     </div>
@@ -73,9 +73,9 @@ const ProgressBar = ({
   const percentage = Math.min(100, Math.max(0, (current / total) * 100))
 
   return (
-    <div className="h-2 w-[84px] overflow-hidden rounded-full bg-[#E7E7E7]">
+    <div className="h-2 w-[84px] overflow-hidden rounded-full bg-[#E7E7E7] dark:bg-gray-600">
       <motion.div
-        className="h-full rounded-full bg-[#FF246E]"
+        className="h-full rounded-full bg-[#FF246E] dark:bg-[#FF5A82]"
         initial={{ width: 0 }}
         animate={{ width: `${percentage}%` }}
         transition={{ duration: 1, ease: 'easeOut' }}
@@ -102,13 +102,13 @@ export const ClassroomModules: React.FC = () => {
       <div className="flex px-2 items-center gap-3">
         <SheetClose asChild>
           <button
-            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-primary hover:bg-transparent cursor-pointer"
+            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-primary hover:bg-transparent cursor-pointer dark:text-foreground"
             aria-label="Fechar menu"
           >
             <CloseCircle size="24" color="currentColor" variant="Linear" />
           </button>
         </SheetClose>
-        <h1 className="whitespace-nowrap md:text-[32px] text-2xl font-bold leading-none text-black -translate-y-px">
+        <h1 className="whitespace-nowrap md:text-[32px] text-2xl font-bold leading-none text-black dark:text-foreground -translate-y-px">
           4.2 Nome da Aula
         </h1>
       </div>
@@ -116,12 +116,17 @@ export const ClassroomModules: React.FC = () => {
       {/* Search */}
       <div className="relative">
         <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-          <SearchNormal1 size="24" color="#6C757D" variant="Linear" />
+          <SearchNormal1
+            size="24"
+            color="#6C757D"
+            variant="Linear"
+            className="dark:text-gray-400"
+          />
         </div>
         <input
           type="text"
           placeholder="Buscar aqui"
-          className="h-12 w-full rounded-lg border border-[#6C757D] bg-white pl-11 pr-4 text-sm text-[#343A40] placeholder-[#6C757D] outline-none focus:border-[#FF246E] focus-visible:ring-2 focus-visible:ring-[#FF246E]/30"
+          className="h-12 w-full rounded-lg border border-[#6C757D] dark:border-gray-600 bg-white dark:bg-(--paper-bg) pl-11 pr-4 text-sm text-[#343A40] dark:text-foreground placeholder-[#6C757D] dark:placeholder-gray-400 outline-none focus:border-[#FF246E] focus-visible:ring-2 focus-visible:ring-[#FF246E]/30"
         />
       </div>
 
@@ -136,12 +141,12 @@ export const ClassroomModules: React.FC = () => {
           <AccordionItem
             key={module.id}
             value={module.id}
-            className="group overflow-hidden rounded-2xl border-none bg-white shadow-[0px_4px_8px_0px_rgba(0,0,0,0.15)] data-[state=open]:bg-linear-to-br data-[state=open]:from-[#FF246E] data-[state=open]:to-[#487BFF] data-[state=open]:p-px data-[state=open]:shadow-none"
+            className="group overflow-hidden rounded-2xl border-none bg-white dark:bg-(--paper-bg) shadow-[0px_4px_8px_0px_rgba(0,0,0,0.15)] data-[state=open]:bg-linear-to-br data-[state=open]:from-[#FF246E] data-[state=open]:to-[#487BFF] data-[state=open]:p-px data-[state=open]:shadow-none"
           >
             <div className="flex flex-col h-full w-full bg-transparent data-[state=open]:gap-px">
               <AccordionTrigger
                 className={cn(
-                  'flex items-center justify-between px-4 py-4 hover:no-underline bg-white rounded-2xl group-data-[state=open]:rounded-b-none group-data-[state=open]:rounded-t-[15px] cursor-pointer',
+                  'flex items-center justify-between px-4 py-4 hover:no-underline bg-white dark:bg-(--paper-bg) rounded-2xl group-data-[state=open]:rounded-b-none group-data-[state=open]:rounded-t-[15px] cursor-pointer',
                   'focus-visible:relative focus-visible:z-10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF246E]'
                 )}
               >
@@ -154,10 +159,10 @@ export const ClassroomModules: React.FC = () => {
                     />
                   )}
                   <div className="flex gap-2 text-left">
-                    <span className="font-inter text-base font-bold text-[#343A40]">
+                    <span className="font-inter text-base font-bold text-[#343A40] dark:text-foreground">
                       {module.number}
                     </span>
-                    <span className="font-inter text-base font-bold text-[#343A40]">
+                    <span className="font-inter text-base font-bold text-[#343A40] dark:text-foreground">
                       {module.title}
                     </span>
                   </div>
@@ -169,7 +174,7 @@ export const ClassroomModules: React.FC = () => {
                   {module.lessons.map((lesson) => (
                     <button
                       key={lesson.id}
-                      className="flex w-full items-center justify-between bg-white px-4 py-4 first:rounded-t-none last:rounded-b-[15px] hover:bg-gray-50 focus-visible:relative focus-visible:z-10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF246E] focus-visible:ring-inset cursor-pointer"
+                      className="flex w-full items-center justify-between bg-white dark:bg-(--paper-bg) px-4 py-4 first:rounded-t-none last:rounded-b-[15px] hover:bg-gray-50 dark:hover:bg-gray-700 focus-visible:relative focus-visible:z-10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF246E] focus-visible:ring-inset cursor-pointer"
                     >
                       <div className="flex items-center gap-4">
                         {/* Resource Badge (Icon + Label) */}
@@ -183,10 +188,10 @@ export const ClassroomModules: React.FC = () => {
                           <div className="flex items-center gap-2 pl-[34px]">
                             {' '}
                             {/* Indent to align with text */}
-                            <span className="font-plus-jakarta text-sm font-bold text-[#343A40]">
+                            <span className="font-plus-jakarta text-sm font-bold text-[#343A40] dark:text-foreground">
                               {lesson.number}
                             </span>
-                            <span className="font-plus-jakarta text-sm font-bold text-[#343A40]">
+                            <span className="font-plus-jakarta text-sm font-bold text-[#343A40] dark:text-foreground">
                               {lesson.title}
                             </span>
                           </div>
@@ -202,13 +207,13 @@ export const ClassroomModules: React.FC = () => {
                               color="#46B35E"
                               variant="Bold"
                             />
-                            <span className="font-plus-jakarta text-xs font-bold text-[#46B35E2]">
+                            <span className="font-plus-jakarta text-xs font-bold text-[#46B35E] dark:text-[#5AC97A]">
                               {lesson.current}/{lesson.total}
                             </span>
                           </div>
                         ) : (
                           <>
-                            <span className="font-plus-jakarta text-xs font-bold text-[#343A40]">
+                            <span className="font-plus-jakarta text-xs font-bold text-[#343A40] dark:text-foreground">
                               {lesson.current}/{lesson.total}
                             </span>
                             <ProgressBar

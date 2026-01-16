@@ -76,19 +76,19 @@ export const HeaderActions: React.FC<HeaderActionsProps> = ({
     <div className="flex items-center gap-4">
       <button
         onClick={onBack}
-        className="flex h-10 w-10 items-center justify-center rounded-full text-[#FF246E] hover:bg-gray-100"
+        className="flex h-10 w-10 items-center justify-center rounded-full text-[#FF246E] hover:bg-gray-100 dark:hover:bg-gray-700"
       >
         <ArrowLeft size="24" color="currentColor" variant="Linear" />
       </button>
 
       {/* Mobile Title (only the class name) */}
-      <h1 className="max-md:font-sans max-md:text-base max-md:font-semibold max-md:text-[#FF246E] max-md:truncate md:hidden">
+      <h1 className="max-md:font-sans max-md:text-base max-md:font-semibold max-md:text-[#FF246E] dark:max-md:text-[#FF5A82] max-md:truncate md:hidden">
         {title}
       </h1>
 
       {/* Desktop Title */}
-      <h1 className="hidden font-sans text-2xl font-semibold text-[#FF246E] md:block">
-        4.2 <span className="text-[#FF246E]">{title}</span>
+      <h1 className="hidden font-sans text-2xl font-semibold text-[#FF246E] dark:text-[#FF5A82] md:block">
+        4.2 <span className="text-[#FF246E] dark:text-[#FF5A82]">{title}</span>
       </h1>
 
       <div className="hidden md:block">

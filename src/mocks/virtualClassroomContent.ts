@@ -28,7 +28,7 @@ const h2 = (text: string, classes = '') =>
   `<h2 class="text-2xl font-bold mt-8 mb-4 text-gray-700 ${classes}">${text}</h2>`
 
 const h3 = (text: string, classes = '') =>
-  `<h3 class="text-xl font-bold mb-2 text-blue-800 ${classes}">${text}</h3>`
+  `<h3 class="text-xl font-bold mb-2 text-muted-foreground ${classes}">${text}</h3>`
 
 const h4 = (text: string, classes = '') =>
   `<h4 class="font-bold ${classes}">${text}</h4>`
@@ -48,7 +48,13 @@ const box = (content: string, bgColor: string, borderColor: string) =>
 const grid2 = (items: string[]) =>
   `<div class="grid grid-cols-2 gap-4 my-8">${items.join('')}</div>`
 
-const card = (title: string, desc: string, bgClass: string, borderClass: string, textClass: string) =>
+const card = (
+  title: string,
+  desc: string,
+  bgClass: string,
+  borderClass: string,
+  textClass: string
+) =>
   `<div class="p-4 ${bgClass} rounded border ${borderClass}">
     ${h4(title, textClass)}
     <p>${desc}</p>
@@ -62,7 +68,8 @@ const placeholder = (text: string) =>
 const center = (content: string) =>
   `<div class="flex justify-center my-10">${content}</div>`
 
-const emoji = (e: string, size = 'text-6xl') => `<div class="${size}">${e}</div>`
+const emoji = (e: string, size = 'text-6xl') =>
+  `<div class="${size}">${e}</div>`
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Dados das páginas
@@ -75,10 +82,14 @@ export const mockContentPages: ContentPage[] = [
     contentHtml: `
       ${h1('Introdução à Matemática')}
       ${p('A matemática é a ciência do raciocínio lógico e abstrato, que estuda quantidades, medidas, espaços, estruturas, variações e estatísticas.')}
-      ${box(`
+      ${box(
+        `
         ${h3('Conceito Chave')}
         ${p('Números são objetos matemáticos usados para descrever quantidade, ordem ou medida.')}
-      `, 'bg-blue-50', 'border-blue-100')}
+      `,
+        'bg-blue-50 dark:bg-blue-900',
+        'border-blue-100 dark:border-blue-800'
+      )}
       ${p('Desde a antiguidade, a matemática tem sido fundamental para o desenvolvimento da civilização humana, sendo aplicada em diversas áreas como engenharia, física, biologia, economia e computação.')}
     `,
   },
@@ -108,10 +119,34 @@ export const mockContentPages: ContentPage[] = [
       ${h2('Operações Básicas')}
       ${p('As quatro operações fundamentais da aritmética são: adição, subtração, multiplicação e divisão.')}
       ${grid2([
-        card('Adição (+)', 'Soma de quantidades.', 'bg-green-50', 'border-green-100', 'text-green-800'),
-        card('Subtração (-)', 'Diferença entre quantidades.', 'bg-red-50', 'border-red-100', 'text-red-800'),
-        card('Multiplicação (×)', 'Soma repetida.', 'bg-yellow-50', 'border-yellow-100', 'text-yellow-800'),
-        card('Divisão (÷)', 'Partição em partes iguais.', 'bg-purple-50', 'border-purple-100', 'text-purple-800'),
+        card(
+          'Adição (+)',
+          'Soma de quantidades.',
+          'bg-green-50',
+          'border-green-100',
+          'text-green-800'
+        ),
+        card(
+          'Subtração (-)',
+          'Diferença entre quantidades.',
+          'bg-red-50',
+          'border-red-100',
+          'text-red-800'
+        ),
+        card(
+          'Multiplicação (×)',
+          'Soma repetida.',
+          'bg-yellow-50',
+          'border-yellow-100',
+          'text-yellow-800'
+        ),
+        card(
+          'Divisão (÷)',
+          'Partição em partes iguais.',
+          'bg-purple-50',
+          'border-purple-100',
+          'text-purple-800'
+        ),
       ])}
     `,
   },
@@ -134,11 +169,15 @@ export const mockContentPages: ContentPage[] = [
     contentHtml: `
       ${h2('Álgebra Elementar')}
       ${p('A álgebra usa letras para representar números desconhecidos e estabelecer relações gerais.')}
-      ${box(`
+      ${box(
+        `
         ${h3('Exemplo de Equação', 'text-green-800')}
         <p class="font-mono text-xl text-center my-4">2x + 5 = 15</p>
         <p>Resolver: x = 5</p>
-      `, 'bg-green-50', 'border-green-100')}
+      `,
+        'bg-green-50',
+        'border-green-100'
+      )}
     `,
   },
   {
@@ -169,11 +208,15 @@ export const mockContentPages: ContentPage[] = [
     contentHtml: `
       ${h2('Números Decimais')}
       ${p('Os números decimais representam quantidades menores que a unidade usando a vírgula (ou ponto) decimal.')}
-      ${box(`
+      ${box(
+        `
         <p class="font-mono text-lg">0,5 = 1/2 = 50%</p>
         <p class="font-mono text-lg">0,25 = 1/4 = 25%</p>
         <p class="font-mono text-lg">0,75 = 3/4 = 75%</p>
-      `, 'bg-orange-50', 'border-orange-100')}
+      `,
+        'bg-orange-50',
+        'border-orange-100'
+      )}
     `,
   },
   {
@@ -191,10 +234,14 @@ export const mockContentPages: ContentPage[] = [
     contentHtml: `
       ${h2('Razão e Proporção')}
       ${p('Razão é a comparação entre duas grandezas. Proporção é a igualdade entre duas razões.')}
-      ${box(`
+      ${box(
+        `
         ${p('Se 2 está para 4, assim como 3 está para 6:')}
         <p class="font-mono text-xl text-center">2/4 = 3/6</p>
-      `, 'bg-teal-50', 'border-teal-100')}
+      `,
+        'bg-teal-50',
+        'border-teal-100'
+      )}
     `,
   },
   {
@@ -212,10 +259,14 @@ export const mockContentPages: ContentPage[] = [
     contentHtml: `
       ${h2('Radiciação')}
       ${p('Radiciação é a operação inversa da potenciação. A raiz quadrada é a mais comum.')}
-      ${box(`
+      ${box(
+        `
         <p class="font-mono text-xl text-center">√16 = 4 (pois 4² = 16)</p>
         <p class="font-mono text-xl text-center">√25 = 5 (pois 5² = 25)</p>
-      `, 'bg-indigo-50', 'border-indigo-100')}
+      `,
+        'bg-indigo-50',
+        'border-indigo-100'
+      )}
     `,
   },
   {

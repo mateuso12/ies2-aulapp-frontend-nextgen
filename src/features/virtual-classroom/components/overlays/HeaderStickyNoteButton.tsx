@@ -22,13 +22,13 @@ export const HeaderStickyNoteButton: React.FC<HeaderStickyNoteButtonProps> = ({
       onClick={onClick}
     >
       {hasNotes && (
-        <div className="absolute inset-0 -m-1 bg-[#46B35E] rounded-full" />
+        <div className="absolute inset-0 -m-1 bg-[#46B35E] dark:bg-[#3A9950] rounded-full" />
       )}
       <Stickynote
         size="24"
         color={hasNotes ? '#FFFFFF' : '#6C757D'}
         variant="Outline"
-        className="relative z-10"
+        className="relative z-10 dark:text-foreground"
       />
     </button>
   )

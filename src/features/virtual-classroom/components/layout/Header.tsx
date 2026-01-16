@@ -197,8 +197,8 @@ export const Header: React.FC<HeaderProps> = ({
               />
 
               {/* Menu Button - Ghost Variant */}
-              <SidebarMenu onOpenChange={setIsSidebarOpen}>
-                <button className="flex h-12 w-12 cursor-pointer items-center justify-center text-[#FF246E] hover:bg-white/10 rounded-full transition-colors">
+              <SidebarMenu open={isSidebarOpen} onOpenChange={setIsSidebarOpen}>
+                <button className="flex h-12 w-12 cursor-pointer items-center justify-center text-[#FF246E] hover:bg-white/10 rounded-full transition-colors dark:text-[#FF5A82] dark:hover:bg-gray-700">
                   <HambergerMenu
                     size="24"
                     color="currentColor"
@@ -214,7 +214,7 @@ export const Header: React.FC<HeaderProps> = ({
   }
 
   return (
-    <header className="relative z-20 w-full bg-white shadow-[0px_4px_4px_rgba(0,0,0,0.25)] max-md:h-[60px] md:h-[88px]">
+    <header className="relative z-20 w-full bg-white dark:bg-(--footer-header-bg) dark:text-foreground shadow-[0px_4px_4px_rgba(0,0,0,0.25)] max-md:h-[60px] md:h-[88px]">
       {/* Mobile */}
       <div className="hidden h-full w-full items-center justify-between max-md:flex">
         {/* Left: Back + Title */}
@@ -274,8 +274,8 @@ export const Header: React.FC<HeaderProps> = ({
           />
 
           {/* Right: Menu */}
-          <SidebarMenu onOpenChange={setIsSidebarOpen}>
-            <button className="flex h-10 w-10 items-center justify-center rounded-full text-[#FF246E] hover:bg-gray-100 cursor-pointer">
+          <SidebarMenu open={isSidebarOpen} onOpenChange={setIsSidebarOpen}>
+            <button className="flex h-10 w-10 items-center justify-center rounded-full text-[#FF246E] dark:text-[#FF5A82] hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer">
               <HambergerMenu size="24" color="currentColor" variant="Linear" />
             </button>
           </SidebarMenu>

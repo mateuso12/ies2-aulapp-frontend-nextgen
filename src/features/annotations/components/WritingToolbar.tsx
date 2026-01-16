@@ -74,47 +74,55 @@ export const WritingToolbar: React.FC<WritingToolbarProps> = ({
           className="fixed right-3 top-1/2 -translate-y-1/2 z-50 flex flex-col items-center"
         >
           {/* Main toolbar container */}
-          <div className="bg-white rounded-2xl shadow-xl border border-gray-200 p-2 flex flex-col items-center gap-1">
+          <div className="bg-white dark:bg-(--paper-bg) rounded-2xl shadow-xl border border-gray-200 dark:border-gray-600 p-2 flex flex-col items-center gap-1">
             {/* Close button */}
             <button
               onClick={onClose}
-              className="min-w-12 min-h-12 flex items-center justify-center rounded-xl bg-gray-100 text-gray-600 active:bg-gray-200 transition-colors"
+              className="min-w-12 min-h-12 flex items-center justify-center rounded-xl bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 active:bg-gray-200 dark:active:bg-gray-600 transition-colors"
               aria-label="Fechar"
             >
               <X className="w-6 h-6" />
             </button>
 
-            <div className="w-8 h-px bg-gray-200 my-1" />
+            <div className="w-8 h-px bg-gray-200 dark:bg-gray-600 my-1" />
 
             {/* Tools section */}
             <button
               onClick={() => handleToolSelect('pen')}
               className={`min-w-12 min-h-12 flex items-center justify-center rounded-xl transition-all ${
                 currentConfig.tool === 'pen'
-                  ? 'bg-blue-100 text-blue-600 scale-105'
-                  : 'text-gray-600 active:bg-gray-100'
+                  ? 'bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-300 scale-105'
+                  : 'text-gray-600 dark:text-gray-300 active:bg-gray-100 dark:active:bg-gray-700'
               }`}
               aria-label="Caneta"
             >
-              <img src="/icons/pencil.svg" alt="Pen" className="w-7 h-7" />
+              <img
+                src="/icons/pencil.svg"
+                alt="Pen"
+                className="w-7 h-7 dark:invert"
+              />
             </button>
 
             <button
               onClick={() => handleToolSelect('eraser')}
               className={`min-w-12 min-h-12 flex items-center justify-center rounded-xl transition-all ${
                 currentConfig.tool === 'eraser'
-                  ? 'bg-blue-100 text-blue-600 scale-105'
-                  : 'text-gray-600 active:bg-gray-100'
+                  ? 'bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-300 scale-105'
+                  : 'text-gray-600 dark:text-gray-300 active:bg-gray-100 dark:active:bg-gray-700'
               }`}
               aria-label="Borracha"
             >
-              <img src="/icons/eraser.svg" alt="Eraser" className="w-7 h-7" />
+              <img
+                src="/icons/eraser.svg"
+                alt="Eraser"
+                className="w-7 h-7 dark:invert"
+              />
             </button>
 
             {/* Expandable section toggle */}
             <button
               onClick={() => setIsExpanded(!isExpanded)}
-              className="min-w-12 min-h-9 flex items-center justify-center rounded-xl text-gray-400 active:bg-gray-100 transition-colors"
+              className="min-w-12 min-h-9 flex items-center justify-center rounded-xl text-gray-400 dark:text-gray-500 active:bg-gray-100 dark:active:bg-gray-700 transition-colors"
               aria-label={isExpanded ? 'Recolher' : 'Expandir'}
             >
               {isExpanded ? (
@@ -134,7 +142,7 @@ export const WritingToolbar: React.FC<WritingToolbarProps> = ({
                   transition={{ duration: 0.2 }}
                   className="overflow-hidden flex flex-col items-center gap-1"
                 >
-                  <div className="w-8 h-px bg-gray-200 my-1" />
+                  <div className="w-8 h-px bg-gray-200 dark:bg-gray-600 my-1" />
 
                   {/* Thickness (only for pen and marker) */}
                   {currentConfig.tool !== 'eraser' && (
@@ -143,47 +151,49 @@ export const WritingToolbar: React.FC<WritingToolbarProps> = ({
                         onClick={() => handleThicknessSelect('thin')}
                         className={`min-w-12 min-h-12 flex items-center justify-center rounded-xl transition-all ${
                           !isThick
-                            ? 'bg-gray-200 scale-105'
-                            : 'text-gray-400 active:bg-gray-100'
+                            ? 'bg-gray-200 dark:bg-gray-600 scale-105'
+                            : 'text-gray-400 dark:text-gray-500 active:bg-gray-100 dark:active:bg-gray-700'
                         }`}
                         aria-label="Fino"
                       >
                         <img
                           src="/icons/thin.svg"
                           alt="Thin"
-                          className="w-7 h-7"
+                          className="w-7 h-7 dark:invert"
                         />
                       </button>
                       <button
                         onClick={() => handleThicknessSelect('thick')}
                         className={`min-w-12 min-h-12 flex items-center justify-center rounded-xl transition-all ${
                           isThick
-                            ? 'bg-gray-200 scale-105'
-                            : 'text-gray-400 active:bg-gray-100'
+                            ? 'bg-gray-200 dark:bg-gray-600 scale-105'
+                            : 'text-gray-400 dark:text-gray-500 active:bg-gray-100 dark:active:bg-gray-700'
                         }`}
                         aria-label="Grosso"
                       >
                         <img
                           src="/icons/thick.svg"
                           alt="Thick"
-                          className="w-7 h-7"
+                          className="w-7 h-7 dark:invert"
                         />
                       </button>
 
-                      <div className="w-8 h-px bg-gray-200 my-1" />
+                      <div className="w-8 h-px bg-gray-200 dark:bg-gray-600 my-1" />
 
                       {/* Color picker toggle */}
                       <button
                         onClick={() => setShowColorPicker(!showColorPicker)}
                         className={`min-w-12 min-h-12 flex items-center justify-center rounded-xl transition-all ${
-                          showColorPicker ? 'bg-gray-200' : 'active:bg-gray-100'
+                          showColorPicker
+                            ? 'bg-gray-200 dark:bg-gray-600'
+                            : 'active:bg-gray-100 dark:active:bg-gray-700'
                         }`}
                         aria-label="Cores"
                       >
                         <div className="relative">
-                          <Palette className="w-6 h-6 text-gray-600" />
+                          <Palette className="w-6 h-6 text-gray-600 dark:text-gray-300" />
                           <div
-                            className="absolute -bottom-1 -right-1 w-4 h-4 rounded-full border-2 border-white"
+                            className="absolute -bottom-1 -right-1 w-4 h-4 rounded-full border-2 border-white dark:border-gray-700"
                             style={{ backgroundColor: currentConfig.color }}
                           />
                         </div>
@@ -191,12 +201,12 @@ export const WritingToolbar: React.FC<WritingToolbarProps> = ({
                     </div>
                   )}
 
-                  <div className="w-8 h-px bg-gray-200 my-1" />
+                  <div className="w-8 h-px bg-gray-200 dark:bg-gray-600 my-1" />
 
                   {/* Clear button */}
                   <button
                     onClick={onClear}
-                    className="min-w-12 min-h-12 flex items-center justify-center rounded-xl text-red-500 active:bg-red-50 transition-colors"
+                    className="min-w-12 min-h-12 flex items-center justify-center rounded-xl text-red-500 dark:text-red-400 active:bg-red-50 dark:active:bg-red-900/30 transition-colors"
                     aria-label="Limpar"
                   >
                     <Trash2 className="w-6 h-6" />
@@ -217,7 +227,7 @@ export const WritingToolbar: React.FC<WritingToolbarProps> = ({
               transition={{ duration: 0.15 }}
               className="fixed right-[72px] top-1/2 -translate-y-1/2 z-50"
             >
-              <div className="bg-white rounded-2xl shadow-xl border border-gray-200 p-3">
+              <div className="bg-white dark:bg-(--paper-bg) rounded-2xl shadow-xl border border-gray-200 dark:border-gray-600 p-3">
                 <div className="grid grid-cols-2 gap-3">
                   {COLORS.map((value) => (
                     <button
@@ -225,8 +235,8 @@ export const WritingToolbar: React.FC<WritingToolbarProps> = ({
                       onClick={() => handleColorSelect(value)}
                       className={`min-w-11 min-h-11 rounded-xl border-2 transition-all ${
                         currentConfig.color === value
-                          ? 'border-blue-500 scale-110'
-                          : 'border-gray-200 active:scale-105'
+                          ? 'border-blue-500 dark:border-blue-400 scale-110'
+                          : 'border-gray-200 dark:border-gray-600 active:scale-105'
                       }`}
                       style={{ backgroundColor: value }}
                       aria-label={`Cor ${value}`}
@@ -248,70 +258,86 @@ export const WritingToolbar: React.FC<WritingToolbarProps> = ({
       animate={{ opacity: 1, y: 0, x: '-50%' }}
       exit={{ opacity: 0, y: 20, x: '-50%' }}
       transition={{ duration: 0.2 }}
-      className="fixed bottom-[120px] left-1/2 bg-white rounded-full shadow-lg px-6 py-3 flex items-center gap-6 z-50 border border-gray-200"
+      className="fixed bottom-[120px] left-1/2 bg-white dark:bg-(--paper-bg) rounded-full shadow-lg px-6 py-3 flex items-center gap-6 z-50 border border-gray-200 dark:border-gray-600"
     >
       {/* Tools */}
-      <div className="flex items-center gap-4 border-r border-gray-200 pr-6">
+      <div className="flex items-center gap-4 border-r border-gray-200 dark:border-gray-600 pr-6">
         <button
           onClick={() => handleToolSelect('pen')}
           className={`p-2 rounded-lg transition-all ${
             currentConfig.tool === 'pen'
-              ? 'bg-blue-50 text-blue-600 scale-110'
-              : 'hover:bg-gray-50 text-gray-600'
+              ? 'bg-blue-50 dark:bg-blue-900 text-blue-600 dark:text-blue-300 scale-110'
+              : 'hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-600 dark:text-gray-300'
           }`}
           title="Caneta"
         >
-          <img src="/icons/pencil.svg" alt="Pen" className="w-6 h-6" />
+          <img
+            src="/icons/pencil.svg"
+            alt="Pen"
+            className="w-6 h-6 dark:invert"
+          />
         </button>
         <button
           onClick={() => handleToolSelect('eraser')}
           className={`p-2 rounded-lg transition-all ${
             currentConfig.tool === 'eraser'
-              ? 'bg-blue-50 text-blue-600 scale-110'
-              : 'hover:bg-gray-50 text-gray-600'
+              ? 'bg-blue-50 dark:bg-blue-900 text-blue-600 dark:text-blue-300 scale-110'
+              : 'hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-600 dark:text-gray-300'
           }`}
           title="Borracha"
         >
-          <img src="/icons/eraser.svg" alt="Eraser" className="w-6 h-6" />
+          <img
+            src="/icons/eraser.svg"
+            alt="Eraser"
+            className="w-6 h-6 dark:invert"
+          />
         </button>
       </div>
 
       {/* Thickness (only for pen and marker) */}
       {currentConfig.tool !== 'eraser' && (
-        <div className="flex items-center gap-2 border-r border-gray-200 pr-6">
+        <div className="flex items-center gap-2 border-r border-gray-200 dark:border-gray-600 pr-6">
           <button
             onClick={() => handleThicknessSelect('thin')}
             className={`p-1.5 rounded-lg transition-all ${
               !isThick
-                ? 'bg-gray-100 scale-110'
-                : 'hover:bg-gray-50 opacity-50 hover:opacity-100'
+                ? 'bg-gray-100 dark:bg-gray-600 scale-110'
+                : 'hover:bg-gray-50 dark:hover:bg-gray-700 opacity-50 hover:opacity-100'
             }`}
             title="Fino"
           >
-            <img src="/icons/thin.svg" alt="Thin" className="w-6 h-6" />
+            <img
+              src="/icons/thin.svg"
+              alt="Thin"
+              className="w-6 h-6 dark:invert"
+            />
           </button>
           <button
             onClick={() => handleThicknessSelect('thick')}
             className={`p-1.5 rounded-lg transition-all ${
               isThick
-                ? 'bg-gray-100 scale-110'
-                : 'hover:bg-gray-50 opacity-50 hover:opacity-100'
+                ? 'bg-gray-100 dark:bg-gray-600 scale-110'
+                : 'hover:bg-gray-50 dark:hover:bg-gray-700 opacity-50 hover:opacity-100'
             }`}
             title="Grosso"
           >
-            <img src="/icons/thick.svg" alt="Thick" className="w-6 h-6" />
+            <img
+              src="/icons/thick.svg"
+              alt="Thick"
+              className="w-6 h-6 dark:invert"
+            />
           </button>
         </div>
       )}
 
       {/* Colors (only for pen and marker) */}
       {currentConfig.tool !== 'eraser' && (
-        <div className="flex items-center gap-3 border-r border-gray-200 pr-6">
+        <div className="flex items-center gap-3 border-r border-gray-200 dark:border-gray-600 pr-6">
           {COLORS.map((value) => (
             <button
               key={value}
               onClick={() => handleColorSelect(value)}
-              className={`w-6 h-6 rounded-full border border-gray-200 transition-all ${
+              className={`w-6 h-6 rounded-full border border-gray-200 dark:border-gray-600 transition-all ${
                 currentConfig.color === value ? 'scale-125' : 'hover:scale-110'
               }`}
               style={{
@@ -331,13 +357,13 @@ export const WritingToolbar: React.FC<WritingToolbarProps> = ({
       <div className="flex items-center gap-3">
         <button
           onClick={onClear}
-          className="text-sm font-medium text-red-500 hover:text-red-600 px-3 py-1.5 rounded-md hover:bg-red-50 transition-colors"
+          className="text-sm font-medium text-red-500 dark:text-red-400 hover:text-red-600 dark:hover:text-red-300 px-3 py-1.5 rounded-md hover:bg-red-50 dark:hover:bg-red-900/30 transition-colors"
         >
           Limpar
         </button>
         <button
           onClick={onClose}
-          className="text-sm font-medium text-gray-500 hover:text-gray-700 px-3 py-1.5 rounded-md hover:bg-gray-50 transition-colors"
+          className="text-sm font-medium text-gray-500 dark:text-gray-300 hover:text-gray-700 dark:hover:text-white px-3 py-1.5 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
         >
           Fechar
         </button>

@@ -22,11 +22,13 @@ export const FloatingBookmarkButton: React.FC<FloatingBookmarkButtonProps> = ({
       <button
         onClick={onClick}
         aria-label={isBookmarked ? 'Remover marca-página' : 'Marcar página'}
+        className="dark:opacity-90 hover:dark:opacity-100 transition-opacity"
       >
         <ArchiveAdd
           size="26"
           color={isBookmarked ? '#487BFF' : '#6C757D'}
           variant={isBookmarked ? 'Bold' : 'Linear'}
+          className="dark:text-foreground"
         />
       </button>
     )

@@ -33,9 +33,9 @@ export const Paper: React.FC<PaperProps> = ({
         currentConfig={currentConfig}
         isDrawingMode={isDrawingMode}
         onStrokesChange={onStrokesChange}
-        className="w-full max-w-[1400px] min-h-[1123px] bg-white shadow-lg rounded-sm overflow-hidden"
+        className="w-full max-w-[1400px] min-h-[1123px] bg-white dark:bg-(--paper-bg) shadow-lg rounded-sm overflow-hidden"
       >
-        <div className="p-12">{children}</div>
+        <div className="p-12 dark:text-foreground">{children}</div>
       </DrawingArea>
     </div>
   )

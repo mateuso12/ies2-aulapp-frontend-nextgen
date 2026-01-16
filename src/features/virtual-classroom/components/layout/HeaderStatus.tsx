@@ -51,19 +51,21 @@ export const HeaderStatus: React.FC<HeaderStatusProps> = ({
     return (
       <div className="flex items-center gap-4">
         <Timer />
-        <div className="flex items-center gap-2 rounded-2xl border-4 border-[#FFB6B6] bg-white px-4 py-2">
+        <div className="flex items-center gap-2 rounded-2xl border-4 border-[#FFB6B6] dark:border-gray-700 bg-white dark:bg-black px-4 py-2">
           <RefreshCircle size="24" color="#FF246E" variant="Bold" />
           <div className="flex items-center gap-1">
             {Array.from({ length: redoTotal }).map((_, index) => (
               <div
                 key={index}
                 className={`h-[12.89px] w-[12.89px] rounded-full ${
-                  index < redoCurrent ? 'bg-[#487BFF]' : 'bg-[#D9D9D9]'
+                  index < redoCurrent
+                    ? 'bg-[#487BFF]'
+                    : 'bg-[#D9D9D9] dark:bg-gray-600'
                 }`}
               />
             ))}
           </div>
-          <span className="font-baloo text-xl font-bold text-[#343A40]">
+          <span className="font-baloo text-xl font-bold text-[#343A40] dark:text-white">
             {redoCurrent}/{redoTotal}
           </span>
         </div>

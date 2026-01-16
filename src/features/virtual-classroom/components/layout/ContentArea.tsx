@@ -57,15 +57,15 @@ export const ContentArea = forwardRef<HTMLDivElement, ContentAreaProps>(
         onDrop={onDrop}
         onDragOver={onDragOver}
         className={`flex-1 min-h-0 overflow-auto relative custom-scrollbar ${
-          variant === 'gamified' ? '' : 'bg-[#F5F7FB]'
+          variant === 'gamified' ? '' : 'bg-[#F5F7FB] dark:bg-background'
         }`}
       >
         {variant === 'gamified' && (
           <>
-            <div className="fixed inset-0 z-0 bg-[#C6D3F5]" />
+            <div className="fixed inset-0 z-0 bg-[#C6D3F5] dark:bg-(--gamified-bg)" />
             <motion.div
               style={{ y: bgY, scale: 1.1 }}
-              className="fixed inset-0 z-0 bg-[url('/imgs/bg_gamified.svg')] bg-cover bg-center opacity-20"
+              className="fixed inset-0 z-0 bg-[url('/imgs/bg_gamified.svg')] bg-cover bg-center opacity-20 dark:opacity-10"
             />
           </>
         )}

@@ -35,11 +35,11 @@ export const Timer: React.FC<TimerProps> = ({
 
   return (
     <div
-      className={`flex items-center justify-center gap-2 rounded-2xl border-4 bg-transparent px-4 py-2 text-[#FF246E] ${className}`}
+      className={`flex items-center justify-center gap-2 rounded-2xl border-4 bg-transparent dark:bg-black px-4 py-2 text-[#FF246E] ${className}`}
       style={{ borderColor: '#FFB6B6' }}
     >
       <Timer1 color="currentColor" variant="Bold" className="h-6 w-6" />
-      <span className="font-baloo text-xl leading-2 font-bold tabular-nums text-[#343A40]">
+      <span className="font-baloo text-xl leading-2 font-bold tabular-nums text-[#343A40] dark:text-white">
         {moment.utc(timeLeft * 1000).format('mm:ss')}
       </span>
     </div>
