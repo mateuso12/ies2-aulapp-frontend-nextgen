@@ -78,6 +78,7 @@ export const ContentArea = forwardRef<HTMLDivElement, ContentAreaProps>(
               currentConfig={currentConfig}
               isDrawingMode={isDrawingMode}
               onStrokesChange={onStrokesChange}
+              variant={variant}
             >
               {children}
             </Paper>
@@ -89,12 +90,18 @@ export const ContentArea = forwardRef<HTMLDivElement, ContentAreaProps>(
             currentConfig={currentConfig}
             isDrawingMode={isDrawingMode}
             onStrokesChange={onStrokesChange}
-            className="w-full min-h-full flex justify-center pt-20 md:pt-32 px-4 md:px-12 pb-20 md:pb-32"
+            className={`w-full min-h-full flex justify-center px-4 md:px-12 pb-20 md:pb-32 ${
+              variant === 'gamified' ? 'pt-32 md:pt-32' : 'pt-20 md:pt-32'
+            }`}
           >
             <div className="w-full max-w-[1400px] relative">{children}</div>
           </DrawingArea>
         ) : (
-          <div className="w-full min-h-full flex justify-center pt-20 md:pt-32 px-4 md:px-12 pb-20 md:pb-32">
+          <div
+            className={`w-full min-h-full flex justify-center px-4 md:px-12 pb-20 md:pb-32 ${
+              variant === 'gamified' ? 'pt-32 md:pt-32' : 'pt-20 md:pt-32'
+            }`}
+          >
             <div className="w-full max-w-[1400px] relative">{children}</div>
           </div>
         )}

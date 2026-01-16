@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { HambergerMenu } from 'iconsax-react'
 import { HeaderActions } from './HeaderActions'
 import { HeaderStatus } from './HeaderStatus'
@@ -25,6 +26,7 @@ interface HeaderProps {
   hasCurrentPageAnnotations?: boolean
   onToggleStickyNotes?: () => void
   onToggleAnnotations?: () => void
+  isHeaderCollapsed?: boolean
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -44,10 +46,16 @@ export const Header: React.FC<HeaderProps> = ({
   hasCurrentPageAnnotations = false,
   onToggleStickyNotes,
   onToggleAnnotations,
+  isHeaderCollapsed = false,
 }) => {
+  const navigate = useNavigate()
   const [isSearchActive, setIsSearchActive] = useState(false)
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)
   const blurTimerRef = useRef<number | null>(null)
+
+  const handleBack = () => {
+    navigate(-1)
+  }
 
   // Único lugar que notifica o layout. Assim evitamos que uma fonte de lock
   // (ex.: busca) "destrave" o Header enquanto outra (ex.: sidebar) segue aberta.
@@ -136,47 +144,72 @@ export const Header: React.FC<HeaderProps> = ({
     )
 
     return (
-      <header className="fixed top-0 z-50 flex w-full items-center justify-between bg-white/18 backdrop-blur-sm px-8 py-6">
-        {/* Left Pill */}
-        <div
-          onFocusCapture={handleSearchFocusIn}
-          onBlurCapture={handleSearchFocusOut}
-        >
-          <HeaderActions
-            variant="gamified"
-            title="Nome da Aula"
-            resourceType={resourceType}
-          />
-        </div>
-
-        {/* Center Progress Bar */}
-        <div className="h-4 w-full max-w-[400px] overflow-hidden rounded-full bg-white shadow-lg border-[3.38px] border-black/20">
-          <motion.div
-            className="h-full bg-linear-to-r from-[#FF5A82] to-[#FF246E]"
-            initial={{ width: 0 }}
-            animate={{ width: `${progress}%` }}
-            transition={{ duration: 1, ease: 'easeOut' }}
-          />
-        </div>
-
-        {/* Right Group */}
-        <div className="flex items-center gap-4">
+      <>
+        {/* Mobile - Gamified Layout */}
+        <header className="md:hidden fixed top-0 left-0 right-0 z-50 px-2 pt-2 sm:pt-3 md:pt-4">
           <HeaderStatus
             variant="gamified"
-            lives={lives}
             score={score}
+            lives={lives}
             redoCurrent={redoCurrent}
             redoTotal={redoTotal}
+            title={title}
+            showTitle={true}
+            resourceType={resourceType}
+            isCollapsed={isHeaderCollapsed}
+            onBack={handleBack}
           />
+        </header>
 
-          {/* Menu Button - Ghost Variant */}
-          <SidebarMenu onOpenChange={setIsSidebarOpen}>
-            <button className="flex h-12 w-12 cursor-pointer items-center justify-center text-[#FF246E] hover:bg-white/10 rounded-full transition-colors">
-              <HambergerMenu size="24" color="currentColor" variant="Linear" />
-            </button>
-          </SidebarMenu>
-        </div>
-      </header>
+        {/* Desktop - Original Gamified Layout */}
+        <header className="hidden md:block fixed top-0 z-50 w-full">
+          <div className="flex items-center justify-between bg-white/18 backdrop-blur-sm px-8 py-6">
+            {/* Left Pill */}
+            <div
+              onFocusCapture={handleSearchFocusIn}
+              onBlurCapture={handleSearchFocusOut}
+            >
+              <HeaderActions
+                variant="gamified"
+                title="Nome da Aula"
+                resourceType={resourceType}
+              />
+            </div>
+
+            {/* Center Progress Bar */}
+            <div className="h-4 w-full max-w-[400px] overflow-hidden rounded-full bg-white shadow-lg border-[3.38px] border-black/20">
+              <motion.div
+                className="h-full bg-linear-to-r from-[#FF5A82] to-[#FF246E]"
+                initial={{ width: 0 }}
+                animate={{ width: `${progress}%` }}
+                transition={{ duration: 1, ease: 'easeOut' }}
+              />
+            </div>
+
+            {/* Right Group */}
+            <div className="flex items-center gap-4">
+              <HeaderStatus
+                variant="gamified"
+                lives={lives}
+                score={score}
+                redoCurrent={redoCurrent}
+                redoTotal={redoTotal}
+              />
+
+              {/* Menu Button - Ghost Variant */}
+              <SidebarMenu onOpenChange={setIsSidebarOpen}>
+                <button className="flex h-12 w-12 cursor-pointer items-center justify-center text-[#FF246E] hover:bg-white/10 rounded-full transition-colors">
+                  <HambergerMenu
+                    size="24"
+                    color="currentColor"
+                    variant="Linear"
+                  />
+                </button>
+              </SidebarMenu>
+            </div>
+          </div>
+        </header>
+      </>
     )
   }
 

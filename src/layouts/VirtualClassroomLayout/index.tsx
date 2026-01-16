@@ -40,6 +40,7 @@ export function VirtualClassroomLayout({
   const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(false)
   const [isFocusModeActive, setIsFocusModeActive] = useState(false)
   const [highlightsTrigger, setHighlightsTrigger] = useState(0)
+  const [isHeaderCollapsed, setIsHeaderCollapsed] = useState(false)
 
   const mainRef = useRef<HTMLDivElement>(null)
   const isMobile = useMediaQuery('(max-width: 768px)')
@@ -111,6 +112,42 @@ export function VirtualClassroomLayout({
 
   const { scrollY } = useScroll({ container: mainRef })
   const bgY = useTransform(scrollY, [0, 1000], [0, 200])
+
+  // Monitor scroll for header collapse (gamified mobile only)
+  useEffect(() => {
+    if (variant !== 'gamified' || !isMobile) {
+      setIsHeaderCollapsed(false)
+      return
+    }
+
+    const mainElement = mainRef.current
+    if (!mainElement) return
+
+    let lastScrollY = 0
+
+    const handleScroll = () => {
+      const currentScrollY = mainElement.scrollTop
+
+      // If near top, always show header
+      if (currentScrollY <= 50) {
+        setIsHeaderCollapsed(false)
+      }
+      // If scrolling down and past threshold, collapse header
+      else if (currentScrollY > lastScrollY && currentScrollY > 50) {
+        setIsHeaderCollapsed(true)
+      }
+      // If scrolling up significantly (more than 10px), expand header
+      else if (currentScrollY < lastScrollY - 10) {
+        setIsHeaderCollapsed(false)
+      }
+      // Otherwise, maintain current state (don't change on small movements)
+
+      lastScrollY = currentScrollY
+    }
+
+    mainElement.addEventListener('scroll', handleScroll, { passive: true })
+    return () => mainElement.removeEventListener('scroll', handleScroll)
+  }, [variant, isMobile])
 
   const {
     stickyNotes,
@@ -280,6 +317,7 @@ export function VirtualClassroomLayout({
         currentNotesCount={currentNotes.length}
         strokesCount={strokes.length}
         hasCurrentPageHighlights={hasCurrentPageHighlights}
+        isHeaderCollapsed={isHeaderCollapsed}
         onHeaderHovered={setIsHeaderHovered}
         onBookmarkClick={handleBookmarkClick}
         onMenusOpenChange={setIsHeaderMenusOpen}

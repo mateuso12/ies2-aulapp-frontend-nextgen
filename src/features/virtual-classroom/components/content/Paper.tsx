@@ -9,6 +9,7 @@ interface PaperProps {
   currentConfig: AnnotationConfig
   isDrawingMode: boolean
   onStrokesChange: (strokes: Stroke[]) => void
+  variant?: 'default' | 'gamified'
 }
 
 export const Paper: React.FC<PaperProps> = ({
@@ -18,9 +19,14 @@ export const Paper: React.FC<PaperProps> = ({
   currentConfig,
   isDrawingMode,
   onStrokesChange,
+  variant = 'default',
 }) => {
   return (
-    <div className="flex justify-center w-full min-h-full px-4 md:px-12 pb-20 md:pb-32 pt-20 md:pt-32">
+    <div
+      className={`flex justify-center w-full min-h-full px-4 md:px-12 pb-20 md:pb-32 ${
+        variant === 'gamified' ? 'pt-32 md:pt-32' : 'pt-20 md:pt-32'
+      }`}
+    >
       <DrawingArea
         pageId={pageId}
         strokes={strokes}

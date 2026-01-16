@@ -12,6 +12,7 @@ interface HeaderSectionProps {
   currentNotesCount: number
   strokesCount: number
   hasCurrentPageHighlights: boolean
+  isHeaderCollapsed: boolean
   onHeaderHovered: (hovered: boolean) => void
   onBookmarkClick: () => void
   onMenusOpenChange: (isOpen: boolean) => void
@@ -30,6 +31,7 @@ export function HeaderSection({
   currentNotesCount,
   strokesCount,
   hasCurrentPageHighlights,
+  isHeaderCollapsed,
   onHeaderHovered,
   onBookmarkClick,
   onMenusOpenChange,
@@ -57,6 +59,7 @@ export function HeaderSection({
         hasCurrentPageAnnotations={strokesCount > 0 || hasCurrentPageHighlights}
         onToggleStickyNotes={onToggleStickyNotes}
         onToggleAnnotations={onToggleAnnotations}
+        isHeaderCollapsed={isHeaderCollapsed}
       />
     </div>
   )
