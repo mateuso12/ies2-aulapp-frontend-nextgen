@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { createPortal } from 'react-dom'
 import {
   TickCircle,
@@ -8,6 +8,7 @@ import {
   Lock,
   LampOn,
 } from 'iconsax-react'
+import { Maximize2, Minimize2 } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useMediaQuery } from '@/hooks/use-media-query'
 
@@ -30,6 +31,7 @@ interface PageReelProps {
   onPageSelect: (pageIndex: number) => void
   onMouseEnter?: () => void
   onMouseLeave?: () => void
+  variant?: 'default' | 'gamified'
 }
 
 export const PageReel: React.FC<PageReelProps> = ({
@@ -40,8 +42,10 @@ export const PageReel: React.FC<PageReelProps> = ({
   onPageSelect,
   onMouseEnter,
   onMouseLeave,
+  variant = 'default',
 }) => {
   const isMobile = useMediaQuery('(max-width: 768px)')
+  const [isMaximized, setIsMaximized] = useState(false)
 
   // Block body scroll when drawer is open
   useEffect(() => {
@@ -88,11 +92,32 @@ export const PageReel: React.FC<PageReelProps> = ({
             onMouseLeave={onMouseLeave}
             className={`fixed z-40 bg-[#2C2C2C] shadow-xl ${
               isMobile
-                ? 'inset-x-0 bottom-0 rounded-t-3xl h-[85vh]'
-                : 'bottom-[120px] left-1/2 rounded-2xl w-[90vw] h-[80vh] max-w-[1644px] max-h-[619px]'
+                ? `inset-x-0 bottom-0 rounded-t-3xl ${
+                    variant === 'gamified' ? 'h-[70vh]' : 'h-[85vh]'
+                  }`
+                : `bottom-[120px] left-1/2 rounded-2xl w-[90vw] max-w-[1644px] transition-all duration-300 ease-in-out ${
+                    isMaximized ? 'h-[80vh] max-h-[619px]' : 'h-[258px]'
+                  }`
             }`}
           >
             <div className="relative w-full h-full flex flex-col overflow-hidden">
+              {/* Header / Controls - Only show on desktop */}
+              {!isMobile && (
+                <div className="absolute top-4 right-4 flex gap-2 z-10">
+                  <button
+                    onClick={() => setIsMaximized(!isMaximized)}
+                    className="p-3 rounded-lg bg-black/50 hover:bg-black/70 text-white transition-colors cursor-pointer backdrop-blur-sm border border-white/10"
+                    title={isMaximized ? 'Minimizar' : 'Maximizar'}
+                  >
+                    {isMaximized ? (
+                      <Minimize2 size={24} />
+                    ) : (
+                      <Maximize2 size={24} />
+                    )}
+                  </button>
+                </div>
+              )}
+
               {/* Content - Always in grid mode */}
               <div
                 className={`w-full flex-1 overflow-y-auto overflow-x-hidden custom-scrollbar ${
@@ -100,12 +125,20 @@ export const PageReel: React.FC<PageReelProps> = ({
                 }`}
               >
                 <div
-                  className="grid gap-4 pb-12"
-                  style={{
-                    gridTemplateColumns: isMobile
-                      ? 'repeat(auto-fill, minmax(140px, 1fr))'
-                      : 'repeat(auto-fill, minmax(180px, 1fr))',
-                  }}
+                  className={`gap-4 pb-12 ${
+                    isMobile || isMaximized
+                      ? 'grid'
+                      : 'flex overflow-x-auto overflow-y-hidden items-center px-4'
+                  }`}
+                  style={
+                    isMobile || isMaximized
+                      ? {
+                          gridTemplateColumns: isMobile
+                            ? 'repeat(auto-fill, minmax(140px, 1fr))'
+                            : 'repeat(auto-fill, minmax(180px, 1fr))',
+                        }
+                      : undefined
+                  }
                 >
                   {pages.map((page, index) => {
                     const pageNumber = index + 1
@@ -145,7 +178,7 @@ export const PageReel: React.FC<PageReelProps> = ({
                         disabled={isLocked}
                         className={`relative group flex flex-col items-center gap-2 transition-all ${
                           isLocked ? 'cursor-not-allowed' : 'cursor-pointer'
-                        }`}
+                        } ${!isMobile && !isMaximized ? 'shrink-0 w-[198px]' : 'w-full'}`}
                       >
                         {/* Thumbnail Container */}
                         <div

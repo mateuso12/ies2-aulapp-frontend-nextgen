@@ -28,6 +28,7 @@ interface FooterSectionProps {
 }
 
 export function FooterSection({
+  variant,
   resourceType,
   currentPage,
   totalPages,
@@ -79,6 +80,7 @@ export function FooterSection({
         onMenusOpenChange={onFooterMenusOpen}
         isFocusModeActive={isFocusModeActive}
         onToggleFocusMode={onToggleFocusMode}
+        variant={variant}
       />
     </div>
   )
