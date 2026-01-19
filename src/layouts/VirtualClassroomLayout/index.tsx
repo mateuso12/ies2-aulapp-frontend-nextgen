@@ -7,6 +7,7 @@ import { useAutoHideBars } from '@/hooks/useAutoHideBars'
 import { useImmersiveReadingMode } from '@/hooks/useImmersiveReadingMode'
 import { useMediaQuery } from '@/hooks/use-media-query'
 import { useFirebaseStickyNotes } from '@/hooks/useFirebaseStickyNotes'
+import { createFirebaseHighlightRepository } from '@/features/annotations/highlighting/repositories'
 import { HeaderSection } from './HeaderSection'
 import { FooterSection } from './FooterSection'
 import { ContentSection } from './ContentSection'
@@ -28,7 +29,6 @@ export function VirtualClassroomLayout({
   onToggleBookmark,
   onRemoveBookmark,
 }: VirtualClassroomLayoutProps) {
-  // State management
   const [variant, setVariant] = useState(initialVariant)
   const [resourceType, setResourceType] = useState(initialResourceType)
   const [isBookmarksSidebarOpen, setIsBookmarksSidebarOpen] = useState(false)
@@ -42,19 +42,18 @@ export function VirtualClassroomLayout({
   const [isFocusModeActive, setIsFocusModeActive] = useState(false)
   const [highlightsTrigger, setHighlightsTrigger] = useState(0)
   const [isHeaderCollapsed, setIsHeaderCollapsed] = useState(false)
+  const [highlightsByPage, setHighlightsByPage] = useState<Record<number, boolean>>({})
+  const [drawingsByPage, setDrawingsByPage] = useState<Record<number, boolean>>({})
 
   const mainRef = useRef<HTMLDivElement>(null)
   const isMobile = useMediaQuery('(max-width: 768px)')
 
-  // User data
   const { userId } = useUser()
 
-  // Handlers
   const openMobileSearch = () => setIsMobileSearchOpen(true)
   const closeMobileSearch = () => setIsMobileSearchOpen(false)
   const toggleFocusMode = () => setIsFocusModeActive(!isFocusModeActive)
 
-  // Lock global quando qualquer menu/ferramenta estiver aberta
   const lockVisible = isHeaderMenusOpen || isFooterMenusOpen
 
   useEffect(() => {
@@ -62,7 +61,6 @@ export function VirtualClassroomLayout({
     setResourceType(initialResourceType)
   }, [initialVariant, initialResourceType])
 
-  // Listen to localStorage changes for highlights
   useEffect(() => {
     const handleStorageChange = (e: StorageEvent) => {
       if (e.key?.startsWith('aulapp:highlights:')) {
@@ -83,7 +81,6 @@ export function VirtualClassroomLayout({
     }
   }, [])
 
-  // Hooks
   const { isRevealed: isBarsRevealed } = useAutoHideBars({
     enabled: isBarsAutoHidden,
     lockVisible,
@@ -102,6 +99,57 @@ export function VirtualClassroomLayout({
     clearStrokes,
   } = useFirebaseAnnotations(`page-${currentPage}`, userId)
 
+  useEffect(() => {
+    if (!userId || totalPages === 0) return
+
+    const loadHighlightsForAllPages = async () => {
+      const repository = createFirebaseHighlightRepository(userId)
+      const highlightsMap: Record<number, boolean> = {}
+
+      for (let i = 1; i <= totalPages; i++) {
+        const documentId = `virtual-classroom-page-${i}`
+        try {
+          const highlights = await repository.findByDocumentId(documentId)
+          highlightsMap[i] = highlights.length > 0
+        } catch (error) {
+          console.error(`Error loading highlights for page ${i}:`, error)
+          highlightsMap[i] = false
+        }
+      }
+
+      setHighlightsByPage(highlightsMap)
+    }
+
+    loadHighlightsForAllPages()
+  }, [userId, totalPages, highlightsTrigger])
+
+  useEffect(() => {
+    if (!userId || totalPages === 0) return
+
+    const loadDrawingsForAllPages = async () => {
+      const { createFirebaseStrokeRepository } = await import(
+        '@/features/annotations/repositories'
+      )
+      const repository = createFirebaseStrokeRepository(userId)
+      const drawingsMap: Record<number, boolean> = {}
+
+      for (let i = 1; i <= totalPages; i++) {
+        const pageId = `page-${i}`
+        try {
+          const strokes = await repository.findByPageId(pageId)
+          drawingsMap[i] = strokes.length > 0
+        } catch (error) {
+          console.error(`Error loading drawings for page ${i}:`, error)
+          drawingsMap[i] = false
+        }
+      }
+
+      setDrawingsByPage(drawingsMap)
+    }
+
+    loadDrawingsForAllPages()
+  }, [userId, totalPages, strokes.length])
+
   const { isUiHidden, reveal: revealImmersiveUi } = useImmersiveReadingMode({
     enabled: true,
     lockVisible,
@@ -117,7 +165,6 @@ export function VirtualClassroomLayout({
   const { scrollY } = useScroll({ container: mainRef })
   const bgY = useTransform(scrollY, [0, 1000], [0, 200])
 
-  // Monitor scroll for header collapse (gamified mobile only)
   useEffect(() => {
     if (variant !== 'gamified' || !isMobile) {
       setIsHeaderCollapsed(false)
@@ -132,19 +179,13 @@ export function VirtualClassroomLayout({
     const handleScroll = () => {
       const currentScrollY = mainElement.scrollTop
 
-      // If near top, always show header
       if (currentScrollY <= 50) {
         setIsHeaderCollapsed(false)
-      }
-      // If scrolling down and past threshold, collapse header
-      else if (currentScrollY > lastScrollY && currentScrollY > 50) {
+      } else if (currentScrollY > lastScrollY && currentScrollY > 50) {
         setIsHeaderCollapsed(true)
-      }
-      // If scrolling up significantly (more than 10px), expand header
-      else if (currentScrollY < lastScrollY - 10) {
+      } else if (currentScrollY < lastScrollY - 10) {
         setIsHeaderCollapsed(false)
       }
-      // Otherwise, maintain current state (don't change on small movements)
 
       lastScrollY = currentScrollY
     }
@@ -172,7 +213,6 @@ export function VirtualClassroomLayout({
     userId,
   })
 
-  // Computed values
   const isContent = resourceType === 'content' || resourceType === 'material'
   const showPaper = variant === 'gamified'
   const enableDrawing = isContent
@@ -198,52 +238,18 @@ export function VirtualClassroomLayout({
   )
 
   const hasCurrentPageHighlights = useMemo(() => {
-    const highlightKey = `aulapp:highlights:virtual-classroom-page-${currentPage}`
-    try {
-      const stored = localStorage.getItem(highlightKey)
-      if (!stored) return false
-      const highlights = JSON.parse(stored)
-      return Array.isArray(highlights) && highlights.length > 0
-    } catch {
-      return false
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentPage, highlightsTrigger])
+    return highlightsByPage[currentPage] || false
+  }, [currentPage, highlightsByPage])
 
   const enhancedPages = useMemo(() => {
     return pages.map((page, index) => {
       const pageNum = index + 1
-      const storageKey = `annotations-user-1-page-${pageNum}`
-      const highlightKey = `aulapp:highlights:virtual-classroom-page-${pageNum}`
-
-      let hasStoredDrawings = false
-      let hasStoredHighlights = false
-
-      try {
-        const stored = localStorage.getItem(storageKey)
-        if (stored) {
-          const parsed = JSON.parse(stored)
-          hasStoredDrawings = Array.isArray(parsed) && parsed.length > 0
-        }
-      } catch {
-        // Ignore
-      }
-
-      try {
-        const stored = localStorage.getItem(highlightKey)
-        if (stored) {
-          const parsed = JSON.parse(stored)
-          hasStoredHighlights = Array.isArray(parsed) && parsed.length > 0
-        }
-      } catch {
-        // Ignore
-      }
 
       const isCurrentPage = pageNum === currentPage
-      const hasDrawings = isCurrentPage ? strokes.length > 0 : hasStoredDrawings
-      const hasHighlights = isCurrentPage
-        ? hasCurrentPageHighlights
-        : hasStoredHighlights
+      const hasDrawings = isCurrentPage 
+        ? strokes.length > 0 
+        : drawingsByPage[pageNum] || false
+      const hasHighlights = highlightsByPage[pageNum] || false
       const hasStickyNotes = stickyNotes.some((n) => n.page === pageNum)
 
       return {
@@ -253,14 +259,13 @@ export function VirtualClassroomLayout({
         hasAnnotations: hasStickyNotes,
       }
     })
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     pages,
     currentPage,
     strokes.length,
     stickyNotes,
-    hasCurrentPageHighlights,
-    highlightsTrigger,
+    highlightsByPage,
+    drawingsByPage,
   ])
 
   const isHeaderHidden =
