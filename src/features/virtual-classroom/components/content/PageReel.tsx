@@ -42,7 +42,6 @@ export const PageReel: React.FC<PageReelProps> = ({
   onPageSelect,
   onMouseEnter,
   onMouseLeave,
-  variant = 'default',
 }) => {
   const isMobile = useMediaQuery('(max-width: 768px)')
   const [isMaximized, setIsMaximized] = useState(false)
@@ -66,7 +65,7 @@ export const PageReel: React.FC<PageReelProps> = ({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/50 z-40"
+            className={`fixed inset-0 bg-black/50 ${isMobile ? 'z-60' : 'z-40'}`}
             onClick={onClose}
           />
 
@@ -90,12 +89,10 @@ export const PageReel: React.FC<PageReelProps> = ({
             }}
             onMouseEnter={onMouseEnter}
             onMouseLeave={onMouseLeave}
-            className={`fixed z-40 bg-[#2C2C2C] shadow-xl ${
+            className={`fixed bg-[#2C2C2C] shadow-xl ${
               isMobile
-                ? `inset-x-0 bottom-0 rounded-t-3xl ${
-                    variant === 'gamified' ? 'h-[70vh]' : 'h-[85vh]'
-                  }`
-                : `bottom-[120px] left-1/2 rounded-2xl w-[90vw] max-w-[1644px] transition-all duration-300 ease-in-out ${
+                ? 'inset-x-0 top-0 bottom-0 z-60'
+                : `bottom-[120px] left-1/2 rounded-2xl w-[90vw] max-w-[1644px] transition-all duration-300 ease-in-out z-40 ${
                     isMaximized ? 'h-[80vh] max-h-[619px]' : 'h-[258px]'
                   }`
             }`}

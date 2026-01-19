@@ -51,7 +51,6 @@ export function Footer({
   onMenusOpenChange,
   isFocusModeActive = false,
   onToggleFocusMode,
-  variant = 'default',
 }: FooterProps) {
   const showTools = resourceType === 'content' || resourceType === 'material'
   const showToolsMobile = resourceType === 'content'
@@ -164,7 +163,6 @@ export function Footer({
         pages={displayPages}
         currentPage={currentPage}
         onPageSelect={handlePageSelect}
-        variant={variant}
       />
       <footer className="relative flex w-full items-center justify-center bg-[#2C2C2C] dark:bg-(--footer-header-bg) text-white max-md:h-20 max-md:px-4 md:h-[105px] md:px-8">
         <MobileFooterContent

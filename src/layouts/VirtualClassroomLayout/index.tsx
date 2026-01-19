@@ -390,7 +390,6 @@ export function VirtualClassroomLayout({
       </ContentSection>
 
       <FooterSection
-        variant={variant}
         resourceType={resourceType}
         currentPage={currentPage}
         totalPages={totalPages}

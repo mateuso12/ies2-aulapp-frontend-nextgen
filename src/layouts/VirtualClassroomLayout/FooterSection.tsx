@@ -3,7 +3,6 @@ import type { PageData } from '@/features/virtual-classroom/components/content/P
 import type { ResourceType } from './types'
 
 interface FooterSectionProps {
-  variant: 'default' | 'gamified'
   resourceType: ResourceType | string
   currentPage: number
   totalPages: number
@@ -28,7 +27,6 @@ interface FooterSectionProps {
 }
 
 export function FooterSection({
-  variant,
   resourceType,
   currentPage,
   totalPages,
@@ -53,7 +51,7 @@ export function FooterSection({
 }: FooterSectionProps) {
   return (
     <div
-      className={`fixed bottom-0 left-0 z-50 w-full transform-gpu transition-transform duration-300 ease-out ${
+      className={`fixed bottom-0 left-0 z-70 w-full transform-gpu transition-transform duration-300 ease-out ${
         isFooterHidden ? 'translate-y-full' : 'translate-y-0'
       }`}
       onMouseEnter={() => isBarsAutoHidden && onFooterHovered(true)}
@@ -80,7 +78,6 @@ export function FooterSection({
         onMenusOpenChange={onFooterMenusOpen}
         isFocusModeActive={isFocusModeActive}
         onToggleFocusMode={onToggleFocusMode}
-        variant={variant}
       />
     </div>
   )
