@@ -15,6 +15,7 @@
 7. [Hooks Customizados](#-hooks-customizados)
 8. [Sistema de Estilos](#-sistema-de-estilos)
 9. [Internacionalização (i18n)](#-internacionalização-i18n)
+9. [Firebase e Persistência](#-firebase-e-persistência)
 10. [PWA e Service Workers](#-pwa-e-service-workers)
 11. [Fluxo de Desenvolvimento](#-fluxo-de-desenvolvimento)
 12. [Boas Práticas](#-boas-práticas)
@@ -71,6 +72,11 @@ O **Aulapp** é uma aplicação educacional frontend desenvolvida para fornecer 
 | **i18next** | Core i18n |
 | **react-i18next** | Bindings React |
 | **i18next-browser-languagedetector** | Detecção automática de idioma |
+
+### Firebase
+| Biblioteca | Propósito |
+|------------|-----------|
+| **firebase** | SDK do Firebase (Realtime Database) |
 
 ### Dev Tools
 | Ferramenta | Propósito |
@@ -151,7 +157,8 @@ src/
 │   └── HomeRoute.tsx
 │
 ├── services/            # Serviços externos
-│   └── i18n.ts          # Configuração i18n
+│   ├── i18n.ts          # Configuração i18n
+│   └── firebase.ts      # Configuração Firebase
 │
 ├── styles/              # Estilos globais
 │
@@ -662,6 +669,63 @@ const Component = () => {
 
 ---
 
+## 🔥 Firebase e Persistência
+
+O projeto utiliza **Firebase Realtime Database** para persistir anotações dos usuários.
+
+### Ambientes Configurados
+
+- **local** - Desenvolvimento local (aulapp-local)
+- **development** - Ambiente de desenvolvimento (aulapp-development)
+- **homologation** - Ambiente de homologação (aulapp-homologation)
+- **production** - Ambiente de produção (appsys-d56e1)
+
+### Configuração Inicial
+
+1. Copie o arquivo de ambiente desejado:
+
+```bash
+# Para desenvolvimento local (padrão)
+cp .env.local .env.local
+
+# Para outros ambientes
+cp .env.development .env.local
+cp .env.homologation .env.local
+cp .env.production .env.local
+```
+
+2. O Firebase é inicializado automaticamente em `src/services/firebase.ts`
+
+### Estrutura dos Dados
+
+```
+/nextgen-frontend/
+  ├── annotations/{userId}/{pageId}/strokes[]
+  ├── highlights/{userId}/{documentId}/highlights[]
+  └── sticky-notes/{userId}/notes[]
+```
+
+### Uso no Código
+
+```typescript
+import { firebaseDatabase } from '@/services/firebase'
+import { ref, set, get } from 'firebase/database'
+
+// Salvar dados
+const dataRef = ref(firebaseDatabase, 'nextgen-frontend/annotations/user123/page-1')
+await set(dataRef, data)
+
+// Ler dados
+const snapshot = await get(dataRef)
+if (snapshot.exists()) {
+  const data = snapshot.val()
+}
+```
+
+**Documentação completa:** Veja [FIREBASE.md](../FIREBASE.md) para detalhes completos sobre configuração e uso.
+
+---
+
 ## 📱 PWA e Service Workers
 
 ### Configuração
@@ -843,6 +907,7 @@ const VirtualClassroom = lazy(() => import('@/pages/VirtualClassroom'))
 - [Framer Motion](https://www.framer.com/motion/)
 - [React-Konva](https://konvajs.org/docs/react/)
 - [i18next](https://www.i18next.com/)
+- [Firebase Realtime Database](https://firebase.google.com/docs/database)
 
 ### Estrutura de Types Globais
 

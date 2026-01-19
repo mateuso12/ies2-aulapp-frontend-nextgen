@@ -3,3 +3,4 @@
  */
 export * from './highlightRepository'
 export * from './localStorageHighlightRepository'
+export * from './firebaseHighlightRepository'

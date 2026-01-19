@@ -3,6 +3,7 @@ import { createPortal } from 'react-dom'
 import parse from 'html-react-parser'
 import { useTextHighlighter } from '../hooks/useTextHighlighter'
 import type { HighlightColor } from '../types/highlight'
+import type { HighlightRepository } from '../repositories'
 import { anchorToRange } from '../lib/xpathRange'
 import {
   createMarkElement,
@@ -16,6 +17,7 @@ export interface TextHighlighterProps {
   documentId: string
   contentHtml: string
   disabled?: boolean
+  repository?: HighlightRepository
 }
 
 function useClickOutside(
@@ -57,6 +59,7 @@ export const TextHighlighter: React.FC<TextHighlighterProps> = ({
   documentId,
   contentHtml,
   disabled = false,
+  repository,
 }) => {
   const rootRef = React.useRef<HTMLDivElement | null>(null)
 
@@ -74,6 +77,7 @@ export const TextHighlighter: React.FC<TextHighlighterProps> = ({
     documentId,
     mode: 'highlight',
     rootRef,
+    repository,
   })
 
   const [removeMenu, setRemoveMenu] = React.useState<{

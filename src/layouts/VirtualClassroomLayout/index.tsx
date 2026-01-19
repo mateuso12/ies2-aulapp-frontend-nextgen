@@ -1,11 +1,12 @@
 import { useRef, useState, useEffect, useMemo } from 'react'
 import { useScroll, useTransform } from 'framer-motion'
 import { MobileSearchOverlay } from '@/features/virtual-classroom/components/overlays/MobileSearchOverlay'
-import { useAnnotations } from '@/hooks/useAnnotations'
+import { useUser } from '@/hooks/useUser'
+import { useFirebaseAnnotations } from '@/hooks/useFirebaseAnnotations'
 import { useAutoHideBars } from '@/hooks/useAutoHideBars'
 import { useImmersiveReadingMode } from '@/hooks/useImmersiveReadingMode'
 import { useMediaQuery } from '@/hooks/use-media-query'
-import { useStickyNotes } from '@/hooks/useStickyNotes'
+import { useFirebaseStickyNotes } from '@/hooks/useFirebaseStickyNotes'
 import { HeaderSection } from './HeaderSection'
 import { FooterSection } from './FooterSection'
 import { ContentSection } from './ContentSection'
@@ -44,6 +45,9 @@ export function VirtualClassroomLayout({
 
   const mainRef = useRef<HTMLDivElement>(null)
   const isMobile = useMediaQuery('(max-width: 768px)')
+
+  // User data
+  const { userId } = useUser()
 
   // Handlers
   const openMobileSearch = () => setIsMobileSearchOpen(true)
@@ -96,7 +100,7 @@ export function VirtualClassroomLayout({
     isVisible,
     setIsVisible,
     clearStrokes,
-  } = useAnnotations(`page-${currentPage}`, 'user-1')
+  } = useFirebaseAnnotations(`page-${currentPage}`, userId)
 
   const { isUiHidden, reveal: revealImmersiveUi } = useImmersiveReadingMode({
     enabled: true,
@@ -161,10 +165,11 @@ export function VirtualClassroomLayout({
     goToNote,
     handleDrop,
     handleDragOver,
-  } = useStickyNotes({
+  } = useFirebaseStickyNotes({
     currentPage,
     onPageSelect,
     mainRef,
+    userId,
   })
 
   // Computed values
