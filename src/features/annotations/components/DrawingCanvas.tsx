@@ -37,95 +37,113 @@ export const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
     }
 
     // Prevent scroll/zoom while drawing
-    document.addEventListener('touchmove', preventTouchDefaults, { passive: false })
-    
+    document.addEventListener('touchmove', preventTouchDefaults, {
+      passive: false,
+    })
+
     return () => {
       document.removeEventListener('touchmove', preventTouchDefaults)
     }
   }, [isDrawingMode])
 
   // Get pointer position with touch support and smoothing
-  const getPointerPosition = useCallback((e: KonvaEventObject<MouseEvent | TouchEvent>) => {
-    const stage = e.target.getStage()
-    if (!stage) return null
+  const getPointerPosition = useCallback(
+    (e: KonvaEventObject<MouseEvent | TouchEvent>) => {
+      const stage = e.target.getStage()
+      if (!stage) return null
 
-    const pos = stage.getPointerPosition()
-    if (!pos) return null
+      const pos = stage.getPointerPosition()
+      if (!pos) return null
 
-    // Apply basic smoothing for touch input
-    if (lastPoint.current) {
-      const smoothingFactor = 0.3
-      return {
-        x: lastPoint.current.x + (pos.x - lastPoint.current.x) * smoothingFactor,
-        y: lastPoint.current.y + (pos.y - lastPoint.current.y) * smoothingFactor,
+      // Apply basic smoothing for touch input
+      if (lastPoint.current) {
+        const smoothingFactor = 0.3
+        return {
+          x:
+            lastPoint.current.x +
+            (pos.x - lastPoint.current.x) * smoothingFactor,
+          y:
+            lastPoint.current.y +
+            (pos.y - lastPoint.current.y) * smoothingFactor,
+        }
       }
-    }
 
-    return pos
-  }, [])
+      return pos
+    },
+    []
+  )
 
-  const handleDrawStart = useCallback((e: KonvaEventObject<MouseEvent | TouchEvent>) => {
-    if (!isDrawingMode) return
+  const handleDrawStart = useCallback(
+    (e: KonvaEventObject<MouseEvent | TouchEvent>) => {
+      if (!isDrawingMode) return
 
-    // Prevent default touch behavior
-    if ('evt' in e && e.evt.type.startsWith('touch')) {
-      e.evt.preventDefault()
-    }
+      // Prevent default touch behavior
+      if ('evt' in e && e.evt.type.startsWith('touch')) {
+        e.evt.preventDefault()
+      }
 
-    isDrawing.current = true
-    const pos = e.target.getStage()?.getPointerPosition()
-    if (!pos) return
+      isDrawing.current = true
+      const pos = e.target.getStage()?.getPointerPosition()
+      if (!pos) return
 
-    lastPoint.current = pos
+      lastPoint.current = pos
 
-    const newStroke: Stroke = {
-      id: Math.random().toString(36).substr(2, 9),
-      pageId,
-      tool: currentConfig.tool,
-      color: currentConfig.tool === 'eraser' ? '#000000' : currentConfig.color,
-      width: currentConfig.strokeWidth,
-      opacity: currentConfig.tool === 'eraser' ? 1 : currentConfig.opacity,
-      points: [pos.x, pos.y],
-      isEraser: currentConfig.tool === 'eraser',
-    }
+      const newStroke: Stroke = {
+        id: Math.random().toString(36).substr(2, 9),
+        pageId,
+        tool: currentConfig.tool,
+        color:
+          currentConfig.tool === 'eraser' ? '#000000' : currentConfig.color,
+        width: currentConfig.strokeWidth,
+        opacity: currentConfig.tool === 'eraser' ? 1 : currentConfig.opacity,
+        points: [pos.x, pos.y],
+        isEraser: currentConfig.tool === 'eraser',
+      }
 
-    onStrokesChange([...strokes, newStroke])
-  }, [isDrawingMode, pageId, currentConfig, strokes, onStrokesChange])
+      onStrokesChange([...strokes, newStroke])
+    },
+    [isDrawingMode, pageId, currentConfig, strokes, onStrokesChange]
+  )
 
-  const handleDrawMove = useCallback((e: KonvaEventObject<MouseEvent | TouchEvent>) => {
-    if (!isDrawingMode || !isDrawing.current) return
+  const handleDrawMove = useCallback(
+    (e: KonvaEventObject<MouseEvent | TouchEvent>) => {
+      if (!isDrawingMode || !isDrawing.current) return
 
-    // Prevent default touch behavior
-    if ('evt' in e && e.evt.type.startsWith('touch')) {
-      e.evt.preventDefault()
-    }
+      // Prevent default touch behavior
+      if ('evt' in e && e.evt.type.startsWith('touch')) {
+        e.evt.preventDefault()
+      }
 
-    const pos = getPointerPosition(e)
-    if (!pos) return
+      const pos = getPointerPosition(e)
+      if (!pos) return
 
-    lastPoint.current = pos
+      lastPoint.current = pos
 
-    const lastStroke = strokes[strokes.length - 1]
-    if (!lastStroke) return
+      const lastStroke = strokes[strokes.length - 1]
+      if (!lastStroke) return
 
-    // Distance threshold to reduce excessive points (improves performance)
-    const lastX = lastStroke.points[lastStroke.points.length - 2]
-    const lastY = lastStroke.points[lastStroke.points.length - 1]
-    const distance = Math.sqrt(Math.pow(pos.x - lastX, 2) + Math.pow(pos.y - lastY, 2))
-    
-    // Skip points that are too close (less than 2px apart)
-    if (distance < 2) return
+      // Distance threshold to reduce excessive points (improves performance)
+      const lastX = lastStroke.points[lastStroke.points.length - 2]
+      const lastY = lastStroke.points[lastStroke.points.length - 1]
+      const distance = Math.sqrt(
+        Math.pow(pos.x - lastX, 2) + Math.pow(pos.y - lastY, 2)
+      )
 
-    const newPoints = lastStroke.points.concat([pos.x, pos.y])
+      // Skip points that are too close (less than 2px apart)
+      if (distance < 2) return
 
-    const updatedStrokes = [...strokes]
-    updatedStrokes[strokes.length - 1] = {
-      ...lastStroke,
-      points: newPoints,
-    }
+      const newPoints = lastStroke.points.concat([pos.x, pos.y])
 
-    onStrokesChange(updatedStrokes)
-  }, [isDrawingMode, strokes, onStrokesChange, getPointerPosition])
+      const updatedStrokes = [...strokes]
+      updatedStrokes[strokes.length - 1] = {
+        ...lastStroke,
+        points: newPoints,
+      }
+
+      onStrokesChange(updatedStrokes)
+    },
+    [isDrawingMode, strokes, onStrokesChange, getPointerPosition]
+  )
 
   const handleDrawEnd = useCallback(() => {
     isDrawing.current = false
@@ -179,7 +197,7 @@ export const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
             style={{
               width: Math.max(currentConfig.strokeWidth, 8),
               height: Math.max(currentConfig.strokeWidth, 8),
-              borderRadius: currentConfig.tool === 'marker' ? '2px' : '50%',
+              borderRadius: '50%',
               border: '1px solid rgba(0,0,0,0.5)',
               backgroundColor:
                 currentConfig.tool === 'eraser'

@@ -228,24 +228,28 @@ export const Header: React.FC<HeaderProps> = ({
 
         {/* Right: Bookmark + Hamburger */}
         <div className="flex items-center gap-4 mr-4">
-          {onToggleStickyNotes && (
-            <HeaderStickyNoteButton
-              hasNotes={hasCurrentPageNotes}
-              onClick={onToggleStickyNotes}
-            />
-          )}
-          {onToggleAnnotations && (
-            <HeaderAnnotationButton
-              hasAnnotations={hasCurrentPageAnnotations}
-              onClick={onToggleAnnotations}
-            />
-          )}
+          {resourceType === 'content' && (
+            <>
+              {onToggleStickyNotes && (
+                <HeaderStickyNoteButton
+                  hasNotes={hasCurrentPageNotes}
+                  onClick={onToggleStickyNotes}
+                />
+              )}
+              {onToggleAnnotations && (
+                <HeaderAnnotationButton
+                  hasAnnotations={hasCurrentPageAnnotations}
+                  onClick={onToggleAnnotations}
+                />
+              )}
 
-          <FloatingBookmarkButton
-            isBookmarked={isBookmarked}
-            onClick={onBookmark || (() => {})}
-            variant="header"
-          />
+              <FloatingBookmarkButton
+                isBookmarked={isBookmarked}
+                onClick={onBookmark || (() => {})}
+                variant="header"
+              />
+            </>
+          )}
         </div>
       </div>
 

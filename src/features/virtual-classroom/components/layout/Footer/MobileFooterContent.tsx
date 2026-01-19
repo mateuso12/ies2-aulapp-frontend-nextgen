@@ -8,6 +8,7 @@ interface MobileFooterContentProps {
   totalPages: number
   isPageReelOpen: boolean
   isFocusModeActive: boolean
+  showTools: boolean
   onTogglePageReel: () => void
   onToggleFocusMode?: () => void
   onSearchInPage: () => void
@@ -24,6 +25,7 @@ export function MobileFooterContent({
   totalPages,
   isPageReelOpen,
   isFocusModeActive,
+  showTools,
   onTogglePageReel,
   onToggleFocusMode,
   onSearchInPage,
@@ -75,6 +77,7 @@ export function MobileFooterContent({
         </Button>
         <SettingsMenu
           isMobile
+          showTools={showTools}
           onSearchInPage={onSearchInPage}
           onBookmarkPage={onBookmarkPage}
           onMarkText={onMarkText}

@@ -54,6 +54,7 @@ export function Footer({
   variant = 'default',
 }: FooterProps) {
   const showTools = resourceType === 'content' || resourceType === 'material'
+  const showToolsMobile = resourceType === 'content'
   const [isFullscreen, setIsFullscreen] = useState(false)
   const [isPageReelOpen, setIsPageReelOpen] = useState(false)
   const [isShareMenuOpen, setIsShareMenuOpen] = useState(false)
@@ -171,6 +172,7 @@ export function Footer({
           totalPages={totalPages}
           isPageReelOpen={isPageReelOpen}
           isFocusModeActive={isFocusModeActive}
+          showTools={showToolsMobile}
           onTogglePageReel={togglePageReel}
           onToggleFocusMode={onToggleFocusMode}
           onSearchInPage={() => onSearchInPage?.()}
