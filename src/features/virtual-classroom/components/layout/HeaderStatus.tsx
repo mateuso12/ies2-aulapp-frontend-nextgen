@@ -2,6 +2,8 @@ import React from 'react'
 import { Flash, RefreshCircle, Heart, ArrowLeft } from 'iconsax-react'
 import { ResourceBadge, Button } from 'ies2-aulapp-ui-kit'
 import { Timer } from '../ui/Timer'
+import { useTranslation } from 'react-i18next'
+import { normalizeLocaleForUIKit } from '@/lib/locale'
 
 interface HeaderStatusProps {
   variant?: 'default' | 'gamified'
@@ -28,6 +30,7 @@ export const HeaderStatus: React.FC<HeaderStatusProps> = ({
   onBack,
   isCollapsed = false,
 }) => {
+  const { i18n } = useTranslation()
   const getBadgeVariant = () => {
     switch (resourceType) {
       case 'content':
@@ -109,6 +112,7 @@ export const HeaderStatus: React.FC<HeaderStatusProps> = ({
               variant={getBadgeVariant()}
               appearance="icon-only"
               className="scale-75 sm:scale-90 md:scale-100"
+              locale={normalizeLocaleForUIKit(i18n.language)}
             />
           </div>
         )}

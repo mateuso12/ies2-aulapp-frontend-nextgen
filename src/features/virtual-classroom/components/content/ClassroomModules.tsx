@@ -9,6 +9,7 @@ import { SearchNormal1, TickCircle } from 'iconsax-react'
 import { ResourceBadge } from 'ies2-aulapp-ui-kit'
 import { useTranslation } from 'react-i18next'
 import { cn } from '@/lib/utils'
+import { normalizeLocaleForUIKit } from '@/lib/locale'
 import { modules } from '@/mocks/courseModules'
 import { motion, useMotionValue, useTransform, animate } from 'framer-motion'
 import { SheetClose } from '@/components/ui/sheet'
@@ -94,7 +95,7 @@ const getModuleProgress = (lessons: (typeof modules)[0]['lessons']) => {
 }
 
 export const ClassroomModules: React.FC = () => {
-  const { t } = useTranslation(['footer', 'classroom'])
+  const { t, i18n } = useTranslation(['footer', 'classroom'])
   const activeModuleId =
     modules.find((m) => m.status === 'in-progress')?.id || modules[0]?.id
 
@@ -185,6 +186,7 @@ export const ClassroomModules: React.FC = () => {
                             <ResourceBadge
                               variant={lesson.type}
                               appearance="ghost"
+                              locale={normalizeLocaleForUIKit(i18n.language)}
                             />
                           </div>
                           <div className="flex items-center gap-2 pl-[34px]">

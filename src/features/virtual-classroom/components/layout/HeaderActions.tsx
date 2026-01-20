@@ -1,6 +1,8 @@
 import React from 'react'
 import { ArrowLeft } from 'iconsax-react'
 import { SearchPopover, Button, ResourceBadge } from 'ies2-aulapp-ui-kit'
+import { useTranslation } from 'react-i18next'
+import { normalizeLocaleForUIKit } from '@/lib/locale'
 
 interface HeaderActionsProps {
   variant?: 'default' | 'gamified'
@@ -35,6 +37,7 @@ export const HeaderActions: React.FC<HeaderActionsProps> = ({
   onBack,
   resourceType = 'content',
 }) => {
+  const { i18n } = useTranslation()
   const badgeVariant = getBadgeVariant(resourceType)
   const showSearch = resourceType === 'content' || resourceType === 'material'
 
@@ -59,6 +62,7 @@ export const HeaderActions: React.FC<HeaderActionsProps> = ({
               variant={badgeVariant}
               appearance="solid"
               className="shadow-none"
+              locale={normalizeLocaleForUIKit(i18n.language)}
             />
           ) : (
             <div className="flex items-center gap-2 rounded-full bg-white/20 px-3 py-1 text-sm font-medium text-white backdrop-blur-md">
@@ -97,6 +101,7 @@ export const HeaderActions: React.FC<HeaderActionsProps> = ({
             variant={badgeVariant}
             appearance="solid"
             className="shadow-none"
+            locale={normalizeLocaleForUIKit(i18n.language)}
           />
         ) : (
           <div className="flex items-center gap-2 rounded-full bg-gray-100 px-3 py-1 text-sm font-medium text-gray-600">
