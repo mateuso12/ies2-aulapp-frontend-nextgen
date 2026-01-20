@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { Note, SearchNormal1, AddSquare, CloseCircle } from 'iconsax-react'
+import { useTranslation } from 'react-i18next'
 import type { StickyNote } from '../types/types'
 import { STICKY_NOTE_COLORS } from '../types/types'
 import { DraftNoteCard } from './internal/DraftNoteCard'
@@ -31,6 +32,7 @@ export const StickyNoteSidebar: React.FC<StickyNoteSidebarProps> = ({
   onToggleVisibility,
   areNotesVisible,
 }) => {
+  const { t } = useTranslation('annotations')
   const isDesktop = useMediaQuery('(min-width: 768px)')
   const [searchQuery, setSearchQuery] = useState('')
   const [newNoteContent, setNewNoteContent] = useState('')
@@ -100,7 +102,7 @@ export const StickyNoteSidebar: React.FC<StickyNoteSidebarProps> = ({
           className={`w-12 h-7 rounded-full relative transition-colors cursor-pointer ${
             areNotesVisible ? 'bg-[#FF246E]' : 'bg-gray-300'
           }`}
-          title="Exibir/Ocultar anotações na tela"
+          title={t('showHideNotes')}
         >
           <div
             className={`w-5 h-5 bg-white rounded-full absolute top-1 transition-all ${
@@ -120,7 +122,9 @@ export const StickyNoteSidebar: React.FC<StickyNoteSidebarProps> = ({
       {/* Title */}
       <div className="flex items-center gap-2">
         <Note size="24" color="#343A40" variant="Outline" />
-        <span className="text-[#343A40] font-bold text-xl">Anotações</span>
+        <span className="text-[#343A40] font-bold text-xl">
+          {t('stickyNotes')}
+        </span>
       </div>
 
       {/* Search and Add */}
@@ -129,7 +133,7 @@ export const StickyNoteSidebar: React.FC<StickyNoteSidebarProps> = ({
           <SearchNormal1 size="16" color="#343A40" />
           <input
             type="text"
-            placeholder="Buscar anotações"
+            placeholder={t('searchNotes')}
             className="bg-transparent border-none outline-none text-sm text-[#6C757D] w-full placeholder-[#6C757D]"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
@@ -141,7 +145,7 @@ export const StickyNoteSidebar: React.FC<StickyNoteSidebarProps> = ({
           className="flex items-center justify-center gap-2 w-full h-10 bg-[#FF246E] border border-[#343A40] rounded-full text-white font-bold text-base hover:bg-[#e01b5e] transition-colors cursor-pointer"
         >
           <AddSquare size="24" color="#FFFFFF" variant="Outline" />
-          <span>Nova</span>
+          <span>{t('newNote')}</span>
         </button>
 
         {/* New Note Card (Draft) */}

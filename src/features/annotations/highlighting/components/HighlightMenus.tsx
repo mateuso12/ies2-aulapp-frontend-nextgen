@@ -1,5 +1,6 @@
 import React from 'react'
 import { motion } from 'framer-motion'
+import { useTranslation } from 'react-i18next'
 import type { HighlightColor } from '../types/highlight'
 
 const MENU_ANIMATION = {
@@ -111,6 +112,7 @@ export const ColorMenu: React.FC<ColorMenuProps> = ({
   onInteractionStart,
   onInteractionEnd,
 }) => {
+  const { t } = useTranslation('highlights')
   const menuRef = React.useRef<HTMLDivElement>(null)
   const position = useMenuPosition(x, y, menuRef)
 
@@ -125,7 +127,7 @@ export const ColorMenu: React.FC<ColorMenuProps> = ({
         transform: 'translate(-50%, -100%)',
       }}
       role="dialog"
-      aria-label="Menu de marcação"
+      aria-label={t('highlightMenu')}
     >
       <motion.div
         {...MENU_ANIMATION}
@@ -138,7 +140,7 @@ export const ColorMenu: React.FC<ColorMenuProps> = ({
             key={color}
             type="button"
             className={`h-11 w-11 ${buttonBaseClass} border border-slate-200 dark:border-slate-700 ${COLOR_CLASSES[color]}`}
-            aria-label={`Marcar com ${color}`}
+            aria-label={`${t('highlightWith')} ${color}`}
             onClick={() => onSelectColor(color)}
           />
         ))}
@@ -149,9 +151,9 @@ export const ColorMenu: React.FC<ColorMenuProps> = ({
           type="button"
           className={`h-11 px-4 ${buttonBaseClass} text-slate-700 hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-800`}
           onClick={onCancel}
-          aria-label="Cancelar marcação"
+          aria-label={t('cancelHighlight')}
         >
-          Cancelar
+          {t('cancel')}
         </button>
       </motion.div>
     </motion.div>
@@ -173,6 +175,7 @@ export const RemoveMenu: React.FC<RemoveMenuProps> = ({
   onRemoveAll,
   onCancel,
 }) => {
+  const { t } = useTranslation('highlights')
   const menuRef = React.useRef<HTMLDivElement>(null)
   const position = useMenuPosition(x, y, menuRef)
 
@@ -187,34 +190,34 @@ export const RemoveMenu: React.FC<RemoveMenuProps> = ({
         transform: 'translate(-50%, -100%)',
       }}
       role="dialog"
-      aria-label="Menu de remoção"
+      aria-label={t('removeMenu')}
     >
       <motion.div {...MENU_ANIMATION} className={menuContainerClass}>
         <button
           type="button"
           className={`h-10 px-4 ${buttonBaseClass} text-white bg-red-600 hover:bg-red-700`}
           onClick={onRemove}
-          aria-label="Remover este destaque"
+          aria-label={t('removeThisHighlight')}
         >
-          Remover
+          {t('remove')}
         </button>
 
         <button
           type="button"
           className={`h-10 px-4 ${buttonBaseClass} text-red-700 hover:bg-red-50 dark:text-red-300 dark:hover:bg-red-950/40`}
           onClick={onRemoveAll}
-          aria-label="Apagar todas as marcações"
+          aria-label={t('removeAllHighlights')}
         >
-          Apagar todas
+          {t('removeAll')}
         </button>
 
         <button
           type="button"
           className={`h-10 px-4 ${buttonBaseClass} text-slate-700 hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-800`}
           onClick={onCancel}
-          aria-label="Cancelar"
+          aria-label={t('cancel')}
         >
-          Cancelar
+          {t('cancel')}
         </button>
       </motion.div>
     </motion.div>

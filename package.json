@@ -34,6 +34,7 @@
     "lucide-react": "^0.555.0",
     "moment": "^2.30.1",
     "react": "^19.1.1",
+    "react-circle-flags": "^0.0.25",
     "react-dom": "^19.1.1",
     "react-i18next": "^16.2.4",
     "react-konva": "^19.2.1",

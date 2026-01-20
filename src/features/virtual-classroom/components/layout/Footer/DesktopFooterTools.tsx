@@ -1,6 +1,7 @@
 import { Maximize2, Minimize2 } from 'lucide-react'
 import { ReceiveSquare, Edit2, Stickynote, Category } from 'iconsax-react'
 import { Button } from 'ies2-aulapp-ui-kit'
+import { useTranslation } from 'react-i18next'
 
 interface DesktopFooterToolsProps {
   currentPage: number
@@ -33,6 +34,8 @@ export function DesktopFooterTools({
   onToggleShareMenu,
   onToggleFullscreen,
 }: DesktopFooterToolsProps) {
+  const { t } = useTranslation('footer')
+
   return (
     <div className="flex items-center gap-12">
       {/* Tools Group */}
@@ -44,8 +47,8 @@ export function DesktopFooterTools({
           className={`rounded-lg transition-colors hover:bg-black text-white ${
             isPageReelOpen ? 'bg-[#FF246E] text-white' : ''
           }`}
-          aria-label="Ver todas as páginas"
-          title="Ver todas as páginas"
+          aria-label={t('viewAllPages')}
+          title={t('viewAllPages')}
         >
           <Category size="24" color="currentColor" variant="Linear" />
         </Button>
@@ -58,8 +61,8 @@ export function DesktopFooterTools({
               className={`rounded-lg transition-colors hover:bg-black text-white ${
                 isStickyNotesOpen ? 'bg-[#FF246E] text-white' : ''
               }`}
-              aria-label="Anotações"
-              title="Anotações"
+              aria-label={t('annotations')}
+              title={t('annotations')}
             >
               <Stickynote size="24" color="currentColor" variant="Linear" />
             </Button>
@@ -73,8 +76,8 @@ export function DesktopFooterTools({
                     ? 'bg-[#FF246E] text-white  hover:bg-[#FF246E]'
                     : ''
                 }`}
-                aria-label="Destaques"
-                title="Destaques"
+                aria-label={t('highlights')}
+                title={t('highlights')}
               >
                 <Edit2 size="24" color="currentColor" variant="Linear" />
               </Button>
@@ -98,8 +101,8 @@ export function DesktopFooterTools({
           className={`rounded-lg transition-colors hover:bg-black text-white ${
             isShareMenuOpen ? 'bg-[#FF246E] text-white hover:bg-[#FF246E]' : ''
           }`}
-          aria-label="Downloads"
-          title="Downloads"
+          aria-label={t('downloads')}
+          title={t('downloads')}
         >
           <ReceiveSquare size="24" color="currentColor" variant="Linear" />
         </Button>
@@ -109,8 +112,8 @@ export function DesktopFooterTools({
             variant="ghost"
             size="icon"
             className="rounded-lg transition-colors hover:bg-black text-white"
-            aria-label={isFullscreen ? 'Sair da tela cheia' : 'Tela cheia'}
-            title={isFullscreen ? 'Sair da tela cheia' : 'Tela cheia'}
+            aria-label={isFullscreen ? t('exitFullscreen') : t('fullscreen')}
+            title={isFullscreen ? t('exitFullscreen') : t('fullscreen')}
           >
             {isFullscreen ? (
               <Minimize2 size={20} color="currentColor" />

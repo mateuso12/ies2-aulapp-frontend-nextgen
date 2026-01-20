@@ -7,6 +7,7 @@ import {
 } from '@/components/ui/accordion'
 import { SearchNormal1, TickCircle } from 'iconsax-react'
 import { ResourceBadge } from 'ies2-aulapp-ui-kit'
+import { useTranslation } from 'react-i18next'
 import { cn } from '@/lib/utils'
 import { modules } from '@/mocks/courseModules'
 import { motion, useMotionValue, useTransform, animate } from 'framer-motion'
@@ -93,6 +94,7 @@ const getModuleProgress = (lessons: (typeof modules)[0]['lessons']) => {
 }
 
 export const ClassroomModules: React.FC = () => {
+  const { t } = useTranslation(['footer', 'classroom'])
   const activeModuleId =
     modules.find((m) => m.status === 'in-progress')?.id || modules[0]?.id
 
@@ -103,7 +105,7 @@ export const ClassroomModules: React.FC = () => {
         <SheetClose asChild>
           <button
             className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-primary hover:bg-transparent cursor-pointer dark:text-foreground"
-            aria-label="Fechar menu"
+            aria-label={t('closeMenu')}
           >
             <CloseCircle size="24" color="currentColor" variant="Linear" />
           </button>
@@ -125,7 +127,7 @@ export const ClassroomModules: React.FC = () => {
         </div>
         <input
           type="text"
-          placeholder="Buscar aqui"
+          placeholder={t('searchModules', { ns: 'classroom' })}
           className="h-12 w-full rounded-lg border border-[#6C757D] dark:border-gray-600 bg-white dark:bg-(--paper-bg) pl-11 pr-4 text-sm text-[#343A40] dark:text-foreground placeholder-[#6C757D] dark:placeholder-gray-400 outline-none focus:border-[#FF246E] focus-visible:ring-2 focus-visible:ring-[#FF246E]/30"
         />
       </div>

@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { X, Trash2, ChevronUp, ChevronDown, Palette } from 'lucide-react'
 import { useMediaQuery } from '@/hooks/use-media-query'
+import { useTranslation } from 'react-i18next'
 import { COLORS, TOOL_CONFIGS } from '../types/types'
 import type { ToolType, AnnotationConfig } from '../types/types'
 
@@ -18,6 +19,7 @@ export const WritingToolbar: React.FC<WritingToolbarProps> = ({
   onClear,
   onClose,
 }) => {
+  const { t } = useTranslation('annotations')
   const isDesktop = useMediaQuery('(min-width: 768px)')
   const [isExpanded, setIsExpanded] = useState(false)
   const [showColorPicker, setShowColorPicker] = useState(false)
@@ -79,7 +81,7 @@ export const WritingToolbar: React.FC<WritingToolbarProps> = ({
             <button
               onClick={onClose}
               className="min-w-12 min-h-12 flex items-center justify-center rounded-xl bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 active:bg-gray-200 dark:active:bg-gray-600 transition-colors"
-              aria-label="Fechar"
+              aria-label={t('close')}
             >
               <X className="w-6 h-6" />
             </button>
@@ -94,7 +96,7 @@ export const WritingToolbar: React.FC<WritingToolbarProps> = ({
                   ? 'bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-300 scale-105'
                   : 'text-gray-600 dark:text-gray-300 active:bg-gray-100 dark:active:bg-gray-700'
               }`}
-              aria-label="Caneta"
+              aria-label={t('pen')}
             >
               <img
                 src="/icons/pencil.svg"
@@ -110,7 +112,7 @@ export const WritingToolbar: React.FC<WritingToolbarProps> = ({
                   ? 'bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-300 scale-105'
                   : 'text-gray-600 dark:text-gray-300 active:bg-gray-100 dark:active:bg-gray-700'
               }`}
-              aria-label="Borracha"
+              aria-label={t('eraser')}
             >
               <img
                 src="/icons/eraser.svg"
@@ -123,7 +125,7 @@ export const WritingToolbar: React.FC<WritingToolbarProps> = ({
             <button
               onClick={() => setIsExpanded(!isExpanded)}
               className="min-w-12 min-h-9 flex items-center justify-center rounded-xl text-gray-400 dark:text-gray-500 active:bg-gray-100 dark:active:bg-gray-700 transition-colors"
-              aria-label={isExpanded ? 'Recolher' : 'Expandir'}
+              aria-label={isExpanded ? t('collapse') : t('expand')}
             >
               {isExpanded ? (
                 <ChevronUp className="w-5 h-5" />
@@ -154,7 +156,7 @@ export const WritingToolbar: React.FC<WritingToolbarProps> = ({
                             ? 'bg-gray-200 dark:bg-gray-600 scale-105'
                             : 'text-gray-400 dark:text-gray-500 active:bg-gray-100 dark:active:bg-gray-700'
                         }`}
-                        aria-label="Fino"
+                        aria-label={t('thin')}
                       >
                         <img
                           src="/icons/thin.svg"
@@ -169,7 +171,7 @@ export const WritingToolbar: React.FC<WritingToolbarProps> = ({
                             ? 'bg-gray-200 dark:bg-gray-600 scale-105'
                             : 'text-gray-400 dark:text-gray-500 active:bg-gray-100 dark:active:bg-gray-700'
                         }`}
-                        aria-label="Grosso"
+                        aria-label={t('thick')}
                       >
                         <img
                           src="/icons/thick.svg"
@@ -188,7 +190,7 @@ export const WritingToolbar: React.FC<WritingToolbarProps> = ({
                             ? 'bg-gray-200 dark:bg-gray-600'
                             : 'active:bg-gray-100 dark:active:bg-gray-700'
                         }`}
-                        aria-label="Cores"
+                        aria-label={t('colors')}
                       >
                         <div className="relative">
                           <Palette className="w-6 h-6 text-gray-600 dark:text-gray-300" />
@@ -207,7 +209,7 @@ export const WritingToolbar: React.FC<WritingToolbarProps> = ({
                   <button
                     onClick={onClear}
                     className="min-w-12 min-h-12 flex items-center justify-center rounded-xl text-red-500 dark:text-red-400 active:bg-red-50 dark:active:bg-red-900/30 transition-colors"
-                    aria-label="Limpar"
+                    aria-label={t('clear')}
                   >
                     <Trash2 className="w-6 h-6" />
                   </button>
@@ -239,7 +241,7 @@ export const WritingToolbar: React.FC<WritingToolbarProps> = ({
                           : 'border-gray-200 dark:border-gray-600 active:scale-105'
                       }`}
                       style={{ backgroundColor: value }}
-                      aria-label={`Cor ${value}`}
+                      aria-label={`${t('color')} ${value}`}
                     />
                   ))}
                 </div>
@@ -269,7 +271,7 @@ export const WritingToolbar: React.FC<WritingToolbarProps> = ({
               ? 'bg-blue-50 dark:bg-blue-900 text-blue-600 dark:text-blue-300 scale-110'
               : 'hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-600 dark:text-gray-300'
           }`}
-          title="Caneta"
+          title={t('pen')}
         >
           <img
             src="/icons/pencil.svg"
@@ -284,7 +286,7 @@ export const WritingToolbar: React.FC<WritingToolbarProps> = ({
               ? 'bg-blue-50 dark:bg-blue-900 text-blue-600 dark:text-blue-300 scale-110'
               : 'hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-600 dark:text-gray-300'
           }`}
-          title="Borracha"
+          title={t('eraser')}
         >
           <img
             src="/icons/eraser.svg"
@@ -304,7 +306,7 @@ export const WritingToolbar: React.FC<WritingToolbarProps> = ({
                 ? 'bg-gray-100 dark:bg-gray-600 scale-110'
                 : 'hover:bg-gray-50 dark:hover:bg-gray-700 opacity-50 hover:opacity-100'
             }`}
-            title="Fino"
+            title={t('thin')}
           >
             <img
               src="/icons/thin.svg"
@@ -319,7 +321,7 @@ export const WritingToolbar: React.FC<WritingToolbarProps> = ({
                 ? 'bg-gray-100 dark:bg-gray-600 scale-110'
                 : 'hover:bg-gray-50 dark:hover:bg-gray-700 opacity-50 hover:opacity-100'
             }`}
-            title="Grosso"
+            title={t('thick')}
           >
             <img
               src="/icons/thick.svg"
@@ -359,13 +361,13 @@ export const WritingToolbar: React.FC<WritingToolbarProps> = ({
           onClick={onClear}
           className="text-sm font-medium text-red-500 dark:text-red-400 hover:text-red-600 dark:hover:text-red-300 px-3 py-1.5 rounded-md hover:bg-red-50 dark:hover:bg-red-900/30 transition-colors"
         >
-          Limpar
+          {t('clear')}
         </button>
         <button
           onClick={onClose}
           className="text-sm font-medium text-gray-500 dark:text-gray-300 hover:text-gray-700 dark:hover:text-white px-3 py-1.5 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
         >
-          Fechar
+          {t('close')}
         </button>
       </div>
     </motion.div>

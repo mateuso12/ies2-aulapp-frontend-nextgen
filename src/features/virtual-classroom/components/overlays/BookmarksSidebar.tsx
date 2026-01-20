@@ -3,6 +3,7 @@ import { ArchiveTick, CloseCircle, Trash, ArrowRight2 } from 'iconsax-react'
 import { useMediaQuery } from '@/hooks/use-media-query'
 import { Sheet, SheetContent } from '@/components/ui/sheet'
 import { Drawer, DrawerContent } from '@/components/ui/drawer'
+import { useTranslation } from 'react-i18next'
 
 interface BookmarksSidebarProps {
   isOpen: boolean
@@ -21,6 +22,7 @@ export const BookmarksSidebar: React.FC<BookmarksSidebarProps> = ({
   onRemoveBookmark,
   onNavigate,
 }) => {
+  const { t } = useTranslation('menu')
   const isDesktop = useMediaQuery('(min-width: 768px)')
 
   const SidebarContent = () => (
@@ -35,7 +37,7 @@ export const BookmarksSidebar: React.FC<BookmarksSidebarProps> = ({
             variant="Linear"
           />
           <h2 className="text-lg font-bold text-[#343A40] dark:text-foreground">
-            Marca páginas
+            {t('bookmarks')}
           </h2>
         </div>
         <button
@@ -50,7 +52,7 @@ export const BookmarksSidebar: React.FC<BookmarksSidebarProps> = ({
       <div className="flex flex-col gap-4 overflow-y-auto flex-1 custom-scrollbar pr-2">
         {bookmarks.length === 0 ? (
           <div className="text-center text-gray-500 dark:text-gray-400 mt-10">
-            Nenhuma página marcada.
+            {t('noBookmarks')}
           </div>
         ) : (
           bookmarks.map((page) => {
@@ -72,7 +74,7 @@ export const BookmarksSidebar: React.FC<BookmarksSidebarProps> = ({
               >
                 <div className="flex w-full items-center justify-between">
                   <span className="font-bold text-[#343A40] dark:text-foreground">
-                    Página {page}
+                    {t('page')} {page}
                   </span>
                   <button
                     onClick={(e) => {
@@ -91,7 +93,7 @@ export const BookmarksSidebar: React.FC<BookmarksSidebarProps> = ({
                   }`}
                 >
                   <span className="text-sm font-normal leading-[18px]">
-                    Ir para Marcador
+                    {t('goToBookmark')}
                   </span>
                   <ArrowRight2
                     size="16"

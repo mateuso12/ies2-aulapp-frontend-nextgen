@@ -10,6 +10,7 @@ import {
 } from 'iconsax-react'
 import { Maximize2, Minimize2 } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { useTranslation } from 'react-i18next'
 import { useMediaQuery } from '@/hooks/use-media-query'
 
 export interface PageData {
@@ -43,6 +44,7 @@ export const PageReel: React.FC<PageReelProps> = ({
   onMouseEnter,
   onMouseLeave,
 }) => {
+  const { t } = useTranslation('pageReel')
   const isMobile = useMediaQuery('(max-width: 768px)')
   const [isMaximized, setIsMaximized] = useState(false)
 
@@ -104,7 +106,7 @@ export const PageReel: React.FC<PageReelProps> = ({
                   <button
                     onClick={() => setIsMaximized(!isMaximized)}
                     className="p-3 rounded-lg bg-black/50 hover:bg-black/70 text-white transition-colors cursor-pointer backdrop-blur-sm border border-white/10"
-                    title={isMaximized ? 'Minimizar' : 'Maximizar'}
+                    title={isMaximized ? t('minimize') : t('maximize')}
                   >
                     {isMaximized ? (
                       <Minimize2 size={24} />

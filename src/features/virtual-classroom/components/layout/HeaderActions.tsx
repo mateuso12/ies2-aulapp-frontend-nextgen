@@ -1,6 +1,6 @@
 import React from 'react'
 import { ArrowLeft } from 'iconsax-react'
-import { ResourceBadge, SearchPopover, Button } from 'ies2-aulapp-ui-kit'
+import { SearchPopover, Button, ResourceBadge } from 'ies2-aulapp-ui-kit'
 
 interface HeaderActionsProps {
   variant?: 'default' | 'gamified'

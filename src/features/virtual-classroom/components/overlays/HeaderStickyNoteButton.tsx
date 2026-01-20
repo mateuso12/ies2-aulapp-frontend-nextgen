@@ -1,5 +1,6 @@
 import React from 'react'
 import { Stickynote } from 'iconsax-react'
+import { useTranslation } from 'react-i18next'
 
 interface HeaderStickyNoteButtonProps {
   hasNotes: boolean
@@ -14,10 +15,12 @@ export const HeaderStickyNoteButton: React.FC<HeaderStickyNoteButtonProps> = ({
   hasNotes,
   onClick,
 }) => {
+  const { t } = useTranslation('buttons')
+
   return (
     <button
       type="button"
-      aria-label={hasNotes ? 'Ver notas adesivas' : 'Adicionar nota adesiva'}
+      aria-label={hasNotes ? t('viewStickyNotes') : t('addStickyNote')}
       className="gap-0 relative"
       onClick={onClick}
     >

@@ -1,5 +1,6 @@
 import React from 'react'
 import { Edit2 } from 'iconsax-react'
+import { useTranslation } from 'react-i18next'
 
 interface HeaderAnnotationButtonProps {
   hasAnnotations: boolean
@@ -14,10 +15,12 @@ export const HeaderAnnotationButton: React.FC<HeaderAnnotationButtonProps> = ({
   hasAnnotations,
   onClick,
 }) => {
+  const { t } = useTranslation('buttons')
+
   return (
     <button
       type="button"
-      aria-label={hasAnnotations ? 'Ver anotações' : 'Adicionar anotação'}
+      aria-label={hasAnnotations ? t('viewAnnotations') : t('addAnnotation')}
       className="gap-0 relative"
       onClick={onClick}
     >

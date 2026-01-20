@@ -1,6 +1,7 @@
 import React from 'react'
 import { ArchiveAdd } from 'iconsax-react'
 import { Button } from 'ies2-aulapp-ui-kit'
+import { useTranslation } from 'react-i18next'
 
 interface FloatingBookmarkButtonProps {
   isBookmarked: boolean
@@ -15,13 +16,15 @@ export const FloatingBookmarkButton: React.FC<FloatingBookmarkButtonProps> = ({
   isVisible = true,
   variant = 'floating',
 }) => {
+  const { t } = useTranslation('buttons')
+
   if (!isVisible) return null
 
   if (variant === 'header') {
     return (
       <button
         onClick={onClick}
-        aria-label={isBookmarked ? 'Remover marca-página' : 'Marcar página'}
+        aria-label={isBookmarked ? t('removeBookmark') : t('addBookmark')}
         className="dark:opacity-90 hover:dark:opacity-100 transition-opacity"
       >
         <ArchiveAdd
@@ -42,7 +45,7 @@ export const FloatingBookmarkButton: React.FC<FloatingBookmarkButtonProps> = ({
             onClick={onClick}
             variant="ghost"
             size="icon"
-            aria-label={isBookmarked ? 'Remover marca-página' : 'Marcar página'}
+            aria-label={isBookmarked ? t('removeBookmark') : t('addBookmark')}
           >
             <ArchiveAdd
               size="48"

@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { SearchNormal1, CloseCircle, ArrowUp2, ArrowDown2 } from 'iconsax-react'
+import { useTranslation } from 'react-i18next'
 
 interface MobileSearchOverlayProps {
   isOpen: boolean
@@ -18,6 +19,7 @@ export const MobileSearchOverlay: React.FC<MobileSearchOverlayProps> = ({
   onPrev,
   onQueryChange,
 }) => {
+  const { t } = useTranslation('footer')
   const [query, setQuery] = useState('')
   const inputRef = useRef<HTMLInputElement>(null)
   const focusTimerRef = useRef<number | null>(null)
@@ -85,13 +87,13 @@ export const MobileSearchOverlay: React.FC<MobileSearchOverlayProps> = ({
           value={query}
           onChange={(e) => handleQueryChange(e.target.value)}
           onKeyDown={handleKeyDown}
-          placeholder="Buscar na página..."
+          placeholder={t('searchPlaceholder')}
           className="flex-1 bg-transparent text-white placeholder-gray-400 outline-none text-base"
         />
 
         {query && (
           <span className="text-sm text-gray-400 whitespace-nowrap">
-            {resultsCount} {resultsCount === 1 ? 'resultado' : 'resultados'}
+            {resultsCount} {resultsCount === 1 ? t('result') : t('results')}
           </span>
         )}
 
@@ -100,14 +102,14 @@ export const MobileSearchOverlay: React.FC<MobileSearchOverlayProps> = ({
             <button
               onClick={onPrev}
               className="p-1.5 rounded-lg hover:bg-white/10 transition-colors"
-              aria-label="Resultado anterior"
+              aria-label={t('previousResult')}
             >
               <ArrowUp2 size="18" color="#E2E2E2" variant="Linear" />
             </button>
             <button
               onClick={onNext}
               className="p-1.5 rounded-lg hover:bg-white/10 transition-colors"
-              aria-label="Próximo resultado"
+              aria-label={t('nextResult')}
             >
               <ArrowDown2 size="18" color="#E2E2E2" variant="Linear" />
             </button>
@@ -117,7 +119,7 @@ export const MobileSearchOverlay: React.FC<MobileSearchOverlayProps> = ({
         <button
           onClick={onClose}
           className="p-1.5 rounded-lg hover:bg-white/10 transition-colors"
-          aria-label="Fechar busca"
+          aria-label={t('closeSearch')}
         >
           <CloseCircle size="22" color="#E2E2E2" variant="Linear" />
         </button>

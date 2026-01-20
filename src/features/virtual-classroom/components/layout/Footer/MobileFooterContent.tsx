@@ -1,6 +1,7 @@
 import { Maximize2, Minimize2 } from 'lucide-react'
 import { Category } from 'iconsax-react'
 import { Button } from 'ies2-aulapp-ui-kit'
+import { useTranslation } from 'react-i18next'
 import { SettingsMenu } from '../../overlays/SettingsMenu'
 
 interface MobileFooterContentProps {
@@ -36,6 +37,8 @@ export function MobileFooterContent({
   onHideToolbar,
   onSettingsMenuOpenChange,
 }: MobileFooterContentProps) {
+  const { t } = useTranslation('footer')
+
   return (
     <div className="hidden w-full max-md:grid max-md:grid-cols-3 max-md:items-center">
       {/* Left: Page reel */}
@@ -47,8 +50,8 @@ export function MobileFooterContent({
           className={`rounded-lg transition-colors hover:bg-black text-white ${
             isPageReelOpen ? 'bg-[#FF246E] text-white' : ''
           }`}
-          aria-label="Ver todas as páginas"
-          title="Ver todas as páginas"
+          aria-label={t('viewAllPages')}
+          title={t('viewAllPages')}
         >
           <Category size="24" color="currentColor" variant="Linear" />
         </Button>
@@ -66,8 +69,8 @@ export function MobileFooterContent({
           variant="ghost"
           size="icon"
           className="rounded-lg transition-colors hover:bg-black text-white"
-          aria-label={isFocusModeActive ? 'Sair da tela cheia' : 'Tela cheia'}
-          title={isFocusModeActive ? 'Sair da tela cheia' : 'Tela cheia'}
+          aria-label={isFocusModeActive ? t('exitFullscreen') : t('fullscreen')}
+          title={isFocusModeActive ? t('exitFullscreen') : t('fullscreen')}
         >
           {isFocusModeActive ? (
             <Minimize2 size={24} />

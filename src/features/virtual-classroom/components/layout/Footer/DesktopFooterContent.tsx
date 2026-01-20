@@ -1,5 +1,6 @@
 import { ArrowCircleRight, ArrowCircleLeft } from 'iconsax-react'
 import { Button } from 'ies2-aulapp-ui-kit'
+import { useTranslation } from 'react-i18next'
 import { DesktopFooterTools } from './DesktopFooterTools'
 
 interface DesktopFooterContentProps {
@@ -37,6 +38,8 @@ export function DesktopFooterContent({
   onToggleShareMenu,
   onToggleFullscreen,
 }: DesktopFooterContentProps) {
+  const { t } = useTranslation('footer')
+
   return (
     <div className="hidden w-full max-w-[1092px] items-center justify-between md:flex">
       {/* Left Arrow */}
@@ -48,8 +51,8 @@ export function DesktopFooterContent({
         className={`h-[54px] w-[54px] rounded-full text-white hover:bg-white/10 ${
           currentPage <= 1 ? 'opacity-50' : ''
         }`}
-        aria-label="Página anterior"
-        title="Página anterior"
+        aria-label={t('previousPage')}
+        title={t('previousPage')}
       >
         <ArrowCircleLeft size="45" color="currentColor" variant="Bold" />
       </Button>
@@ -80,8 +83,8 @@ export function DesktopFooterContent({
         className={`h-[54px] w-[54px] rounded-full text-white hover:bg-white/10 ${
           currentPage >= totalPages ? 'opacity-50' : ''
         }`}
-        aria-label="Próxima página"
-        title="Próxima página"
+        aria-label={t('nextPage')}
+        title={t('nextPage')}
       >
         <ArrowCircleRight size="45" color="currentColor" variant="Bold" />
       </Button>
