@@ -174,12 +174,20 @@ export const VirtualClassroom: React.FC = () => {
                     : !!currentAnswer
 
                   const optionLabels = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']
+                  
+                  // Calcula o progresso (página atual / total de páginas)
+                  const progress = ((currentPageIndex + 1) / totalPages) * 100
 
                   return (
                     <div className="space-y-6">
-                      {/* Header pequeno com barra colorida */}
+                      {/* Progress bar */}
                       <div>
-                        <div className="h-1 w-20 bg-pink-500 mb-3 rounded-full"></div>
+                        <div className="h-1 w-full bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden mb-3">
+                          <div 
+                            className="h-full bg-[#E91E63] transition-all duration-300"
+                            style={{ width: `${progress}%` }}
+                          ></div>
+                        </div>
                         <h2 className="text-sm font-semibold text-gray-900 dark:text-gray-100">
                           {exercise.title}
                         </h2>
@@ -208,10 +216,10 @@ export const VirtualClassroom: React.FC = () => {
                             <button
                               key={option.id}
                               onClick={() => handleSelectOption(exercise.id, option.id)}
-                              className={`w-full p-5 text-left rounded-[20px] border-2 transition-all ${
+                              className={`w-full px-6 py-4 text-left rounded-[20px] border-2 transition-all ${
                                 isSelected
-                                  ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
-                                  : 'border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 hover:border-blue-300'
+                                  ? 'border-[#4B80F9] bg-[#4B80F9]/10'
+                                  : 'border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 hover:border-blue-300'
                               }`}
                             >
                               <div className="flex items-center justify-between gap-4">
@@ -226,12 +234,12 @@ export const VirtualClassroom: React.FC = () => {
                                 <div
                                   className={`w-6 h-6 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-all ${
                                     isSelected
-                                      ? 'border-blue-500 bg-blue-500'
-                                      : 'border-gray-400 dark:border-gray-500'
+                                      ? 'border-blue-500 bg-white'
+                                      : 'border-gray-400 dark:border-gray-500 bg-white'
                                   }`}
                                 >
                                   {isSelected && (
-                                    <div className="w-3 h-3 rounded-full bg-white"></div>
+                                    <div className="w-3 h-3 rounded-full bg-blue-500"></div>
                                   )}
                                 </div>
                               </div>
