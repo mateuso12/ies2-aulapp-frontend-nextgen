@@ -309,17 +309,26 @@ export const validateExercise = (
 ): ExerciseValidationResult => {
   switch (exercise.type) {
     case 'multiple-choice':
-      return validateMultipleChoice(exercise, answer as string)
+      return validateMultipleChoice(
+        exercise as MultipleChoiceExercise,
+        answer as string
+      )
     case 'multiple-select':
-      return validateMultipleSelect(exercise, answer as string[])
+      return validateMultipleSelect(
+        exercise as MultipleSelectExercise,
+        answer as string[]
+      )
     case 'numeric':
-      return validateNumeric(exercise, answer as number)
+      return validateNumeric(exercise as NumericExercise, answer as number)
     case 'ordering':
-      return validateOrdering(exercise, answer as string[])
+      return validateOrdering(exercise as OrderingExercise, answer as string[])
     case 'true-false':
-      return validateTrueFalse(exercise, answer as boolean)
+      return validateTrueFalse(exercise as TrueFalseExercise, answer as boolean)
     case 'matching':
-      return validateMatching(exercise, answer as Record<string, string>)
+      return validateMatching(
+        exercise as MatchingExercise,
+        answer as Record<string, string>
+      )
     default:
       return {
         isCorrect: false,

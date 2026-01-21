@@ -49,8 +49,9 @@ export type DifficultyLevel = 'easy' | 'medium' | 'hard'
  * Use generics para definir tipos específicos de dados e respostas.
  * 
  * @template TData - Tipo dos dados específicos do exercício
- * @template TAnswer - Tipo da resposta do usuário
+ * @template TAnswer - Tipo da resposta do usuário (usado para inferência de tipos)
  */
+// @ts-ignore - TAnswer is used for type inference in derived types
 export interface BaseExercise<TData = unknown, TAnswer = unknown> {
   /** ID único do exercício */
   id: string

@@ -119,7 +119,7 @@ export const useExerciseSubmission = (
   const [elapsedSeconds, setElapsedSeconds] = useState(0)
 
   // Refs
-  const autoSaveTimerRef = useRef<NodeJS.Timeout>()
+  const autoSaveTimerRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined)
 
   /**
    * Carregar exercício e dados relacionados

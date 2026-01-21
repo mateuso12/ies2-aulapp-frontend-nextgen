@@ -163,7 +163,7 @@ export class FirebaseSubmissionRepository implements ISubmissionRepository {
     )
   }
 
-  async findById(submissionId: string): Promise<ExerciseSubmission | null> {
+  async findById(_submissionId: string): Promise<ExerciseSubmission | null> {
     // Nota: Requer userId. Considere adicionar índice ou buscar em outro local
     console.warn('[FirebaseSubmissionRepository] findById requires userId')
     return null
@@ -238,8 +238,8 @@ export class FirebaseSubmissionRepository implements ISubmissionRepository {
   }
 
   async update(
-    submissionId: string,
-    submission: Partial<ExerciseSubmission>
+    _submissionId: string,
+    _submission: Partial<ExerciseSubmission>
   ): Promise<void> {
     console.warn(
       '[FirebaseSubmissionRepository] update requires userId - not implemented'
@@ -247,7 +247,7 @@ export class FirebaseSubmissionRepository implements ISubmissionRepository {
     throw new Error('Not implemented - requires userId')
   }
 
-  async remove(submissionId: string): Promise<void> {
+  async remove(_submissionId: string): Promise<void> {
     console.warn(
       '[FirebaseSubmissionRepository] remove requires userId - not implemented'
     )
