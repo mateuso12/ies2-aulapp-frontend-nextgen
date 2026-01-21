@@ -1,7 +1,7 @@
 import React from 'react'
 import { ArchiveTick, CloseCircle, Trash, ArrowRight2 } from 'iconsax-react'
 import { useMediaQuery } from '@/hooks/use-media-query'
-import { Sheet, SheetContent } from '@/components/ui/sheet'
+import { Sheet, SheetContent, SheetTitle } from '@/components/ui/sheet'
 import { Drawer, DrawerContent } from '@/components/ui/drawer'
 import { useTranslation } from 'react-i18next'
 
@@ -116,6 +116,7 @@ export const BookmarksSidebar: React.FC<BookmarksSidebarProps> = ({
           side="left"
           className="w-[347px] bg-[#EFEFEF] dark:bg-card p-0 border-r-0 shadow-[4px_0_24px_rgba(0,0,0,0.1)]"
         >
+          <SheetTitle className="sr-only">Marca páginas</SheetTitle>
           <SidebarContent />
         </SheetContent>
       </Sheet>

@@ -5,32 +5,35 @@ import { mockContentPages } from '../mocks/virtualClassroomContent'
 import { TextHighlighter } from '@/features/annotations/highlighting'
 import { createFirebaseHighlightRepository } from '@/features/annotations/highlighting/repositories'
 import { useUser } from '@/hooks/useUser'
+import { usePageProgress } from '@/hooks/usePageProgress'
 import { DevTools } from '@/features/virtual-classroom/components/overlays'
 import type { PageData } from '@/features/virtual-classroom/components/content/PageReel'
 
 export const VirtualClassroom: React.FC = () => {
   const { userId } = useUser()
   const [currentPageIndex, setCurrentPageIndex] = useState(0)
-  const [visitedPages, setVisitedPages] = useState<number[]>([1])
-  const [maxReachedIndex, setMaxReachedIndex] = useState(0)
-  const [bookmarks, setBookmarks] = useState<number[]>([])
   const [resourceType, setResourceType] = useState('content')
+  
+  const resourceId = 'virtual-classroom-demo'
+  
+  const {
+    visitedPages,
+    bookmarks,
+    toggleBookmark,
+    removeBookmark,
+  } = usePageProgress({
+    resourceId,
+    userId,
+    currentPage: currentPageIndex + 1,
+  })
+
   const currentPage = mockContentPages[currentPageIndex]
   const totalPages = mockContentPages.length
 
-  React.useEffect(() => {
-    const pageNum = currentPageIndex + 1
-    setVisitedPages((prev) => {
-      if (!prev.includes(pageNum)) {
-        return [...prev, pageNum]
-      }
-      return prev
-    })
-
-    if (currentPageIndex > maxReachedIndex) {
-      setMaxReachedIndex(currentPageIndex)
-    }
-  }, [currentPageIndex, maxReachedIndex])
+  const maxReachedIndex = useMemo(() => {
+    if (visitedPages.length === 0) return 0
+    return Math.max(...visitedPages) - 1
+  }, [visitedPages])
 
   const handleNext = () => {
     if (currentPageIndex < totalPages - 1) {
@@ -51,20 +54,13 @@ export const VirtualClassroom: React.FC = () => {
   }
 
   const handleToggleBookmark = (page: number) => {
-    setBookmarks((prev) => {
-      if (prev.includes(page)) {
-        return prev.filter((p) => p !== page)
-      }
-      return [...prev, page].sort((a, b) => a - b)
-    })
+    toggleBookmark(page)
   }
 
   const handleRemoveBookmark = (page: number) => {
-    setBookmarks((prev) => prev.filter((p) => p !== page))
+    removeBookmark(page)
   }
 
-  // Transform mock data to include status and features for the PageReel
-  // Parse HTML strings to ReactNode for the preview
   const pagesData: PageData[] = mockContentPages.map((page, index) => {
     const pageNumber = index + 1
     const isLocked = pageNumber > maxReachedIndex + 3
@@ -81,7 +77,6 @@ export const VirtualClassroom: React.FC = () => {
     }
   })
 
-  // Cria repositório Firebase para highlights do usuário
   const highlightRepository = useMemo(() => {
     if (!userId) return undefined
     return createFirebaseHighlightRepository(userId)

@@ -1,17 +1,11 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useMemo } from 'react'
 import { createPortal } from 'react-dom'
-import {
-  TickCircle,
-  Edit2,
-  Stickynote,
-  ArchiveAdd,
-  Lock,
-  LampOn,
-} from 'iconsax-react'
+import { Edit2, Stickynote, ArchiveAdd, Lock, LampOn } from 'iconsax-react'
 import { Maximize2, Minimize2 } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
 import { useMediaQuery } from '@/hooks/use-media-query'
+import type { PageFilter } from '@/features/page-progress'
 
 export interface PageData {
   id: string | number
@@ -43,12 +37,71 @@ export const PageReel: React.FC<PageReelProps> = ({
   onPageSelect,
   onMouseEnter,
   onMouseLeave,
+  variant = 'default',
 }) => {
   const { t } = useTranslation('pageReel')
   const isMobile = useMediaQuery('(max-width: 768px)')
   const [isMaximized, setIsMaximized] = useState(false)
+  const [activeFilters, setActiveFilters] = useState<PageFilter[]>([])
 
-  // Block body scroll when drawer is open
+  const availableFilters: Array<{
+    id: PageFilter
+    label: string
+  }> = [
+    { id: 'bookmarked', label: 'Páginas marcadas' },
+    { id: 'with-annotations', label: 'Com anotações' },
+    { id: 'with-highlights', label: 'Com Marcações' },
+    { id: 'with-drawings', label: 'Com desenhos' },
+    { id: 'completed', label: 'Concluídos' },
+    { id: 'not-completed', label: 'Não concluídos' },
+  ]
+
+  const toggleFilter = (filterId: PageFilter) => {
+    setActiveFilters((prev) => {
+      const conflictingFilters: Record<string, PageFilter[]> = {
+        completed: ['not-completed'],
+        'not-completed': ['completed'],
+      }
+
+      let newFilters = prev.filter((f) => {
+        const conflicts = conflictingFilters[filterId] || []
+        return !conflicts.includes(f)
+      })
+
+      if (newFilters.includes(filterId)) {
+        return newFilters.filter((f) => f !== filterId)
+      }
+      return [...newFilters, filterId]
+    })
+  }
+
+  const filteredPages = useMemo(() => {
+    if (activeFilters.length === 0) {
+      return pages
+    }
+
+    return pages.filter((page) => {
+      return activeFilters.every((filter) => {
+        switch (filter) {
+          case 'bookmarked':
+            return page.isBookmarked
+          case 'with-annotations':
+            return page.hasAnnotations
+          case 'with-highlights':
+            return page.hasHighlights
+          case 'with-drawings':
+            return page.hasDrawings
+          case 'completed':
+            return page.isCompleted
+          case 'not-completed':
+            return !page.isCompleted
+          default:
+            return true
+        }
+      })
+    })
+  }, [pages, activeFilters])
+
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden'
@@ -62,7 +115,6 @@ export const PageReel: React.FC<PageReelProps> = ({
     <AnimatePresence>
       {isOpen && (
         <>
-          {/* Backdrop to close on click outside */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -93,14 +145,15 @@ export const PageReel: React.FC<PageReelProps> = ({
             onMouseLeave={onMouseLeave}
             className={`fixed bg-[#2C2C2C] shadow-xl ${
               isMobile
-                ? 'inset-x-0 top-0 bottom-0 z-60'
-                : `bottom-[120px] left-1/2 rounded-2xl w-[90vw] max-w-[1644px] transition-all duration-300 ease-in-out z-40 ${
-                    isMaximized ? 'h-[80vh] max-h-[619px]' : 'h-[258px]'
+                ? `inset-x-0 bottom-0 rounded-t-3xl ${
+                    variant === 'gamified' ? 'h-[70vh] z-60' : 'h-[85vh] z-60'
+                  }`
+                : `bottom-30 left-1/2 rounded-2xl w-[90vw] max-w-411 transition-all duration-300 ease-in-out z-40 ${
+                    isMaximized ? 'h-[80vh] max-h-154.75' : 'h-64.5'
                   }`
             }`}
           >
             <div className="relative w-full h-full flex flex-col overflow-hidden">
-              {/* Header / Controls - Only show on desktop */}
               {!isMobile && (
                 <div className="absolute top-4 right-4 flex gap-2 z-10">
                   <button
@@ -117,10 +170,46 @@ export const PageReel: React.FC<PageReelProps> = ({
                 </div>
               )}
 
-              {/* Content - Always in grid mode */}
+              {!isMobile && (
+                <div className="px-8 pt-6 pb-4">
+                  <div className="flex flex-wrap justify-center gap-2">
+                    {availableFilters.map((filter) => {
+                      const isActive = activeFilters.includes(filter.id)
+                      const count = filteredPages.filter((page) => {
+                        switch (filter.id) {
+                          case 'bookmarked': return page.isBookmarked
+                          case 'with-annotations': return page.hasAnnotations
+                          case 'with-highlights': return page.hasHighlights
+                          case 'with-drawings': return page.hasDrawings
+                          case 'completed': return page.isCompleted
+                          case 'not-completed': return !page.isCompleted
+                          default: return false
+                        }
+                      }).length
+                      return (
+                        <button
+                          key={filter.id}
+                          onClick={() => toggleFilter(filter.id)}
+                          className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                            isActive
+                              ? 'bg-[#487BFF] text-white shadow-md'
+                              : 'bg-white/90 text-gray-700 hover:bg-white hover:shadow-sm'
+                          }`}
+                        >
+                          <span>{filter.label}</span>
+                          <span className={`text-xs font-bold ${isActive ? 'text-white' : 'text-gray-500'}`}>
+                            {count}
+                          </span>
+                        </button>
+                      )
+                    })}
+                  </div>
+                </div>
+              )}
+
               <div
                 className={`w-full flex-1 overflow-y-auto overflow-x-hidden custom-scrollbar ${
-                  isMobile ? 'px-4 pt-4 pb-12' : 'p-8'
+                  isMobile ? 'px-4 pt-2 pb-12' : 'p-8 pt-4'
                 }`}
               >
                 <div
@@ -139,13 +228,13 @@ export const PageReel: React.FC<PageReelProps> = ({
                       : undefined
                   }
                 >
-                  {pages.map((page, index) => {
-                    const pageNumber = index + 1
+                  {filteredPages.map((page) => {
+                    const realIndex = pages.findIndex((p) => p.id === page.id)
+                    const pageNumber = realIndex + 1
                     const isActive = currentPage === pageNumber
                     const isLocked = page.isLocked
                     const isCompleted = page.isCompleted && !isActive
 
-                    // Styles based on state
                     let borderClass = 'border-transparent'
                     let shadowClass = ''
                     let overlayClass = 'bg-transparent'
@@ -167,7 +256,7 @@ export const PageReel: React.FC<PageReelProps> = ({
 
                     return (
                       <button
-                        key={index}
+                        key={page.id}
                         onClick={() => {
                           if (!isLocked) {
                             onPageSelect(pageNumber)
@@ -177,103 +266,84 @@ export const PageReel: React.FC<PageReelProps> = ({
                         disabled={isLocked}
                         className={`relative group flex flex-col items-center gap-2 transition-all ${
                           isLocked ? 'cursor-not-allowed' : 'cursor-pointer'
-                        } ${!isMobile && !isMaximized ? 'shrink-0 w-[198px]' : 'w-full'}`}
+                        } ${!isMobile && !isMaximized ? 'shrink-0 w-49.5' : 'w-full'}`}
                       >
-                        {/* Thumbnail Container */}
-                        <div
-                          className={`relative w-full aspect-4/3 rounded-lg overflow-hidden bg-white transition-all ${borderClass} ${shadowClass}`}
-                        >
-                          {/* Page Preview */}
-                          <div className="absolute inset-0 overflow-hidden bg-white">
-                            <div className="w-[400%] h-[400%] origin-top-left scale-[0.25] p-8 pointer-events-none select-none text-left text-black">
-                              {page.content}
-                            </div>
-                          </div>
-
-                          {/* State Overlay */}
-                          <div
-                            className={`absolute inset-0 ${overlayClass} transition-colors flex items-center justify-center text-muted-foreground`}
-                          >
-                            {isLocked && (
-                              <Lock
-                                size={32}
-                                variant="Bold"
-                                color="currentColor"
-                              />
-                            )}
-                          </div>
-
-                          {/* Feature Icons (Top Left) */}
-                          <div className="absolute top-1.5 left-1.5 flex gap-1">
-                            {page.hasHighlights && (
+                        <div className="relative w-full">
+                          {page.isBookmarked && (
+                            <div className="absolute -top-2 right-4 z-10">
                               <div
-                                className={`bg-[#F3C353] rounded-md flex items-center justify-center shadow-sm text-white ${
-                                  isMobile ? 'w-6 h-6' : 'w-8 h-8'
-                                }`}
-                              >
-                                <LampOn
-                                  size={isMobile ? 16 : 24}
-                                  variant="Linear"
-                                  color="currentColor"
-                                />
-                              </div>
-                            )}
-                            {page.hasAnnotations && (
-                              <div
-                                className={`bg-[#46B35E] rounded-md flex items-center justify-center shadow-sm text-white ${
-                                  isMobile ? 'w-6 h-6' : 'w-8 h-8'
-                                }`}
-                              >
-                                <Stickynote
-                                  size={isMobile ? 16 : 24}
-                                  variant="Outline"
-                                  color="currentColor"
-                                />
-                              </div>
-                            )}
-                            {page.hasDrawings && (
-                              <div
-                                className={`bg-[#8A5CCC] rounded-md flex items-center justify-center shadow-sm text-white ${
-                                  isMobile ? 'w-6 h-6' : 'w-8 h-8'
-                                }`}
-                              >
-                                <Edit2
-                                  size={isMobile ? 16 : 24}
-                                  variant="Outline"
-                                  color="currentColor"
-                                />
-                              </div>
-                            )}
-                            {page.isBookmarked && (
-                              <div
-                                className={`bg-white rounded-md flex items-center justify-center shadow-sm text-[#487BFF] ${
-                                  isMobile ? 'w-6 h-6' : 'w-8 h-8'
+                                className={`bg-white flex items-center justify-center shadow-md text-[#487BFF] ${
+                                  isMobile ? 'w-7 h-7' : 'w-10 h-10'
                                 }`}
                               >
                                 <ArchiveAdd
-                                  size={isMobile ? 16 : 24}
+                                  size={isMobile ? 20 : 28}
                                   variant="Bold"
                                   color="currentColor"
                                 />
                               </div>
-                            )}
+                            </div>
+                          )}
+                          
+                          <div
+                            className={`relative w-full aspect-4/3 rounded-lg overflow-hidden bg-white transition-all ${borderClass} ${shadowClass}`}
+                          >
+                            <div className="absolute inset-0 overflow-hidden bg-white">
+                              <div className="w-[400%] h-[400%] origin-top-left scale-[0.25] p-8 pointer-events-none select-none text-left text-black">
+                                {page.content}
+                              </div>
+                            </div>
+
+                            <div
+                              className={`absolute inset-0 ${overlayClass} transition-colors flex items-center justify-center text-muted-foreground`}
+                            >
+                              {isLocked && (
+                                <Lock
+                                  size={32}
+                                  variant="Bold"
+                                  color="currentColor"
+                                />
+                              )}
+                            </div>
                           </div>
                         </div>
 
-                        {/* Footer: Page Number & Status */}
-                        <div className="flex items-center justify-center gap-1.5 mt-1">
-                          {isCompleted && (
-                            <TickCircle
-                              size={isMobile ? 16 : 20}
-                              variant="Bold"
-                              color="#46B35E"
-                            />
-                          )}
+                        <div className="flex items-center justify-center gap-1.5 -mt-0.5">
                           <span
                             className={`font-bold ${isMobile ? 'text-base' : 'text-lg'} ${numberColorClass}`}
                           >
                             {pageNumber}
                           </span>
+                          
+                          <div className="flex items-center gap-1">
+                            {page.hasHighlights && (
+                              <div className="bg-[#F3C353] rounded-full w-6 h-6 flex items-center justify-center shadow-sm">
+                                <LampOn
+                                  size={16}
+                                  variant="Linear"
+                                  color="white"
+                                />
+                              </div>
+                            )}
+                            {page.hasAnnotations && (
+                              <div className="bg-[#46B35E] rounded-full w-6 h-6 flex items-center justify-center shadow-sm">
+                                <Stickynote
+                                  size={16}
+                                  variant="Linear"
+                                  color="white"
+                                />
+                              </div>
+                            )}
+                            {page.hasDrawings && (
+                              <div className="bg-[#8A5CCB] rounded-full w-6 h-6 flex items-center justify-center shadow-sm">
+                                <Edit2
+                                  size={16}
+                                  variant="Linear"
+                                  color="white"
+                                />
+                              </div>
+                            )}
+                          </div>
                         </div>
                       </button>
                     )
