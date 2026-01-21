@@ -74,6 +74,9 @@ export interface BaseExercise<TData = unknown, TAnswer = unknown> {
   /** Pontuação máxima do exercício */
   maxScore: number
   
+  /** Número máximo de tentativas permitidas */
+  maxAttempts?: number
+  
   /** Nível de dificuldade */
   difficulty?: DifficultyLevel
   

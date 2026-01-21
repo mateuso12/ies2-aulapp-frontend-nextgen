@@ -22,11 +22,19 @@ export const mockExercise1: MultipleChoiceExercise = {
     shuffleOptions: false,
   },
   maxScore: 10,
+  maxAttempts: 3,
   difficulty: 'easy',
   tags: ['geografia', 'brasil'],
   hints: ['É a sede do governo federal', 'Fica no Centro-Oeste'],
   createdAt: new Date('2024-01-15'),
   updatedAt: new Date('2024-01-15'),
+  metadata: {
+    comment: {
+      title: 'Por que Brasília?',
+      content: `Brasília foi fundada em 21 de abril de 1960 e tornou-se a capital do Brasil. A cidade foi planejada pelo urbanista Lúcio Costa e projetada pelo arquiteto Oscar Niemeyer. A transferência da capital do Rio de Janeiro para o Planalto Central teve como objetivo promover o desenvolvimento do interior do país e descongestionar a região litorânea.`,
+      imageUrl: 'https://images.unsplash.com/photo-1516483638261-f4dbaf036963?w=800&q=80',
+    },
+  },
 }
 
 /**
@@ -51,6 +59,7 @@ export const mockExercise2: MultipleSelectExercise = {
     maxSelections: 5,
   },
   maxScore: 15,
+  maxAttempts: 2,
   difficulty: 'medium',
   tags: ['programação', 'poo'],
   hints: [
@@ -59,6 +68,13 @@ export const mockExercise2: MultipleSelectExercise = {
   ],
   createdAt: new Date('2024-01-15'),
   updatedAt: new Date('2024-01-15'),
+  metadata: {
+    comment: {
+      title: 'Programação Orientada a Objetos',
+      content: `JavaScript, Python e Java são linguagens que suportam o paradigma de Programação Orientada a Objetos (POO). JavaScript usa protótipos mas também suporta classes desde ES6. Python tem suporte nativo a classes e herança. Java é uma linguagem puramente orientada a objetos. Por outro lado, C é uma linguagem procedural que não possui suporte nativo a POO, e Assembly é uma linguagem de baixo nível focada em instruções de máquina.`,
+      imageUrl: 'https://images.unsplash.com/photo-1542831371-29b0f74f9713?w=800&q=80',
+    },
+  },
 }
 
 /**
@@ -79,6 +95,7 @@ export const mockExercise3: MultipleChoiceExercise = {
     shuffleOptions: false,
   },
   maxScore: 5,
+  maxAttempts: 3,
   difficulty: 'easy',
   tags: ['matemática', 'básico'],
   hints: ['É uma operação simples de adição'],
@@ -90,6 +107,13 @@ export const mockExercise3: MultipleChoiceExercise = {
   ],
   createdAt: new Date('2024-01-15'),
   updatedAt: new Date('2024-01-15'),
+  metadata: {
+    comment: {
+      title: 'Operações Básicas',
+      content: `A adição é uma das quatro operações fundamentais da aritmética. Neste caso, 2 + 2 = 4. Esta é uma operação simples de soma de dois números inteiros positivos. A adição é comutativa, ou seja, a ordem dos números não altera o resultado: 2 + 2 = 2 + 2.`,
+      imageUrl: 'https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=800&q=80',
+    },
+  },
 }
 
 /**
