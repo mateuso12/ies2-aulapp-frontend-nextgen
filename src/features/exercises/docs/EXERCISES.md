@@ -30,7 +30,11 @@ O sistema de exercícios do Aulapp foi projetado para ser **genérico**, **exten
 - ✅ **Extensível**: Adicione novos tipos de exercícios sem modificar código existente
 - ✅ **Type-Safe**: Tipagem forte em toda a cadeia (dados → resposta → validação)
 - ✅ **Correção Automática**: Suporte integrado para validação automática
-- ✅ **Persistência**: Firebase + auto-save de rascunhos
+- ✅ **Sistema de Tentativas**: Limite configurável de tentativas com botão "Tentar Novamente"
+- ✅ **Feedback Visual**: Indicação visual de respostas corretas (verde) e incorretas (vermelho)
+- ✅ **Comentários Dinâmicos**: Seção de comentário com imagem e explicação após acerto
+- ✅ **Progress Bar**: Barra de progresso visual indicando avanço nas questões
+- ✅ **Persistência**: Firebase para submissões/rascunhos + API REST para exercícios
 - ✅ **Modular**: Componentes reutilizáveis e separação de responsabilidades
 - ✅ **Testável**: Interfaces abstratas facilitam testes unitários
 
@@ -126,13 +130,14 @@ interface BaseExercise<TData = unknown, TAnswer = unknown> {
   
   // Configuração
   maxScore: number
+  maxAttempts?: number          // Número máximo de tentativas
   difficulty?: DifficultyLevel
   tags?: string[]
-  hints?: string[]
+  hints?: string[]              // DEPRECATED: Não usado na UI atual
   references?: ExerciseReference[]
   
   // Metadados
-  metadata?: Record<string, unknown>
+  metadata?: Record<string, unknown>  // Pode incluir comment: { title, content, imageUrl }
   createdAt: Date
   updatedAt: Date
 }
@@ -1542,6 +1547,195 @@ async findById(exerciseId: string): Promise<Exercise | null> {
 6. ✅ **Analytics e métricas** de desempenho dos alunos
 7. ✅ **Sistema de hints progressivos** (revelar dicas gradualmente)
 8. ✅ **Gamificação** (badges, pontos, rankings)
+
+---
+
+## 🎨 Features Implementadas (UI/UX)
+
+### Sistema de Tentativas e Feedback Visual
+
+**Implementado em**: `src/pages/VirtualClassroom.tsx`
+
+#### Configuração de Tentativas
+
+Cada exercício suporta `maxAttempts` (opcional):
+
+```typescript
+const exercise: MultipleChoiceExercise = {
+  id: 'ex-001',
+  maxAttempts: 3,  // Permite até 3 tentativas
+  // ...
+}
+```
+
+#### Comportamento
+
+| Situação | Comportamento |
+|----------|--------------|
+| **Resposta Correta** | ✅ Feedback verde + Badge "Correto" + Comentário (se disponível) |
+| **Resposta Incorreta (com tentativas)** | ❌ Feedback vermelho + Badge "Incorreto" + Botão "Tentar Novamente" |
+| **Resposta Incorreta (sem tentativas)** | ❌ Feedback vermelho + Badge "Incorreto" + Bloqueado |
+| **Sem maxAttempts** | Padrão = 1 tentativa |
+
+#### Cores e Estilos
+
+**Resposta Correta**:
+- Borda: `#4ADE80` (verde)
+- Fundo: `#DCFCE7` (verde claro)
+- Ícone: Check verde
+- Badge: "Correto" em preto
+
+**Resposta Incorreta**:
+- Borda: `#F87171` (vermelho)
+- Fundo: `#FEE2E2` (vermelho claro)
+- Ícone: X vermelho
+- Badge: "Incorreto" em preto
+
+**Selecionada (antes de verificar)**:
+- Borda: `#4B80F9` (azul)
+- Fundo: `#4B80F9` com 10% opacidade
+- Radio button: Ponto azul interno
+
+### Sistema de Comentários
+
+**Visualização**: Apenas após resposta correta
+
+**Estrutura**:
+```typescript
+metadata: {
+  comment: {
+    title: string          // Título do comentário
+    content: string        // Explicação em texto
+    imageUrl?: string      // Imagem ilustrativa (opcional)
+  }
+}
+```
+
+**Layout**:
+- Seção abaixo do exercício (min-height: 100vh)
+- Título "Comentário Questão X"
+- Imagem em largura total (se fornecida)
+- Texto explicativo
+- Botão "Voltar para questão" (scroll ao topo)
+
+**Navegação**:
+- Botão "Ir para o comentário" → Scroll suave até a seção
+- Botão "Voltar para questão" → Scroll ao topo do container
+
+### Progress Bar
+
+**Localização**: Topo de cada exercício
+
+**Cálculo**: `(páginaAtual / totalPáginas) * 100%`
+
+**Cores**:
+- Fundo: Cinza claro
+- Preenchimento: `#E91E63` (rosa)
+
+**Exemplo**: Na página 2 de 3 exercícios → 66% preenchido
+
+### Layout do Exercício
+
+```
+┌────────────────────────────┐
+│ [=======>     ] 66%        │  ← Progress bar
+│ Questão 2                  │  ← Título pequeno
+│                            │
+│ Questão 2 Enunciado        │  ← Título grande
+│ Lorem ipsum dolor sit...   │  ← Descrição
+│                            │
+│ ┌─────────────────────┐   │
+│ │ A) Opção 1      ◯   │   │  ← Não selecionada
+│ └─────────────────────┘   │
+│ ┌─────────────────────┐   │
+│ │ B) Opção 2      ◉   │   │  ← Selecionada (azul)
+│ └─────────────────────┘   │
+│ ┌─────────────────────┐   │
+│ │ C) Opção 3    ✓ Cor │   │  ← Correta (verde)
+│ └─────────────────────┘   │
+│                            │
+│     [Verificar]            │  ← Ou [Tentar Novamente]
+│                            │
+│  [Ir para o comentário ↓]  │  ← Aparece após acerto
+└────────────────────────────┘
+          ↓ Scroll
+┌────────────────────────────┐
+│ Comentário Questão 2       │
+│ Por que esta é a resposta? │
+│ ┌────────────────────────┐ │
+│ │   [Imagem]             │ │
+│ └────────────────────────┘ │
+│ Explicação detalhada...    │
+│                            │
+│  [Voltar para questão ↑]   │
+└────────────────────────────┘
+```
+
+### Integração com API (Futura)
+
+**Endpoint de Correção**:
+```
+POST /api/exercises/{exerciseId}/check
+```
+
+**Request**:
+```json
+{
+  "userId": "user-123",
+  "answer": "option-b",
+  "attemptNumber": 1
+}
+```
+
+**Response**:
+```json
+{
+  "isCorrect": true,
+  "score": 10,
+  "feedback": "Correto!",
+  "comment": {
+    "title": "Explicação",
+    "content": "...",
+    "imageUrl": "https://..."
+  },
+  "remainingAttempts": 2
+}
+```
+
+**Nota**: Atualmente a validação é feita no cliente. Na integração final, o backend fará a validação e retornará o comentário.
+
+---
+
+## 📝 Notas de Implementação
+
+### ✅ Implementado
+
+- Sistema de tipos completo (10 tipos de exercícios)
+- Validadores automáticos (6 tipos)
+- Sistema de tentativas (`maxAttempts`)
+- Feedback visual (verde/vermelho/azul)
+- Sistema de comentários dinâmicos
+- Progress bar visual
+- Botão "Tentar Novamente"
+- Scroll suave entre seções
+- Repositório API (stub)
+- Repositórios Firebase (submissões/rascunhos)
+- Hook `useExerciseSubmission`
+- Mocks completos para desenvolvimento
+- Renderização de múltipla escolha inline no VirtualClassroom
+
+### ⚠️ Pendentes
+
+- Componentes UI específicos por tipo (arquivos separados)
+- Integração real com API REST
+- Testes unitários e de integração
+- Suporte offline/sincronização
+- Analytics de desempenho
+
+### ❌ Deprecated/Removido
+
+- **hints**: Campo ainda existe nos tipos mas não é renderizado na UI
+- Renderização das dicas foi removida do VirtualClassroom.tsx
 
 ---
 

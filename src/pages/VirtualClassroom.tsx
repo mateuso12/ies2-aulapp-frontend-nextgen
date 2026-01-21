@@ -202,7 +202,7 @@ export const VirtualClassroom: React.FC = () => {
               />
             ) : (
               /* Página de exercício */
-              <div className="max-w-4xl mx-auto py-8">
+              <div className="w-full md:w-[896px] mx-auto py-8">
                 {(() => {
                   const exercise = currentPage.exercise
                   if (!exercise) return null
