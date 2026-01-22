@@ -1,9 +1,9 @@
 /**
  * Feature: Sistema de Exercícios
- * 
+ *
  * Sistema completo para criação, renderização e avaliação de exercícios
  * educacionais de diferentes tipos (múltipla escolha, texto, numérico, etc.)
- * 
+ *
  * @module features/exercises
  */
 
@@ -19,5 +19,5 @@ export * from './repositories'
 // Hooks
 export * from './hooks'
 
-// Componentes (quando implementados)
-// export * from './components'
+// Componentes
+export * from './components/exercise-types'

@@ -1,6 +1,6 @@
 /**
  * Sistema de tipos para exercícios da plataforma.
- * 
+ *
  * Arquitetura baseada em tipos genéricos que suportam extensão
  * para diferentes tipos de exercícios (múltipla escolha, texto,
  * numérico, ordenação, etc.).
@@ -15,25 +15,26 @@
  * Adicione novos tipos aqui conforme necessário.
  */
 export type ExerciseType =
-  | 'multiple-choice'      // Múltipla escolha (uma resposta)
-  | 'multiple-select'      // Múltipla escolha (várias respostas)
-  | 'open-text'            // Resposta aberta (texto livre)
-  | 'numeric'              // Resposta numérica
-  | 'ordering'             // Ordenação de itens
-  | 'matching'             // Associação (ligar itens)
-  | 'true-false'           // Verdadeiro ou Falso
-  | 'fill-blanks'          // Preencher lacunas
-  | 'drag-drop'            // Arrastar e soltar
-  | 'code'                 // Código de programação
+  | 'multiple-choice' // Múltipla escolha (uma resposta)
+  | 'multiple-select' // Múltipla escolha (várias respostas)
+  | 'open-text' // Resposta aberta (texto livre)
+  | 'numeric' // Resposta numérica
+  | 'ordering' // Ordenação de itens
+  | 'matching' // Associação (ligar itens)
+  | 'true-false' // Verdadeiro ou Falso
+  | 'fill-blanks' // Preencher lacunas
+  | 'drag-drop' // Arrastar e soltar
+  | 'code' // Código de programação
+  | 'writing' // Atividade de escrita (resposta curta)
 
 /**
  * Estado de submissão de um exercício
  */
 export type SubmissionStatus =
-  | 'not-started'          // Não iniciado
-  | 'in-progress'          // Em progresso
-  | 'submitted'            // Submetido (aguardando correção)
-  | 'graded'               // Corrigido/avaliado
+  | 'not-started' // Não iniciado
+  | 'in-progress' // Em progresso
+  | 'submitted' // Submetido (aguardando correção)
+  | 'graded' // Corrigido/avaliado
 
 /**
  * Nível de dificuldade
@@ -47,7 +48,7 @@ export type DifficultyLevel = 'easy' | 'medium' | 'hard'
 /**
  * Interface base para qualquer exercício.
  * Use generics para definir tipos específicos de dados e respostas.
- * 
+ *
  * @template TData - Tipo dos dados específicos do exercício
  * @template TAnswer - Tipo da resposta do usuário (usado para inferência de tipos)
  */
@@ -55,46 +56,43 @@ export type DifficultyLevel = 'easy' | 'medium' | 'hard'
 export interface BaseExercise<TData = unknown, TAnswer = unknown> {
   /** ID único do exercício */
   id: string
-  
+
   /** Tipo do exercício */
   type: ExerciseType
-  
+
   /** Título/enunciado do exercício */
   title: string
-  
+
   /** Descrição/instruções adicionais (opcional) */
   description?: string
-  
+
   /** Conteúdo HTML do enunciado (para rich text) */
   contentHtml?: string
-  
+
   /** Dados específicos do tipo de exercício */
   data: TData
-  
+
   /** Pontuação máxima do exercício */
   maxScore: number
-  
-  /** Número máximo de tentativas permitidas */
-  maxAttempts?: number
-  
+
   /** Nível de dificuldade */
   difficulty?: DifficultyLevel
-  
+
   /** Tags/categorias para organização */
   tags?: string[]
-  
+
   /** Dicas opcionais para o aluno */
   hints?: string[]
-  
+
   /** Referências/material de apoio */
   references?: ExerciseReference[]
-  
+
   /** Metadados adicionais */
   metadata?: Record<string, unknown>
-  
+
   /** Data de criação */
   createdAt: Date
-  
+
   /** Data da última atualização */
   updatedAt: Date
 }
@@ -110,40 +108,40 @@ export interface ExerciseReference {
 
 /**
  * Interface para resposta de um exercício.
- * 
+ *
  * @template TAnswer - Tipo da resposta específica do exercício
  */
 export interface ExerciseSubmission<TAnswer = unknown> {
   /** ID único da submissão */
   id: string
-  
+
   /** ID do exercício respondido */
   exerciseId: string
-  
+
   /** ID do usuário que respondeu */
   userId: string
-  
+
   /** Resposta do usuário */
   answer: TAnswer
-  
+
   /** Status da submissão */
   status: SubmissionStatus
-  
+
   /** Nota obtida (após correção) */
   score?: number
-  
+
   /** Feedback do professor/sistema */
   feedback?: string
-  
+
   /** Tempo gasto em segundos */
   timeSpentSeconds?: number
-  
+
   /** Número de tentativas */
   attemptNumber: number
-  
+
   /** Data de submissão */
   submittedAt: Date
-  
+
   /** Data de avaliação (quando aplicável) */
   gradedAt?: Date
 }
@@ -151,7 +149,7 @@ export interface ExerciseSubmission<TAnswer = unknown> {
 /**
  * Interface para correção automática de exercícios.
  * Implementada por cada tipo de exercício que suporta correção automática.
- * 
+ *
  * @template TData - Tipo dos dados do exercício
  * @template TAnswer - Tipo da resposta
  */
@@ -160,10 +158,7 @@ export interface ExerciseValidator<TData = unknown, TAnswer = unknown> {
    * Valida se uma resposta está correta
    * @returns { isCorrect, score, feedback }
    */
-  validate(
-    exerciseData: TData,
-    userAnswer: TAnswer
-  ): ExerciseValidationResult
+  validate(exerciseData: TData, userAnswer: TAnswer): ExerciseValidationResult
 }
 
 /**
@@ -172,48 +167,48 @@ export interface ExerciseValidator<TData = unknown, TAnswer = unknown> {
 export interface ExerciseValidationResult {
   /** Se a resposta está correta */
   isCorrect: boolean
-  
+
   /** Pontuação obtida (0 a maxScore) */
   score: number
-  
+
   /** Feedback automático */
   feedback?: string
-  
+
   /** Detalhes adicionais da correção */
   details?: Record<string, unknown>
 }
 
 /**
  * Props comuns para componentes de renderização de exercícios
- * 
+ *
  * @template TData - Tipo dos dados do exercício
  * @template TAnswer - Tipo da resposta
  */
 export interface ExerciseComponentProps<TData = unknown, TAnswer = unknown> {
   /** Dados do exercício */
   exercise: BaseExercise<TData, TAnswer>
-  
+
   /** Resposta atual do usuário (controlled) */
   value?: TAnswer
-  
+
   /** Callback quando a resposta muda */
   onChange?: (answer: TAnswer) => void
-  
+
   /** Se o exercício está em modo de apenas visualização */
   readonly?: boolean
-  
+
   /** Se deve mostrar a resposta correta (após submissão) */
   showCorrectAnswer?: boolean
-  
+
   /** Feedback/resultado da correção */
   validationResult?: ExerciseValidationResult
-  
+
   /** Classes CSS adicionais */
   className?: string
-  
+
   /** Se está carregando */
   isLoading?: boolean
-  
+
   /** Se está desabilitado */
   disabled?: boolean
 }
@@ -346,7 +341,7 @@ export type TrueFalseExercise = BaseExercise<TrueFalseData, TrueFalseAnswer>
 export interface FillBlanksData {
   /** Texto com marcadores {0}, {1}, etc. para as lacunas */
   textWithBlanks: string
-  
+
   /** Respostas corretas para cada lacuna */
   blanks: Array<{
     id: string
@@ -369,7 +364,7 @@ export interface DragDropData {
     text: string
     type?: string // Tipo do item (opcional, para categorização)
   }>
-  
+
   /** Zonas de drop e seus conteúdos esperados */
   dropZones: Array<{
     id: string
@@ -399,6 +394,33 @@ export type CodeAnswer = string // Código escrito pelo usuário
 
 export type CodeExercise = BaseExercise<CodeData, CodeAnswer>
 
+/**
+ * ATIVIDADE DE ESCRITA (resposta curta com validação)
+ */
+export interface WritingData {
+  /** Variações de respostas corretas aceitas */
+  correctAnswers: string[]
+
+  /** Limite máximo de caracteres */
+  maxCharacters?: number
+
+  /** Placeholder para o campo de entrada */
+  placeholder?: string
+
+  /** Feedback a ser exibido quando a resposta estiver incorreta */
+  incorrectFeedback?: string
+
+  /** Se a validação é case-sensitive */
+  caseSensitive?: boolean
+
+  /** Se deve ignorar espaços em branco extras */
+  trimSpaces?: boolean
+}
+
+export type WritingAnswer = string
+
+export type WritingExercise = BaseExercise<WritingData, WritingAnswer>
+
 // ─────────────────────────────────────────────────────────────────────────────
 // Union Types
 // ─────────────────────────────────────────────────────────────────────────────
@@ -418,6 +440,7 @@ export type Exercise =
   | FillBlanksExercise
   | DragDropExercise
   | CodeExercise
+  | WritingExercise
 
 /**
  * Union type de todas as respostas possíveis
@@ -433,6 +456,7 @@ export type ExerciseAnswer =
   | FillBlanksAnswer
   | DragDropAnswer
   | CodeAnswer
+  | WritingAnswer
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Type Guards
@@ -495,6 +519,14 @@ export const isDragDropExercise = (
   return exercise.type === 'drag-drop'
 }
 
-export const isCodeExercise = (exercise: Exercise): exercise is CodeExercise => {
+export const isCodeExercise = (
+  exercise: Exercise
+): exercise is CodeExercise => {
   return exercise.type === 'code'
+}
+
+export const isWritingExercise = (
+  exercise: Exercise
+): exercise is WritingExercise => {
+  return exercise.type === 'writing'
 }

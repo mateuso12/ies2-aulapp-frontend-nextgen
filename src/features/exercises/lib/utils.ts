@@ -12,6 +12,7 @@ import type {
   OrderingExercise,
   TrueFalseExercise,
   MatchingExercise,
+  WritingExercise,
 } from '../types'
 
 /**
@@ -152,8 +153,12 @@ export const validateMultipleSelect = (
     correctIds.every((id, index) => id === userIds[index])
 
   // Calcula pontuação parcial
-  const correctSelections = userIds.filter((id) => correctIds.includes(id)).length
-  const incorrectSelections = userIds.filter((id) => !correctIds.includes(id)).length
+  const correctSelections = userIds.filter((id) =>
+    correctIds.includes(id)
+  ).length
+  const incorrectSelections = userIds.filter(
+    (id) => !correctIds.includes(id)
+  ).length
   const missedSelections = correctIds.length - correctSelections
 
   let score = 0
@@ -301,6 +306,49 @@ export const validateMatching = (
 }
 
 /**
+ * Valida resposta de atividade de escrita
+ */
+export const validateWriting = (
+  exercise: WritingExercise,
+  answer: string
+): ExerciseValidationResult => {
+  const {
+    correctAnswers,
+    caseSensitive = false,
+    trimSpaces = true,
+    incorrectFeedback,
+  } = exercise.data
+
+  // Processa a resposta do usuário
+  let processedAnswer = answer
+  if (trimSpaces) {
+    processedAnswer = processedAnswer.trim().replace(/\s+/g, ' ')
+  }
+
+  // Verifica se a resposta corresponde a alguma das variações corretas
+  const isCorrect = correctAnswers.some((correctAnswer) => {
+    let processedCorrect = correctAnswer
+    if (trimSpaces) {
+      processedCorrect = processedCorrect.trim().replace(/\s+/g, ' ')
+    }
+
+    if (caseSensitive) {
+      return processedAnswer === processedCorrect
+    } else {
+      return processedAnswer.toLowerCase() === processedCorrect.toLowerCase()
+    }
+  })
+
+  return {
+    isCorrect,
+    score: isCorrect ? exercise.maxScore : 0,
+    feedback: isCorrect
+      ? 'Resposta correta! 🎉'
+      : incorrectFeedback || 'Resposta incorreta. Tente novamente!',
+  }
+}
+
+/**
  * Função genérica de validação que roteia para o validador específico
  */
 export const validateExercise = (
@@ -329,6 +377,8 @@ export const validateExercise = (
         exercise as MatchingExercise,
         answer as Record<string, string>
       )
+    case 'writing':
+      return validateWriting(exercise as WritingExercise, answer as string)
     default:
       return {
         isCorrect: false,

@@ -1,6 +1,6 @@
 /**
  * Barrel exports para componentes de tipos específicos de exercícios.
- * 
+ *
  * Cada componente será implementado em seu próprio arquivo:
  * - MultipleChoiceExercise.tsx
  * - MultipleSelectExercise.tsx
@@ -12,7 +12,8 @@
  * - FillBlanksExercise.tsx
  * - DragDropExercise.tsx
  * - CodeExercise.tsx
- * 
+ * - WritingExercise.tsx
+ *
  * Cada componente deve:
  * 1. Receber props do tipo ExerciseComponentProps<TData, TAnswer>
  * 2. Implementar UI específica do tipo de exercício
@@ -32,3 +33,5 @@
 // export { FillBlanksExercise } from './FillBlanksExercise'
 // export { DragDropExercise } from './DragDropExercise'
 // export { CodeExercise } from './CodeExercise'
+
+export { WritingExercise as WritingExerciseComponent } from './WritingExercise'

@@ -87,6 +87,13 @@ export const EXERCISE_TYPE_CONFIG: Record<
     supportAutoGrade: false, // Pode ser true se integrar com judge online
     defaultMaxScore: 10,
   },
+  writing: {
+    label: 'Atividade de Escrita',
+    icon: 'PenTool',
+    description: 'Digite uma resposta curta com validação automática',
+    supportAutoGrade: true,
+    defaultMaxScore: 1,
+  },
 }
 
 /**
