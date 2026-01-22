@@ -70,7 +70,11 @@ export const ActivityView: React.FC<ActivityViewProps> = ({
     const isSubmitted = !!submittedAnswer && submittedAnswer.isCorrect
 
     return (
-      <div className="w-full md:w-[896px] mx-auto py-8">
+      <div
+        className={`w-full md:w-4xl mx-auto pb-8 ${
+          resourceType === 'gamified' ? 'mt-8' : 'py-8'
+        }`}
+      >
         <div id={`exercise-${exercise.id}`} className="min-h-screen space-y-6">
           {/* Progress bar */}
           <div>
@@ -181,7 +185,11 @@ export const ActivityView: React.FC<ActivityViewProps> = ({
     const currentAnswer = selectedAnswer
 
     return (
-      <div className="w-full md:w-[896px] mx-auto py-8">
+      <div
+        className={`w-full md:w-[896px] mx-auto pb-8 ${
+          resourceType === 'gamified' ? 'mt-8' : 'py-8'
+        }`}
+      >
         <div className="min-h-screen space-y-6">
           {/* Progress bar */}
           <div>
