@@ -36,7 +36,7 @@ export const HeaderActions: React.FC<HeaderActionsProps> = ({
   resourceType = 'content',
 }) => {
   const badgeVariant = getBadgeVariant(resourceType)
-  const showSearch = resourceType === 'content' || resourceType === 'material'
+  const showSearch = resourceType === 'content'
 
   if (variant === 'gamified') {
     return (

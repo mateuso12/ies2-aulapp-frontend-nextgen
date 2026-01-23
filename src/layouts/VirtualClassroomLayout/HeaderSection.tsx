@@ -38,6 +38,10 @@ export function HeaderSection({
   onToggleStickyNotes,
   onToggleAnnotations,
 }: HeaderSectionProps) {
+  // Modo minimal ativado para Material de Apoio
+  const isMinimal = resourceType === 'material'
+  const title = resourceType === 'material' ? 'Material de Apoio' : 'Nome do conteúdo'
+
   return (
     <div
       className={`fixed left-0 top-0 z-50 w-full transform-gpu transition-transform duration-300 ease-out ${
@@ -48,7 +52,7 @@ export function HeaderSection({
     >
       <Header
         variant={variant}
-        title="Nome do conteúdo"
+        title={title}
         currentPage={currentPage}
         totalPages={totalPages}
         resourceType={resourceType}
@@ -60,6 +64,7 @@ export function HeaderSection({
         onToggleStickyNotes={onToggleStickyNotes}
         onToggleAnnotations={onToggleAnnotations}
         isHeaderCollapsed={isHeaderCollapsed}
+        minimal={isMinimal}
       />
     </div>
   )

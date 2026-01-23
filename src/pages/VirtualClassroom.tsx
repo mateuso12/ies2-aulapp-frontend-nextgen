@@ -3,8 +3,10 @@ import parse from 'html-react-parser'
 import { VirtualClassroomLayout } from '../layouts/VirtualClassroomLayout/index'
 import { ContentView } from './ContentView'
 import { ActivityView } from './ActivityView'
+import { MaterialView } from './MaterialView'
 import { mockActivities } from '../mocks/activities'
 import { mockContentPages } from '../mocks/content'
+import { mockSupportMaterials, mockSupportMaterialsApi } from '../mocks/supportMaterials'
 import { createFirebaseHighlightRepository } from '@/features/annotations/highlighting/repositories'
 import { useUser } from '@/hooks/useUser'
 import { usePageProgress } from '@/hooks/usePageProgress'
@@ -58,6 +60,19 @@ export const VirtualClassroom: React.FC = () => {
       }))
     }
 
+    // Se resourceType for 'material', retorna uma única "página" de materiais
+    if (resourceType === 'material') {
+      return [
+        {
+          id: 'support-materials',
+          title: 'Material de Apoio',
+          contentHtml: '',
+          isExercise: false as const,
+          isMaterialView: true as const,
+        },
+      ]
+    }
+
     // Para outros resourceTypes, retorna atividades
     return mockActivities.map((exercise) => ({
       id: exercise.id,
@@ -71,6 +86,7 @@ export const VirtualClassroom: React.FC = () => {
   const totalPages = allPages.length
   const currentPage = allPages[currentPageIndex]
   const isExercisePage = 'isExercise' in currentPage && currentPage.isExercise
+  const isMaterialView = 'isMaterialView' in currentPage && currentPage.isMaterialView
 
   const { visitedPages, bookmarks, toggleBookmark, removeBookmark } =
     usePageProgress({
@@ -254,6 +270,17 @@ export const VirtualClassroom: React.FC = () => {
     return createFirebaseHighlightRepository(userId)
   }, [userId])
 
+  // Handler para download de material
+  const handleDownloadMaterial = async (materialId: string) => {
+    try {
+      const { url } = await mockSupportMaterialsApi.downloadMaterial(materialId)
+      // Simula download abrindo em nova aba
+      window.open(url, '_blank')
+    } catch (error) {
+      console.error('Erro ao baixar material:', error)
+    }
+  }
+
   return (
     <>
       <DevTools
@@ -286,8 +313,17 @@ export const VirtualClassroom: React.FC = () => {
               />
             )}
 
+            {/* Renderiza MaterialView para resourceType 'material' */}
+            {resourceType === 'material' && isMaterialView && (
+              <MaterialView
+                materials={mockSupportMaterials}
+                onDownload={handleDownloadMaterial}
+              />
+            )}
+
             {/* Renderiza ActivityView para outros resourceTypes */}
             {resourceType !== 'content' &&
+              resourceType !== 'material' &&
               isExercisePage &&
               currentPage.exercise && (
                 <ActivityView
