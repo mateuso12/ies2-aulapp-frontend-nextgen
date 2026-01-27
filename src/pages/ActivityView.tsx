@@ -38,8 +38,6 @@ interface ActivityViewProps {
   onSelectOption: (optionId: string) => void
   /** Callback quando o usuário confirma a resposta */
   onConfirmAnswer: () => void
-  /** Callback quando o usuário tenta novamente */
-  onTryAgain: () => void
   /** Callback quando o usuário verifica resposta de escrita */
   onVerifyWriting: () => void
   /** Callback quando o usuário muda a resposta de escrita */
@@ -56,7 +54,6 @@ export const ActivityView: React.FC<ActivityViewProps> = ({
   validationResult,
   onSelectOption,
   onConfirmAnswer,
-  onTryAgain,
   onVerifyWriting,
   onWritingChange,
 }) => {
@@ -341,18 +338,6 @@ export const ActivityView: React.FC<ActivityViewProps> = ({
                   ? '✓ Resposta correta!'
                   : '✗ Resposta incorreta'}
               </p>
-            </div>
-          )}
-
-          {/* Botão Tentar Novamente (quando incorreto) */}
-          {submittedAnswer && !submittedAnswer.isCorrect && (
-            <div className="flex flex-col items-center gap-4 pt-8">
-              <button
-                onClick={onTryAgain}
-                className="px-12 py-3 bg-orange-500 hover:bg-orange-600 text-white font-semibold rounded-lg shadow-md transition-colors"
-              >
-                Tentar Novamente
-              </button>
             </div>
           )}
 

@@ -178,6 +178,13 @@ export const VirtualClassroom: React.FC = () => {
       isCorrect = correctOptions.includes(userAnswer)
     }
 
+    // Toca o áudio de feedback
+    if (isCorrect) {
+      playSuccess()
+    } else {
+      playError()
+    }
+
     const comment = exercise.metadata?.comment as
       | { title: string; content: string; imageUrl?: string }
       | undefined
@@ -186,24 +193,6 @@ export const VirtualClassroom: React.FC = () => {
       ...submittedAnswers,
       [exerciseId]: { isCorrect, userAnswer, comment },
     })
-  }
-
-  // Handler para tentar novamente
-  const handleTryAgain = (exerciseId: string) => {
-    const newSubmitted = { ...submittedAnswers }
-    delete newSubmitted[exerciseId]
-    setSubmittedAnswers(newSubmitted)
-
-    const newValidations = { ...validationResults }
-    delete newValidations[exerciseId]
-    setValidationResults(newValidations)
-
-    const exercise = mockActivities.find((ex) => ex.id === exerciseId)
-    if (exercise && !isWritingExercise(exercise)) {
-      const newAnswers = { ...selectedAnswers }
-      delete newAnswers[exerciseId]
-      setSelectedAnswers(newAnswers)
-    }
   }
 
   // Handler para verificar resposta de atividade de escrita
@@ -340,7 +329,6 @@ export const VirtualClassroom: React.FC = () => {
                   onConfirmAnswer={() =>
                     handleConfirmAnswer(currentPage.exercise!.id)
                   }
-                  onTryAgain={() => handleTryAgain(currentPage.exercise!.id)}
                   onVerifyWriting={() =>
                     handleVerifyWriting(currentPage.exercise!.id)
                   }
