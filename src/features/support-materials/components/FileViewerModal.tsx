@@ -1,13 +1,13 @@
 /**
  * FileViewerModal - Modal principal para visualização de arquivos
- * Carrega o visualizador apropriado baseado no tipo de arquivo
+ * Usa o UniversalFileViewer para suportar múltiplos tipos
  */
 
 import React from 'react'
 import { CloseCircle } from 'iconsax-react'
-import { Sheet, SheetContent } from '@/components/ui/sheet'
-import { PDFViewer, AudioViewer, ImageViewer, DocxViewer, SpreadsheetViewer } from './viewers'
+import { UniversalFileViewer } from './viewers'
 import type { SupportMaterial } from '@/mocks/supportMaterials'
+import { X } from 'lucide-react'
 
 interface FileViewerModalProps {
   /** Material sendo visualizado */
@@ -23,112 +23,82 @@ export const FileViewerModal: React.FC<FileViewerModalProps> = ({
   isOpen,
   onClose,
 }) => {
-  if (!material) return null
-
-  // Determina qual visualizador usar baseado no tipo de arquivo
-  const renderViewer = () => {
-    const type = material.type.toLowerCase()
-    
-    // PDF
-    if (type === 'pdf') {
-      return <PDFViewer url={material.downloadUrl} title={material.title} />
-    }
-    
-    // Áudio
-    if (type === 'mp3' || type === 'audio' || type === 'wav' || type === 'ogg') {
-      return <AudioViewer url={material.downloadUrl} title={material.title} />
-    }
-    
-    // Imagem
-    if (['image', 'png', 'jpg', 'jpeg', 'svg', 'gif', 'webp'].includes(type)) {
-      return <ImageViewer url={material.downloadUrl} title={material.title} />
-    }
-    
-    // Word
-    if (type === 'docx' || type === 'doc') {
-      return <DocxViewer url={material.downloadUrl} title={material.title} size={material.size} />
-    }
-    
-    // Excel
-    if (['xlsx', 'xls', 'csv'].includes(type)) {
-      return <SpreadsheetViewer url={material.downloadUrl} title={material.title} size={material.size} />
-    }
-    
-    // Tipo não suportado
-    return (
-      <div className="w-full h-full flex items-center justify-center p-12">
-        <div className="text-center">
-          <p className="text-gray-500 dark:text-gray-400 mb-4">
-            Tipo de arquivo não suportado para visualização
-          </p>
-          <button
-            onClick={() => window.open(material.downloadUrl, '_blank')}
-            className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors"
-          >
-            Fazer Download
-          </button>
-        </div>
-      </div>
-    )
-  }
+  if (!material || !isOpen) return null
 
   return (
-    <Sheet open={isOpen} onOpenChange={onClose}>
-      <SheetContent 
-        side="right" 
-        className="w-full sm:max-w-4xl lg:max-w-6xl p-0 flex flex-col"
+    <>
+      {/* Backdrop - Começa abaixo do header */}
+      <div className="fixed top-[60px] md:top-[88px] left-0 right-0 bottom-0 z-30 bg-black/50 backdrop-blur-sm animate-in fade-in" />
+
+      {/* Modal Container - Centralizado e Responsivo, começa abaixo do header */}
+      <div
+        className="fixed top-[60px] md:top-[88px] left-0 right-0 bottom-0 z-30 flex items-center justify-center p-4 md:p-8"
+        onClick={onClose}
       >
-        {/* Header do Modal */}
-        <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800">
-          <div className="flex-1 min-w-0">
-            <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100 truncate">
-              {material.title}
-            </h2>
-            {material.description && (
-              <p className="text-sm text-gray-500 dark:text-gray-400 mt-1 truncate">
-                {material.description}
-              </p>
-            )}
-          </div>
-          
-          <button
-            onClick={onClose}
-            className="ml-4 flex items-center justify-center w-10 h-10 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors flex-shrink-0"
-            aria-label="Fechar"
-          >
-            <CloseCircle size={24} />
-          </button>
-        </div>
+        <div
+          className="relative w-full h-full max-h-[calc(100vh-60px-2rem)] md:max-h-[calc(100vh-88px-4rem)] md:max-w-6xl md:rounded-2xl bg-white dark:bg-gray-900 shadow-2xl flex flex-col overflow-hidden animate-in zoom-in-95 duration-300"
+          onClick={(e) => e.stopPropagation()}
+        >
+          {/* Header do Modal */}
+          <div className="flex items-center justify-between px-4 py-3 md:px-6 md:py-4 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 flex-shrink-0">
+            <div className="flex-1 min-w-0 mr-4">
+              <h2 className="text-base md:text-xl font-semibold text-gray-900 dark:text-gray-100 truncate">
+                {material.title}
+              </h2>
+              {material.source && (
+                <p className="text-xs md:text-sm text-gray-500 dark:text-gray-400 mt-0.5 md:mt-1 truncate">
+                  {material.source}
+                </p>
+              )}
+            </div>
 
-        {/* Conteúdo do Visualizador */}
-        <div className="flex-1 overflow-hidden">
-          {renderViewer()}
-        </div>
-
-        {/* Footer (opcional) */}
-        <div className="flex items-center justify-between p-4 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800">
-          <div className="flex items-center gap-4 text-sm text-gray-600 dark:text-gray-400">
-            <span className="capitalize">{material.type.toUpperCase()}</span>
-            <span>•</span>
-            <span>{material.size}</span>
-            {material.uploadDate && (
-              <>
-                <span>•</span>
-                <span>
-                  Enviado em {new Date(material.uploadDate).toLocaleDateString('pt-BR')}
-                </span>
-              </>
-            )}
+            <button
+              onClick={onClose}
+              className="flex items-center justify-center w-10 h-10 md:w-11 md:h-11 rounded-full bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 transition-colors flex-shrink-0"
+              aria-label="Fechar"
+              title="Fechar (Esc)"
+            >
+              <X
+                size={24}
+                className="md:w-7 md:h-7 text-gray-700 dark:text-gray-200"
+                color="currentColor"
+              />
+            </button>
           </div>
-          
-          <button
-            onClick={() => window.open(material.downloadUrl, '_blank')}
-            className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-medium transition-colors"
-          >
-            Download
-          </button>
+
+          {/* Conteúdo do Visualizador */}
+          <div className="flex-1 overflow-hidden">
+            <UniversalFileViewer material={material} />
+          </div>
+
+          {/* Footer - Responsivo */}
+          <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-2 md:gap-4 px-4 py-3 md:px-6 md:py-4 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 flex-shrink-0">
+            <div className="flex flex-wrap items-center gap-2 md:gap-4 text-xs md:text-sm text-gray-600 dark:text-gray-400">
+              <span className="capitalize font-medium">
+                {material.type.toUpperCase()}
+              </span>
+              <span className="hidden md:inline">•</span>
+              <span>{material.size}</span>
+              {material.uploadDate && (
+                <>
+                  <span className="hidden md:inline">•</span>
+                  <span className="hidden sm:inline">
+                    Enviado em{' '}
+                    {new Date(material.uploadDate).toLocaleDateString('pt-BR')}
+                  </span>
+                </>
+              )}
+            </div>
+
+            <button
+              onClick={() => window.open(material.downloadUrl, '_blank')}
+              className="w-full md:w-auto px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-medium transition-colors whitespace-nowrap"
+            >
+              Download
+            </button>
+          </div>
         </div>
-      </SheetContent>
-    </Sheet>
+      </div>
+    </>
   )
 }

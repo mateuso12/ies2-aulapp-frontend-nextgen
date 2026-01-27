@@ -6,11 +6,42 @@
 export interface SupportMaterial {
   id: string
   title: string
-  type: 'pdf' | 'docx' | 'xlsx' | 'pptx' | 'zip' | 'video' | 'image' | 'png' | 'jpg' | 'jpeg' | 'svg' | 'gif' | 'webp' | 'mp3' | 'audio' | 'wav' | 'ogg' | 'other'
+  type:
+    | 'pdf'
+    | 'doc'
+    | 'docx'
+    | 'xls'
+    | 'xlsx'
+    | 'ppt'
+    | 'pptx'
+    | 'zip'
+    | 'rar'
+    | '7z'
+    | 'epub'
+    | 'mobi'
+    | 'video'
+    | 'mp4'
+    | 'webm'
+    | 'avi'
+    | 'mov'
+    | 'image'
+    | 'png'
+    | 'jpg'
+    | 'jpeg'
+    | 'svg'
+    | 'gif'
+    | 'webp'
+    | 'bmp'
+    | 'mp3'
+    | 'audio'
+    | 'wav'
+    | 'ogg'
+    | 'm4a'
+    | 'other'
   size: string
   sizeInBytes: number
   duration?: string // Para vídeos e áudios
-  description?: string
+  source?: string // Fonte/origem do material
   downloadUrl: string
   uploadDate?: Date
 }
@@ -21,84 +52,84 @@ export interface SupportMaterial {
 export const mockSupportMaterials: SupportMaterial[] = [
   {
     id: 'mat-001',
-    title: 'Apostila de Matemática Básica',
+    title: 'Checklist Fundos Imobiliários',
     type: 'pdf',
-    size: '1.2MB',
-    sizeInBytes: 1258291,
-    description: 'Conteúdo completo sobre operações matemáticas fundamentais',
-    downloadUrl: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf',
+    size: '1.8MB',
+    sizeInBytes: 1887436,
+    source: 'Portal de Investimentos FII',
+    downloadUrl: '/docs-test/CHECKLIST+FUNDOS+IMOBILIA_RIOS.pdf',
     uploadDate: new Date('2026-01-15'),
   },
   {
     id: 'mat-002',
-    title: 'Exemplo de Documento PDF',
-    type: 'pdf',
-    size: '53KB',
-    sizeInBytes: 54272,
-    description: 'Documento de teste para visualização',
-    downloadUrl: 'https://pdfobject.com/pdf/sample.pdf',
+    title: 'Relatório 10000 Clientes',
+    type: 'xlsx',
+    size: '856KB',
+    sizeInBytes: 876544,
+    source: 'Sistema CRM Interno',
+    downloadUrl: '/docs-test/10000-customers.xlsx',
     uploadDate: new Date('2026-01-10'),
   },
   {
     id: 'mat-003',
-    title: 'Foto de Exemplo - Natureza',
-    type: 'image',
-    size: '1.8MB',
-    sizeInBytes: 1887436,
-    description: 'Imagem em alta resolução para testes',
-    downloadUrl: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&q=80',
+    title: 'Documento Exemplo Word',
+    type: 'docx',
+    size: '45KB',
+    sizeInBytes: 46080,
+    source: 'Biblioteca de Templates',
+    downloadUrl: '/docs-test/sample3.docx',
     uploadDate: new Date('2026-01-12'),
   },
   {
     id: 'mat-004',
-    title: 'Áudio Exemplo - Som Ambiente',
-    type: 'mp3',
-    size: '2.4MB',
-    sizeInBytes: 2516582,
-    description: 'Arquivo de áudio para demonstração',
-    duration: '0:45',
-    downloadUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3',
-    uploadDate: new Date('2026-01-08'),
+    title: 'Captura de Tela - Interface',
+    type: 'png',
+    size: '280KB',
+    sizeInBytes: 286720,
+    source: 'Time de Design UI/UX',
+    downloadUrl: '/docs-test/Captura de tela de 2026-01-19 14-16-24.png',
+    uploadDate: new Date('2026-01-19'),
   },
   {
     id: 'mat-005',
-    title: 'Imagem SVG - Diagrama',
-    type: 'svg',
-    size: '12KB',
-    sizeInBytes: 12288,
-    description: 'Gráfico vetorial escalável',
-    downloadUrl: 'https://dev.w3.org/SVG/tools/svgweb/samples/svg-files/410.svg',
-    uploadDate: new Date('2026-01-14'),
+    title: 'Apresentação Corporativa',
+    type: 'ppt',
+    size: '1MB',
+    sizeInBytes: 1048576,
+    source: 'Marketing Institucional',
+    downloadUrl: '/docs-test/file_example_PPT_1MB.ppt',
+    uploadDate: new Date('2026-01-20'),
   },
   {
     id: 'mat-006',
-    title: 'Documento Word - Relatório',
-    type: 'docx',
-    size: '280KB',
-    sizeInBytes: 286720,
-    description: 'Relatório trimestral em formato Word',
-    downloadUrl: 'https://file-examples.com/storage/fe7e156330a96190476c534/2017/02/file-sample_100kB.doc',
-    uploadDate: new Date('2026-01-05'),
+    title: 'Áudio Exemplo - Treinamento',
+    type: 'wav',
+    size: '10MB',
+    sizeInBytes: 10485760,
+    source: 'Departamento de RH',
+    downloadUrl: '/docs-test/file_example_WAV_10MG.wav',
+    uploadDate: new Date('2026-01-21'),
   },
   {
     id: 'mat-007',
-    title: 'Planilha Excel - Dados Estatísticos',
-    type: 'xlsx',
-    size: '68KB',
-    sizeInBytes: 69632,
-    description: 'Planilha com análise de dados',
-    downloadUrl: 'https://file-examples.com/storage/fe7e156330a96190476c534/2017/02/file_example_XLS_10.xls',
-    uploadDate: new Date('2026-01-03'),
+    title: 'Vídeo Tutorial - Sistema',
+    type: 'mp4',
+    size: '18MB',
+    sizeInBytes: 18874368,
+    duration: '3:25',
+    source: 'Time de Suporte Técnico',
+    downloadUrl: '/docs-test/file_example_MP4_1920_18MG.mp4',
+    uploadDate: new Date('2026-01-22'),
   },
   {
     id: 'mat-008',
-    title: 'Imagem PNG - Código de Programação',
-    type: 'png',
-    size: '856KB',
-    sizeInBytes: 876544,
-    description: 'Screenshot de código em alta qualidade',
-    downloadUrl: 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=1920&q=80',
-    uploadDate: new Date('2026-01-18'),
+    title: 'Around the World in 28 Languages',
+    type: 'epub',
+    size: '2.5MB',
+    sizeInBytes: 2621440,
+    source: 'Biblioteca Digital',
+    downloadUrl: '/docs-test/Around the World in 28 Languages.epub',
+    uploadDate: new Date('2026-01-27'),
   },
 ]
 
