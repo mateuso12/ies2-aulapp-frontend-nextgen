@@ -1,4 +1,4 @@
-import { Maximize2, Minimize2 } from 'lucide-react'
+import { Maximize2, Minimize2, ChevronLeft, ChevronRight } from 'lucide-react'
 import { Category } from 'iconsax-react'
 import { Button } from 'ies2-aulapp-ui-kit'
 import { SettingsMenu } from '../../overlays/SettingsMenu'
@@ -18,6 +18,8 @@ interface MobileFooterContentProps {
   onOpenSettings?: () => void
   onHideToolbar?: () => void
   onSettingsMenuOpenChange: (isOpen: boolean) => void
+  onNext?: () => void
+  onPrevious?: () => void
 }
 
 export function MobileFooterContent({
@@ -35,7 +37,12 @@ export function MobileFooterContent({
   onOpenSettings,
   onHideToolbar,
   onSettingsMenuOpenChange,
+  onNext,
+  onPrevious,
 }: MobileFooterContentProps) {
+  const canGoPrevious = currentPage > 1
+  const canGoNext = currentPage < totalPages
+
   return (
     <div className="hidden w-full max-md:grid max-md:grid-cols-3 max-md:items-center">
       {/* Left: Page reel */}
@@ -54,10 +61,36 @@ export function MobileFooterContent({
         </Button>
       </div>
 
-      {/* Center: Counter */}
-      <span className="font-plus-jakarta text-xl font-semibold text-center">
-        {currentPage} de {totalPages}
-      </span>
+      {/* Center: Navigation and Counter */}
+      <div className="flex items-center justify-center gap-1">
+        <Button
+          onClick={onPrevious}
+          disabled={!canGoPrevious}
+          variant="ghost"
+          size="icon"
+          className="h-8 w-8 rounded-md transition-colors hover:bg-black/50 text-white disabled:opacity-30 disabled:cursor-not-allowed"
+          aria-label="Página anterior"
+          title="Página anterior"
+        >
+          <ChevronLeft size={20} strokeWidth={2.5} />
+        </Button>
+        
+        <span className="font-plus-jakarta text-xl font-semibold text-center min-w-[80px]">
+          {currentPage} de {totalPages}
+        </span>
+
+        <Button
+          onClick={onNext}
+          disabled={!canGoNext}
+          variant="ghost"
+          size="icon"
+          className="h-8 w-8 rounded-md transition-colors hover:bg-black/50 text-white disabled:opacity-30 disabled:cursor-not-allowed"
+          aria-label="Próxima página"
+          title="Próxima página"
+        >
+          <ChevronRight size={20} strokeWidth={2.5} />
+        </Button>
+      </div>
 
       {/* Right: Settings and Fullscreen (Mobile only) */}
       <div className="flex items-center justify-end gap-3">
