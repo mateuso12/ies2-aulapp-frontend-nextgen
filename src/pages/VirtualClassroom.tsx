@@ -6,7 +6,10 @@ import { ActivityView } from './ActivityView'
 import { MaterialView } from './MaterialView'
 import { mockActivities } from '../mocks/activities'
 import { mockContentPages } from '../mocks/content'
-import { mockSupportMaterials, mockSupportMaterialsApi } from '../mocks/supportMaterials'
+import {
+  mockSupportMaterials,
+  mockSupportMaterialsApi,
+} from '../mocks/supportMaterials'
 import { createFirebaseHighlightRepository } from '@/features/annotations/highlighting/repositories'
 import { useUser } from '@/hooks/useUser'
 import { usePageProgress } from '@/hooks/usePageProgress'
@@ -86,7 +89,8 @@ export const VirtualClassroom: React.FC = () => {
   const totalPages = allPages.length
   const currentPage = allPages[currentPageIndex]
   const isExercisePage = 'isExercise' in currentPage && currentPage.isExercise
-  const isMaterialView = 'isMaterialView' in currentPage && currentPage.isMaterialView
+  const isMaterialView =
+    'isMaterialView' in currentPage && currentPage.isMaterialView
 
   const { visitedPages, bookmarks, toggleBookmark, removeBookmark } =
     usePageProgress({

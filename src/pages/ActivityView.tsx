@@ -65,6 +65,8 @@ export const ActivityView: React.FC<ActivityViewProps> = ({
     const currentAnswer = (selectedAnswer as string) || ''
     const hasAnswer = currentAnswer.trim().length > 0
     const isSubmitted = !!submittedAnswer && submittedAnswer.isCorrect
+    // Campo travado após verificação (quando há validationResult) ou quando submetido
+    const isLocked = !!validationResult || isSubmitted
 
     return (
       <div
@@ -103,8 +105,9 @@ export const ActivityView: React.FC<ActivityViewProps> = ({
             exercise={exercise}
             value={currentAnswer}
             onChange={(answer) => onWritingChange(answer)}
-            readonly={isSubmitted}
+            readonly={isLocked}
             validationResult={validationResult}
+            resourceType={resourceType}
           />
 
           {/* Botão Verificar */}

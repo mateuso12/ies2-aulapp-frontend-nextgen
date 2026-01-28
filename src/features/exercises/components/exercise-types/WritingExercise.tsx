@@ -7,7 +7,9 @@ import type {
 import { cn } from '@/lib/utils'
 
 export const WritingExercise: React.FC<
-  ExerciseComponentProps<WritingData, WritingAnswer>
+  ExerciseComponentProps<WritingData, WritingAnswer> & {
+    resourceType?: string
+  }
 > = ({
   exercise,
   value = '',
@@ -15,6 +17,7 @@ export const WritingExercise: React.FC<
   readonly = false,
   validationResult,
   disabled = false,
+  resourceType,
 }) => {
   const [localValue, setLocalValue] = useState(value)
   const maxChars = exercise.data.maxCharacters || 200
@@ -86,10 +89,33 @@ export const WritingExercise: React.FC<
           )}
         />
 
-        {/* Contador de caracteres */}
-        <div className="absolute bottom-3 right-4 text-xs text-gray-500 dark:text-gray-400">
-          {localValue.length}/{maxChars}
-        </div>
+        {/* Contador de caracteres - oculto quando há validationResult */}
+        {!validationResult && (
+          <div className="absolute bottom-3 right-4 text-xs text-gray-500 dark:text-gray-400">
+            {localValue.length}/{maxChars}
+          </div>
+        )}
+
+        {/* Card de feedback de erro (apenas em Simulado) - dentro do container */}
+        {validationResult &&
+          !validationResult.isCorrect &&
+          exercise.data.incorrectFeedback &&
+          resourceType === 'simulation' && (
+            <div className="px-4 pb-4 md:px-6 md:pb-6">
+              <div
+                className={cn(
+                  'w-full min-h-[100px] p-4 md:p-6',
+                  'bg-white dark:bg-gray-800',
+                  'border-2 border-[#2BC779]',
+                  'rounded-tl-none rounded-tr-2xl rounded-br-2xl rounded-bl-2xl',
+                  'text-sm md:text-base leading-relaxed',
+                  'text-gray-900 dark:text-gray-100'
+                )}
+              >
+                {exercise.data.incorrectFeedback}
+              </div>
+            </div>
+          )}
       </div>
 
       {/* Feedback de Sucesso - Design do Figma */}
@@ -146,28 +172,6 @@ export const WritingExercise: React.FC<
               Incorreto
             </p>
           </div>
-
-          {/* Card vermelho com feedback textual (se existir) */}
-          {exercise.data.incorrectFeedback && (
-            <div
-              className={cn(
-                'w-full rounded-4xl border-2 p-4 md:p-6',
-                'border-[#EC272B] bg-[#FFCAD6] dark:bg-red-900/20'
-              )}
-            >
-              {/* Card branco interno com o texto de feedback */}
-              <div
-                className={cn(
-                  'w-full min-h-[100px] rounded-2xl p-4 md:p-6',
-                  'bg-white dark:bg-gray-800',
-                  'text-sm md:text-base leading-relaxed',
-                  'text-gray-900 dark:text-gray-100'
-                )}
-              >
-                {exercise.data.incorrectFeedback}
-              </div>
-            </div>
-          )}
         </div>
       )}
     </div>
