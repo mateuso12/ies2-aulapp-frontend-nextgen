@@ -7,16 +7,27 @@ import type {
 import { cn } from '@/lib/utils'
 import { ExerciseFeedback } from '../ExerciseFeedback'
 import { ExerciseResultIndicator } from '../ExerciseResultIndicator'
+import { ViewCommentButton } from '../ViewCommentButton'
+import { ExerciseComment } from '../ExerciseComment'
 
-export const WritingExercise: React.FC<
-  ExerciseComponentProps<WritingData, WritingAnswer>
-> = ({
+interface WritingExerciseProps extends ExerciseComponentProps<
+  WritingData,
+  WritingAnswer
+> {
+  resourceType?: string
+  currentPageIndex?: number
+  comment?: { title: string; content: string; imageUrl?: string }
+}
+
+export const WritingExercise: React.FC<WritingExerciseProps> = ({
   exercise,
   value = '',
   onChange,
   readonly = false,
   validationResult,
   disabled = false,
+  currentPageIndex,
+  comment,
 }) => {
   const [localValue, setLocalValue] = useState(value)
   const maxChars = exercise.data.maxCharacters || 200
@@ -109,6 +120,27 @@ export const WritingExercise: React.FC<
 
       {validationResult && (
         <ExerciseResultIndicator isCorrect={validationResult.isCorrect} />
+      )}
+
+      {validationResult && comment && (
+        <ViewCommentButton exerciseId={exercise.id} />
+      )}
+
+      {validationResult && comment && (
+        <ExerciseComment
+          exerciseId={exercise.id}
+          questionNumber={currentPageIndex || 0 + 1}
+          comment={comment}
+          onBackToQuestion={() => {
+            const mainElement = document.querySelector('main.overflow-auto')
+            if (mainElement) {
+              mainElement.scrollTo({
+                top: 0,
+                behavior: 'smooth',
+              })
+            }
+          }}
+        />
       )}
     </div>
   )

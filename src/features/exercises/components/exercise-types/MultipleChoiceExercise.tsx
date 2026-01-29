@@ -229,31 +229,26 @@ export const MultipleChoiceExerciseComponent: React.FC<
           </div>
         )}
 
-        {submittedAnswer?.comment &&
-          submittedAnswer.isCorrect &&
-          resourceType === 'simulation' && (
-            <ViewCommentButton exerciseId={exercise.id} />
-          )}
+        {submittedAnswer?.comment && (
+          <ViewCommentButton exerciseId={exercise.id} />
+        )}
 
-        {submittedAnswer?.comment &&
-          submittedAnswer.isCorrect &&
-          resourceType === 'simulation' && (
-            <ExerciseComment
-              exerciseId={exercise.id}
-              questionNumber={currentPageIndex + 1}
-              comment={submittedAnswer.comment}
-              onBackToQuestion={() => {
-                const mainElement =
-                  document.querySelector('main.overflow-auto')
-                if (mainElement) {
-                  mainElement.scrollTo({
-                    top: 0,
-                    behavior: 'smooth',
-                  })
-                }
-              }}
-            />
-          )}
+        {submittedAnswer?.comment && (
+          <ExerciseComment
+            exerciseId={exercise.id}
+            questionNumber={currentPageIndex + 1}
+            comment={submittedAnswer.comment}
+            onBackToQuestion={() => {
+              const mainElement = document.querySelector('main.overflow-auto')
+              if (mainElement) {
+                mainElement.scrollTo({
+                  top: 0,
+                  behavior: 'smooth',
+                })
+              }
+            }}
+          />
+        )}
       </div>
     </div>
   )

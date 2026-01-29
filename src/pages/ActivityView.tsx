@@ -4,10 +4,6 @@ import {
   MultipleChoiceExerciseComponent,
 } from '@/features/exercises/components/exercise-types'
 import {
-  ExerciseComment,
-  ViewCommentButton,
-} from '@/features/exercises/components'
-import {
   isWritingExercise,
   isMultipleChoiceExercise,
 } from '@/features/exercises/types'
@@ -91,6 +87,8 @@ export const ActivityView: React.FC<ActivityViewProps> = ({
             onChange={(answer) => onWritingChange(answer)}
             readonly={isLocked}
             validationResult={validationResult}
+            currentPageIndex={currentPageIndex}
+            comment={submittedAnswer?.comment}
           />
 
           {!isSubmitted && !validationResult && (
@@ -108,32 +106,6 @@ export const ActivityView: React.FC<ActivityViewProps> = ({
               </button>
             </div>
           )}
-
-          {validationResult?.isCorrect &&
-            submittedAnswer?.comment &&
-            resourceType === 'simulation' && (
-              <ViewCommentButton exerciseId={exercise.id} />
-            )}
-
-          {validationResult?.isCorrect &&
-            submittedAnswer?.comment &&
-            resourceType === 'simulation' && (
-              <ExerciseComment
-                exerciseId={exercise.id}
-                questionNumber={currentPageIndex + 1}
-                comment={submittedAnswer.comment}
-                onBackToQuestion={() => {
-                  const mainElement =
-                    document.querySelector('main.overflow-auto')
-                  if (mainElement) {
-                    mainElement.scrollTo({
-                      top: 0,
-                      behavior: 'smooth',
-                    })
-                  }
-                }}
-              />
-            )}
         </div>
       </div>
     )
