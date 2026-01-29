@@ -24,4 +24,5 @@
 // export { OrderingExercise } from './OrderingExercise'
 // export { TrueFalseExercise } from './TrueFalseExercise'
 
+export { MultipleChoiceExerciseComponent } from './MultipleChoiceExercise'
 export { WritingExercise as WritingExerciseComponent } from './WritingExercise'
