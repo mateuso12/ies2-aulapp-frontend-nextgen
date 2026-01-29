@@ -198,7 +198,7 @@ export const ActivityView: React.FC<ActivityViewProps> = ({
                 let radioClasses = ''
                 let radioInnerClasses = ''
 
-                if (showFeedback && isCorrectOption) {
+                if (showFeedback && isCorrectOption && isSelected) {
                   containerClasses = 'h-auto min-h-[104px]'
                   borderClasses = 'border-2 border-[#2BC779]'
                   bgClasses = 'bg-[#C9F6DB]'
@@ -208,7 +208,7 @@ export const ActivityView: React.FC<ActivityViewProps> = ({
                   borderClasses = 'border-2 border-[#EC272B]'
                   bgClasses = 'bg-[#FFCAD6]'
                   radioClasses = 'hidden'
-                } else if (isSelected) {
+                } else if (isSelected && !showFeedback) {
                   containerClasses = 'h-[104px]'
                   borderClasses = 'border-4 border-[#487BFF]'
                   bgClasses = 'bg-[#C6D3F5]'
@@ -250,7 +250,7 @@ export const ActivityView: React.FC<ActivityViewProps> = ({
                             )}
                           </div>
                         )}
-                        {showFeedback && isCorrectOption && (
+                        {showFeedback && isCorrectOption && isSelected && (
                           <div className="flex items-center gap-1 shrink-0">
                             <svg
                               className="w-10 h-10"

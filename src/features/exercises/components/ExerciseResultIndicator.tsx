@@ -4,9 +4,9 @@ interface ExerciseResultIndicatorProps {
   isCorrect: boolean
 }
 
-export const ExerciseResultIndicator: React.FC<ExerciseResultIndicatorProps> = ({
-  isCorrect,
-}) => {
+export const ExerciseResultIndicator: React.FC<
+  ExerciseResultIndicatorProps
+> = ({ isCorrect }) => {
   if (isCorrect) {
     return (
       <div className="flex items-center justify-center gap-1">
