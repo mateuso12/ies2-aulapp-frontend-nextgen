@@ -4,7 +4,6 @@
  */
 
 import React from 'react'
-import { CloseCircle } from 'iconsax-react'
 import { UniversalFileViewer } from './viewers'
 import type { SupportMaterial } from '@/mocks/supportMaterials'
 import { X } from 'lucide-react'

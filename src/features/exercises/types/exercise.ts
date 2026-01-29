@@ -223,7 +223,8 @@ export interface ExerciseComponentProps<TData = unknown, TAnswer = unknown> {
 export interface MultipleChoiceOption {
   id: string
   text: string
-  isCorrect: boolean // Usado apenas no backend/correção
+  isCorrect: boolean
+  feedback?: string
 }
 
 export interface MultipleChoiceData {

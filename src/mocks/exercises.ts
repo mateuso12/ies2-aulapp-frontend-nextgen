@@ -18,10 +18,28 @@ export const mockExercise1: MultipleChoiceExercise = {
   description: 'Selecione a alternativa correta.',
   data: {
     options: [
-      { id: 'a', text: 'São Paulo', isCorrect: false },
+      {
+        id: 'a',
+        text: 'São Paulo',
+        isCorrect: false,
+        feedback:
+          'São Paulo é a maior cidade do Brasil, mas não é a capital. A capital está localizada no Distrito Federal.',
+      },
       { id: 'b', text: 'Brasília', isCorrect: true },
-      { id: 'c', text: 'Rio de Janeiro', isCorrect: false },
-      { id: 'd', text: 'Salvador', isCorrect: false },
+      {
+        id: 'c',
+        text: 'Rio de Janeiro',
+        isCorrect: false,
+        feedback:
+          'Rio de Janeiro foi capital do Brasil até 1960, quando Brasília foi inaugurada como nova capital.',
+      },
+      {
+        id: 'd',
+        text: 'Salvador',
+        isCorrect: false,
+        feedback:
+          'Salvador foi a primeira capital do Brasil colonial (1549-1763), mas hoje a capital é Brasília.',
+      },
     ],
     shuffleOptions: false,
   },
@@ -54,9 +72,21 @@ export const mockExercise2: MultipleSelectExercise = {
     options: [
       { id: 'a', text: 'JavaScript', isCorrect: true },
       { id: 'b', text: 'Python', isCorrect: true },
-      { id: 'c', text: 'C', isCorrect: false },
+      {
+        id: 'c',
+        text: 'C',
+        isCorrect: false,
+        feedback:
+          'C é uma linguagem procedural que não possui suporte nativo a Programação Orientada a Objetos. Para POO em C, você precisaria usar C++.',
+      },
       { id: 'd', text: 'Java', isCorrect: true },
-      { id: 'e', text: 'Assembly', isCorrect: false },
+      {
+        id: 'e',
+        text: 'Assembly',
+        isCorrect: false,
+        feedback:
+          'Assembly é uma linguagem de baixo nível focada em instruções de máquina. Não possui conceitos de POO como classes, objetos ou herança.',
+      },
     ],
     shuffleOptions: false,
     minSelections: 1,
@@ -91,10 +121,28 @@ export const mockExercise3: MultipleChoiceExercise = {
   description: 'Resolva a operação matemática.',
   data: {
     options: [
-      { id: 'a', text: '3', isCorrect: false },
+      {
+        id: 'a',
+        text: '3',
+        isCorrect: false,
+        feedback:
+          'Incorreto. Revise a operação de adição: 2 + 2 resulta em um número maior que 3.',
+      },
       { id: 'b', text: '4', isCorrect: true },
-      { id: 'c', text: '5', isCorrect: false },
-      { id: 'd', text: '22', isCorrect: false },
+      {
+        id: 'c',
+        text: '5',
+        isCorrect: false,
+        feedback:
+          'Incorreto. O resultado de 2 + 2 não é 5. Lembre-se: estamos somando dois números iguais.',
+      },
+      {
+        id: 'd',
+        text: '22',
+        isCorrect: false,
+        feedback:
+          'Atenção! Aqui estamos fazendo uma adição matemática (2 + 2), não uma concatenação de strings. O resultado é 4, não 22.',
+      },
     ],
     shuffleOptions: false,
   },

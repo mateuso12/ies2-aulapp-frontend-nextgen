@@ -5,11 +5,11 @@ import type {
   WritingAnswer,
 } from '../../types'
 import { cn } from '@/lib/utils'
+import { ExerciseFeedback } from '../ExerciseFeedback'
+import { ExerciseResultIndicator } from '../ExerciseResultIndicator'
 
 export const WritingExercise: React.FC<
-  ExerciseComponentProps<WritingData, WritingAnswer> & {
-    resourceType?: string
-  }
+  ExerciseComponentProps<WritingData, WritingAnswer>
 > = ({
   exercise,
   value = '',
@@ -17,7 +17,6 @@ export const WritingExercise: React.FC<
   readonly = false,
   validationResult,
   disabled = false,
-  resourceType,
 }) => {
   const [localValue, setLocalValue] = useState(value)
   const maxChars = exercise.data.maxCharacters || 200
@@ -96,83 +95,20 @@ export const WritingExercise: React.FC<
           </div>
         )}
 
-        {/* Card de feedback de erro (apenas em Simulado) - dentro do container */}
         {validationResult &&
           !validationResult.isCorrect &&
-          exercise.data.incorrectFeedback &&
-          resourceType === 'simulation' && (
+          exercise.data.incorrectFeedback && (
             <div className="px-4 pb-4 md:px-6 md:pb-6">
-              <div
-                className={cn(
-                  'w-full min-h-[100px] p-4 md:p-6',
-                  'bg-white dark:bg-gray-800',
-                  'border-2 border-[#2BC779]',
-                  'rounded-tl-none rounded-tr-2xl rounded-br-2xl rounded-bl-2xl',
-                  'text-sm md:text-base leading-relaxed',
-                  'text-gray-900 dark:text-gray-100'
-                )}
-              >
-                {exercise.data.incorrectFeedback}
-              </div>
+              <ExerciseFeedback
+                feedback={exercise.data.incorrectFeedback}
+                variant="error"
+              />
             </div>
           )}
       </div>
 
-      {/* Feedback de Sucesso - Design do Figma */}
-      {validationResult?.isCorrect && (
-        <div className="flex items-center justify-center gap-1">
-          {/* Ícone de check - verde */}
-          <svg
-            className="w-[71.711px] h-[71.711px] shrink-0"
-            viewBox="0 0 72 72"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <circle cx="36" cy="36" r="36" fill="#2BC779" />
-            <path
-              d="M30 36L33.5 39.5L42 31"
-              stroke="white"
-              strokeWidth="4"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
-
-          {/* Texto "Correto" */}
-          <p className="font-sans font-semibold text-[32px] leading-none text-black dark:text-white tracking-[-0.48px]">
-            Correto
-          </p>
-        </div>
-      )}
-
-      {/* Feedback de Erro - Sempre exibe ícone + texto (e feedback se houver) */}
-      {validationResult && !validationResult.isCorrect && (
-        <div className="space-y-6">
-          {/* Ícone X + Texto "Incorreto" */}
-          <div className="flex items-center justify-center gap-1">
-            {/* Ícone X - vermelho */}
-            <svg
-              className="w-[71.711px] h-[71.711px] shrink-0"
-              viewBox="0 0 72 72"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <circle cx="36" cy="36" r="36" fill="#EC272B" />
-              <path
-                d="M28 28L44 44M44 28L28 44"
-                stroke="white"
-                strokeWidth="4"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-
-            {/* Texto "Incorreto" */}
-            <p className="font-sans font-semibold text-[32px] leading-none text-black dark:text-white tracking-[-0.48px]">
-              Incorreto
-            </p>
-          </div>
-        </div>
+      {validationResult && (
+        <ExerciseResultIndicator isCorrect={validationResult.isCorrect} />
       )}
     </div>
   )

@@ -4,7 +4,7 @@
  */
 
 import React, { useState } from 'react'
-import { SearchZoomIn, SearchZoomOut, Maximize4 } from 'iconsax-react'
+import { SearchZoomIn, SearchZoomOut } from 'iconsax-react'
 
 interface ImageViewerProps {
   /** URL da imagem */
@@ -18,7 +18,6 @@ export const ImageViewer: React.FC<ImageViewerProps> = ({ url, title }) => {
 
   const handleZoomIn = () => setZoom((prev) => Math.min(prev + 25, 300))
   const handleZoomOut = () => setZoom((prev) => Math.max(prev - 25, 50))
-  const handleResetZoom = () => setZoom(100)
 
   return (
     <div className="w-full h-full flex flex-col bg-gray-50 dark:bg-gray-900">
