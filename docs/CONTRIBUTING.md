@@ -33,6 +33,7 @@ O **Aulapp** é uma aplicação educacional frontend desenvolvida para fornecer 
 - 🔖 **Sistema de bookmarks** para navegação rápida
 - 🌐 **Multi-idiomas** (pt-BR, en)
 - 📱 **PWA** com suporte offline
+- ✏️ **Sistema de exercícios** genérico e extensível (múltipla escolha, texto, numérico, ordenação, etc.)
 
 ---
 
@@ -188,6 +189,25 @@ export { TextHighlighter } from './components/TextHighlighter'
 export { useTextHighlighter } from './hooks/useTextHighlighter'
 export type { Highlight, HighlightColor } from './types/highlight'
 ```
+
+#### Feature `exercises/` - Sistema de Exercícios
+
+O sistema de exercícios segue o mesmo padrão feature-based e é altamente genérico e extensível:
+
+```
+exercises/
+├── components/          # Componentes de UI
+│   ├── exercise-types/  # Componentes específicos por tipo
+│   └── common/          # Componentes reutilizáveis
+├── hooks/              # useExerciseSubmission, etc.
+├── types/              # Tipos genéricos extensíveis
+├── lib/                # Validadores e utilitários
+├── repositories/       # Camada de persistência
+├── docs/               # Documentação detalhada
+└── index.ts
+```
+
+**Documentação completa:** Veja [exercises/docs/EXERCISES.md](../src/features/exercises/docs/EXERCISES.md) para guia detalhado de implementação.
 
 ---
 

@@ -355,14 +355,17 @@ export function VirtualClassroomLayout({
         }
       />
 
-      <FloatingButtons
-        isContent={isContent}
-        isCurrentPageBookmarked={isCurrentPageBookmarked}
-        isFocusModeActive={isFocusModeActive}
-        isMobile={isMobile}
-        onBookmarkClick={handleBookmarkClick}
-        onToggleFocusMode={toggleFocusMode}
-      />
+      {/* FloatingButtons ocultos quando resourceType === 'material' */}
+      {resourceType !== 'material' && (
+        <FloatingButtons
+          isContent={isContent}
+          isCurrentPageBookmarked={isCurrentPageBookmarked}
+          isFocusModeActive={isFocusModeActive}
+          isMobile={isMobile}
+          onBookmarkClick={handleBookmarkClick}
+          onToggleFocusMode={toggleFocusMode}
+        />
+      )}
 
       <ContentSection
         mainRef={mainRef}
@@ -394,29 +397,32 @@ export function VirtualClassroomLayout({
         {children}
       </ContentSection>
 
-      <FooterSection
-        resourceType={resourceType}
-        currentPage={currentPage}
-        totalPages={totalPages}
-        enhancedPages={enhancedPages}
-        isFooterHidden={isFooterHidden}
-        isBarsAutoHidden={isBarsAutoHidden}
-        isVisible={isVisible}
-        isStickyNoteSidebarOpen={isStickyNoteSidebarOpen}
-        isFocusModeActive={isFocusModeActive}
-        onNext={onNext}
-        onPrevious={onPrevious}
-        onPageSelect={onPageSelect}
-        onFooterHovered={setIsFooterHovered}
-        onToggleAnnotations={handleToggleAnnotations}
-        onToggleStickyNotes={handleToggleStickyNotes}
-        onBookmarkClick={handleBookmarkClick}
-        onSearchInPage={openMobileSearch}
-        onToggleBarsAutoHidden={() => setIsBarsAutoHidden((v) => !v)}
-        onFooterInteracting={setIsFooterInteracting}
-        onFooterMenusOpen={setIsFooterMenusOpen}
-        onToggleFocusMode={toggleFocusMode}
-      />
+      {/* Footer oculto quando resourceType === 'material' */}
+      {resourceType !== 'material' && (
+        <FooterSection
+          resourceType={resourceType}
+          currentPage={currentPage}
+          totalPages={totalPages}
+          enhancedPages={enhancedPages}
+          isFooterHidden={isFooterHidden}
+          isBarsAutoHidden={isBarsAutoHidden}
+          isVisible={isVisible}
+          isStickyNoteSidebarOpen={isStickyNoteSidebarOpen}
+          isFocusModeActive={isFocusModeActive}
+          onNext={onNext}
+          onPrevious={onPrevious}
+          onPageSelect={onPageSelect}
+          onFooterHovered={setIsFooterHovered}
+          onToggleAnnotations={handleToggleAnnotations}
+          onToggleStickyNotes={handleToggleStickyNotes}
+          onBookmarkClick={handleBookmarkClick}
+          onSearchInPage={openMobileSearch}
+          onToggleBarsAutoHidden={() => setIsBarsAutoHidden((v) => !v)}
+          onFooterInteracting={setIsFooterInteracting}
+          onFooterMenusOpen={setIsFooterMenusOpen}
+          onToggleFocusMode={toggleFocusMode}
+        />
+      )}
     </div>
   )
 }

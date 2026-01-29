@@ -50,6 +50,7 @@ export default defineConfig(({ mode }) => ({
           mode === 'development' ? [] : ['**/*.{js,css,html,ico,png,svg}'],
         cleanupOutdatedCaches: true,
         clientsClaim: true,
+        maximumFileSizeToCacheInBytes: 5 * 1024 * 1024, // 5 MB
         runtimeCaching: [
           {
             urlPattern: /.*\.(?:png|jpg|jpeg|svg|webp|gif)/,

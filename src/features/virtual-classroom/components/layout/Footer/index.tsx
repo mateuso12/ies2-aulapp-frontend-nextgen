@@ -180,6 +180,8 @@ export function Footer({
           onOpenSettings={onOpenSettings}
           onHideToolbar={onHideToolbar}
           onSettingsMenuOpenChange={setIsSettingsMenuOpen}
+          onNext={onNext}
+          onPrevious={onPrevious}
         />
 
         <DesktopFooterContent

@@ -27,6 +27,7 @@ interface HeaderProps {
   onToggleStickyNotes?: () => void
   onToggleAnnotations?: () => void
   isHeaderCollapsed?: boolean
+  minimal?: boolean // Quando true, mostra apenas título e botão voltar
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -47,6 +48,7 @@ export const Header: React.FC<HeaderProps> = ({
   onToggleStickyNotes,
   onToggleAnnotations,
   isHeaderCollapsed = false,
+  minimal = false,
 }) => {
   const navigate = useNavigate()
   const [isSearchActive, setIsSearchActive] = useState(false)
@@ -226,31 +228,33 @@ export const Header: React.FC<HeaderProps> = ({
           />
         </div>
 
-        {/* Right: Bookmark + Hamburger */}
-        <div className="flex items-center gap-4 mr-4">
-          {resourceType === 'content' && (
-            <>
-              {onToggleStickyNotes && (
-                <HeaderStickyNoteButton
-                  hasNotes={hasCurrentPageNotes}
-                  onClick={onToggleStickyNotes}
-                />
-              )}
-              {onToggleAnnotations && (
-                <HeaderAnnotationButton
-                  hasAnnotations={hasCurrentPageAnnotations}
-                  onClick={onToggleAnnotations}
-                />
-              )}
+        {/* Right: Bookmark + Hamburger - Esconde em modo minimal */}
+        {!minimal && (
+          <div className="flex items-center gap-4 mr-4">
+            {resourceType === 'content' && (
+              <>
+                {onToggleStickyNotes && (
+                  <HeaderStickyNoteButton
+                    hasNotes={hasCurrentPageNotes}
+                    onClick={onToggleStickyNotes}
+                  />
+                )}
+                {onToggleAnnotations && (
+                  <HeaderAnnotationButton
+                    hasAnnotations={hasCurrentPageAnnotations}
+                    onClick={onToggleAnnotations}
+                  />
+                )}
 
-              <FloatingBookmarkButton
-                isBookmarked={isBookmarked}
-                onClick={onBookmark || (() => {})}
-                variant="header"
-              />
-            </>
-          )}
-        </div>
+                <FloatingBookmarkButton
+                  isBookmarked={isBookmarked}
+                  onClick={onBookmark || (() => {})}
+                  variant="header"
+                />
+              </>
+            )}
+          </div>
+        )}
       </div>
 
       {/* Desktop */}
@@ -267,23 +271,25 @@ export const Header: React.FC<HeaderProps> = ({
           />
         </div>
 
-        {/* Center: Controls */}
-        <div className="flex items-center gap-8">
-          <HeaderStatus
-            variant="default"
-            lives={lives}
-            score={score}
-            redoCurrent={redoCurrent}
-            redoTotal={redoTotal}
-          />
+        {/* Center: Controls - Esconde em modo minimal */}
+        {!minimal && (
+          <div className="flex items-center gap-8">
+            <HeaderStatus
+              variant="default"
+              lives={lives}
+              score={score}
+              redoCurrent={redoCurrent}
+              redoTotal={redoTotal}
+            />
 
-          {/* Right: Menu */}
-          <SidebarMenu open={isSidebarOpen} onOpenChange={setIsSidebarOpen}>
-            <button className="flex h-10 w-10 items-center justify-center rounded-full text-[#FF246E] dark:text-[#FF5A82] hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer">
-              <HambergerMenu size="24" color="currentColor" variant="Linear" />
-            </button>
-          </SidebarMenu>
-        </div>
+            {/* Right: Menu */}
+            <SidebarMenu open={isSidebarOpen} onOpenChange={setIsSidebarOpen}>
+              <button className="flex h-10 w-10 items-center justify-center rounded-full text-[#FF246E] dark:text-[#FF5A82] hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer">
+                <HambergerMenu size="24" color="currentColor" variant="Linear" />
+              </button>
+            </SidebarMenu>
+          </div>
+        )}
       </div>
     </header>
   )

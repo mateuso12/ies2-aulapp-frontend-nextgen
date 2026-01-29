@@ -39,7 +39,7 @@ export const HeaderActions: React.FC<HeaderActionsProps> = ({
 }) => {
   const { i18n } = useTranslation()
   const badgeVariant = getBadgeVariant(resourceType)
-  const showSearch = resourceType === 'content' || resourceType === 'material'
+  const showSearch = resourceType === 'content'
 
   if (variant === 'gamified') {
     return (
