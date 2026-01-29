@@ -7,11 +7,9 @@ import type {
   ExerciseAnswer,
   ExerciseValidationResult,
   MultipleChoiceExercise,
-  MultipleSelectExercise,
   NumericExercise,
   OrderingExercise,
   TrueFalseExercise,
-  MatchingExercise,
   WritingExercise,
 } from '../types'
 
@@ -107,38 +105,10 @@ export const calculateElapsedSeconds = (
 }
 
 /**
- * Valida resposta de múltipla escolha
+ * Valida resposta de múltipla escolha (permite múltiplas seleções)
  */
 export const validateMultipleChoice = (
   exercise: MultipleChoiceExercise,
-  answer: string
-): ExerciseValidationResult => {
-  const correctOption = exercise.data.options.find((opt) => opt.isCorrect)
-
-  if (!correctOption) {
-    return {
-      isCorrect: false,
-      score: 0,
-      feedback: 'Erro na configuração do exercício',
-    }
-  }
-
-  const isCorrect = answer === correctOption.id
-
-  return {
-    isCorrect,
-    score: isCorrect ? exercise.maxScore : 0,
-    feedback: isCorrect
-      ? 'Resposta correta! 🎉'
-      : 'Resposta incorreta. Tente novamente!',
-  }
-}
-
-/**
- * Valida resposta de múltipla seleção
- */
-export const validateMultipleSelect = (
-  exercise: MultipleSelectExercise,
   answer: string[]
 ): ExerciseValidationResult => {
   const correctIds = exercise.data.options
@@ -159,12 +129,11 @@ export const validateMultipleSelect = (
   const incorrectSelections = userIds.filter(
     (id) => !correctIds.includes(id)
   ).length
-  const missedSelections = correctIds.length - correctSelections
 
   let score = 0
   if (isCorrect) {
     score = exercise.maxScore
-  } else {
+  } else if (correctSelections > 0) {
     // Pontuação parcial: (acertos - erros) / total de corretas
     score = Math.max(
       0,
@@ -175,15 +144,10 @@ export const validateMultipleSelect = (
 
   return {
     isCorrect,
-    score: Math.round(score * 100) / 100, // Arredonda para 2 casas decimais
+    score: Math.round(score * 100) / 100,
     feedback: isCorrect
-      ? 'Todas as opções corretas selecionadas! 🎉'
-      : `${correctSelections} corretas, ${incorrectSelections} incorretas, ${missedSelections} não selecionadas`,
-    details: {
-      correctSelections,
-      incorrectSelections,
-      missedSelections,
-    },
+      ? 'Resposta correta! 🎉'
+      : `${correctSelections} corretas, ${incorrectSelections} incorretas`,
   }
 }
 
@@ -263,49 +227,6 @@ export const validateTrueFalse = (
 }
 
 /**
- * Valida resposta de associação
- */
-export const validateMatching = (
-  exercise: MatchingExercise,
-  answer: Record<string, string>
-): ExerciseValidationResult => {
-  const correctPairs = exercise.data.pairs.reduce(
-    (acc, pair) => {
-      acc[pair.leftId] = pair.rightId
-      return acc
-    },
-    {} as Record<string, string>
-  )
-
-  const totalPairs = Object.keys(correctPairs).length
-  let correctMatches = 0
-
-  for (const [leftId, rightId] of Object.entries(answer)) {
-    if (correctPairs[leftId] === rightId) {
-      correctMatches++
-    }
-  }
-
-  const isCorrect = correctMatches === totalPairs
-
-  const score = isCorrect
-    ? exercise.maxScore
-    : (correctMatches / totalPairs) * exercise.maxScore
-
-  return {
-    isCorrect,
-    score: Math.round(score * 100) / 100,
-    feedback: isCorrect
-      ? 'Todas as associações corretas! 🎉'
-      : `${correctMatches} de ${totalPairs} associações corretas`,
-    details: {
-      correctMatches,
-      totalPairs,
-    },
-  }
-}
-
-/**
  * Valida resposta de atividade de escrita
  */
 export const validateWriting = (
@@ -359,11 +280,6 @@ export const validateExercise = (
     case 'multiple-choice':
       return validateMultipleChoice(
         exercise as MultipleChoiceExercise,
-        answer as string
-      )
-    case 'multiple-select':
-      return validateMultipleSelect(
-        exercise as MultipleSelectExercise,
         answer as string[]
       )
     case 'numeric':
@@ -372,11 +288,6 @@ export const validateExercise = (
       return validateOrdering(exercise as OrderingExercise, answer as string[])
     case 'true-false':
       return validateTrueFalse(exercise as TrueFalseExercise, answer as boolean)
-    case 'matching':
-      return validateMatching(
-        exercise as MatchingExercise,
-        answer as Record<string, string>
-      )
     case 'writing':
       return validateWriting(exercise as WritingExercise, answer as string)
     default:

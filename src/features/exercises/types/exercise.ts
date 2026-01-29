@@ -15,16 +15,11 @@
  * Adicione novos tipos aqui conforme necessário.
  */
 export type ExerciseType =
-  | 'multiple-choice' // Múltipla escolha (uma resposta)
-  | 'multiple-select' // Múltipla escolha (várias respostas)
+  | 'multiple-choice' // Múltipla escolha (permite seleção múltipla)
   | 'open-text' // Resposta aberta (texto livre)
   | 'numeric' // Resposta numérica
   | 'ordering' // Ordenação de itens
-  | 'matching' // Associação (ligar itens)
   | 'true-false' // Verdadeiro ou Falso
-  | 'fill-blanks' // Preencher lacunas
-  | 'drag-drop' // Arrastar e soltar
-  | 'code' // Código de programação
   | 'writing' // Atividade de escrita (resposta curta)
 
 /**
@@ -218,7 +213,7 @@ export interface ExerciseComponentProps<TData = unknown, TAnswer = unknown> {
 // ─────────────────────────────────────────────────────────────────────────────
 
 /**
- * MÚLTIPLA ESCOLHA
+ * MÚLTIPLA ESCOLHA (sempre permite seleção múltipla)
  */
 export interface MultipleChoiceOption {
   id: string
@@ -230,30 +225,15 @@ export interface MultipleChoiceOption {
 export interface MultipleChoiceData {
   options: MultipleChoiceOption[]
   shuffleOptions?: boolean // Se deve embaralhar as opções
+  minSelections?: number // Mínimo de seleções permitidas
+  maxSelections?: number // Máximo de seleções permitidas
 }
 
-export type MultipleChoiceAnswer = string // ID da opção selecionada
+export type MultipleChoiceAnswer = string[] // Array de IDs das opções selecionadas
 
 export type MultipleChoiceExercise = BaseExercise<
   MultipleChoiceData,
   MultipleChoiceAnswer
->
-
-/**
- * MÚLTIPLA SELEÇÃO (várias respostas corretas)
- */
-export interface MultipleSelectData {
-  options: MultipleChoiceOption[]
-  minSelections?: number
-  maxSelections?: number
-  shuffleOptions?: boolean
-}
-
-export type MultipleSelectAnswer = string[] // Array de IDs selecionados
-
-export type MultipleSelectExercise = BaseExercise<
-  MultipleSelectData,
-  MultipleSelectAnswer
 >
 
 /**
@@ -306,26 +286,6 @@ export type OrderingAnswer = string[] // Array de IDs na ordem escolhida
 export type OrderingExercise = BaseExercise<OrderingData, OrderingAnswer>
 
 /**
- * ASSOCIAÇÃO (ligar itens de duas listas)
- */
-export interface MatchingPair {
-  leftId: string
-  leftText: string
-  rightId: string
-  rightText: string
-}
-
-export interface MatchingData {
-  pairs: MatchingPair[]
-  shuffleLeft?: boolean
-  shuffleRight?: boolean
-}
-
-export type MatchingAnswer = Record<string, string> // { leftId: rightId }
-
-export type MatchingExercise = BaseExercise<MatchingData, MatchingAnswer>
-
-/**
  * VERDADEIRO OU FALSO
  */
 export interface TrueFalseData {
@@ -335,65 +295,6 @@ export interface TrueFalseData {
 export type TrueFalseAnswer = boolean
 
 export type TrueFalseExercise = BaseExercise<TrueFalseData, TrueFalseAnswer>
-
-/**
- * PREENCHER LACUNAS
- */
-export interface FillBlanksData {
-  /** Texto com marcadores {0}, {1}, etc. para as lacunas */
-  textWithBlanks: string
-
-  /** Respostas corretas para cada lacuna */
-  blanks: Array<{
-    id: string
-    correctAnswers: string[] // Aceita múltiplas variações
-    caseSensitive?: boolean
-  }>
-}
-
-export type FillBlanksAnswer = Record<string, string> // { blankId: answer }
-
-export type FillBlanksExercise = BaseExercise<FillBlanksData, FillBlanksAnswer>
-
-/**
- * ARRASTAR E SOLTAR
- */
-export interface DragDropData {
-  /** Itens que podem ser arrastados */
-  items: Array<{
-    id: string
-    text: string
-    type?: string // Tipo do item (opcional, para categorização)
-  }>
-
-  /** Zonas de drop e seus conteúdos esperados */
-  dropZones: Array<{
-    id: string
-    label: string
-    acceptedItemIds: string[] // IDs dos itens que podem ser colocados aqui
-  }>
-}
-
-export type DragDropAnswer = Record<string, string[]> // { dropZoneId: [itemIds] }
-
-export type DragDropExercise = BaseExercise<DragDropData, DragDropAnswer>
-
-/**
- * CÓDIGO DE PROGRAMAÇÃO
- */
-export interface CodeData {
-  language: string // 'javascript', 'python', etc.
-  starterCode?: string // Código inicial
-  testCases?: Array<{
-    input: unknown
-    expectedOutput: unknown
-  }>
-  hints?: string[]
-}
-
-export type CodeAnswer = string // Código escrito pelo usuário
-
-export type CodeExercise = BaseExercise<CodeData, CodeAnswer>
 
 /**
  * ATIVIDADE DE ESCRITA (resposta curta com validação)
@@ -432,15 +333,10 @@ export type WritingExercise = BaseExercise<WritingData, WritingAnswer>
  */
 export type Exercise =
   | MultipleChoiceExercise
-  | MultipleSelectExercise
   | OpenTextExercise
   | NumericExercise
   | OrderingExercise
-  | MatchingExercise
   | TrueFalseExercise
-  | FillBlanksExercise
-  | DragDropExercise
-  | CodeExercise
   | WritingExercise
 
 /**
@@ -448,15 +344,10 @@ export type Exercise =
  */
 export type ExerciseAnswer =
   | MultipleChoiceAnswer
-  | MultipleSelectAnswer
   | OpenTextAnswer
   | NumericAnswer
   | OrderingAnswer
-  | MatchingAnswer
   | TrueFalseAnswer
-  | FillBlanksAnswer
-  | DragDropAnswer
-  | CodeAnswer
   | WritingAnswer
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -470,12 +361,6 @@ export const isMultipleChoiceExercise = (
   exercise: Exercise
 ): exercise is MultipleChoiceExercise => {
   return exercise.type === 'multiple-choice'
-}
-
-export const isMultipleSelectExercise = (
-  exercise: Exercise
-): exercise is MultipleSelectExercise => {
-  return exercise.type === 'multiple-select'
 }
 
 export const isOpenTextExercise = (
@@ -496,34 +381,10 @@ export const isOrderingExercise = (
   return exercise.type === 'ordering'
 }
 
-export const isMatchingExercise = (
-  exercise: Exercise
-): exercise is MatchingExercise => {
-  return exercise.type === 'matching'
-}
-
 export const isTrueFalseExercise = (
   exercise: Exercise
 ): exercise is TrueFalseExercise => {
   return exercise.type === 'true-false'
-}
-
-export const isFillBlanksExercise = (
-  exercise: Exercise
-): exercise is FillBlanksExercise => {
-  return exercise.type === 'fill-blanks'
-}
-
-export const isDragDropExercise = (
-  exercise: Exercise
-): exercise is DragDropExercise => {
-  return exercise.type === 'drag-drop'
-}
-
-export const isCodeExercise = (
-  exercise: Exercise
-): exercise is CodeExercise => {
-  return exercise.type === 'code'
 }
 
 export const isWritingExercise = (

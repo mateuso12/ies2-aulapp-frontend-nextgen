@@ -9,7 +9,6 @@ import {
 import {
   isWritingExercise,
   isMultipleChoiceExercise,
-  isMultipleSelectExercise,
 } from '@/features/exercises/types'
 import type {
   Exercise,
@@ -140,14 +139,8 @@ export const ActivityView: React.FC<ActivityViewProps> = ({
     )
   }
 
-  if (
-    isMultipleChoiceExercise(exercise) ||
-    isMultipleSelectExercise(exercise)
-  ) {
-    const correctCount = exercise.data.options.filter(
-      (opt) => opt.isCorrect
-    ).length
-    const isMultipleSelect = correctCount > 1
+  if (isMultipleChoiceExercise(exercise)) {
+    const isMultipleSelect = true // Sempre permitir seleção múltipla
     const currentAnswer = selectedAnswer
 
     return (
@@ -333,7 +326,7 @@ export const ActivityView: React.FC<ActivityViewProps> = ({
                     : 'bg-gray-300 text-gray-500 cursor-not-allowed'
                 }`}
               >
-                Confirmar
+                Verificar
               </button>
             </div>
           )}

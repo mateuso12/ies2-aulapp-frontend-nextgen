@@ -19,7 +19,6 @@ import { validateExercise } from '@/features/exercises/lib/utils'
 import {
   isWritingExercise,
   isMultipleChoiceExercise,
-  isMultipleSelectExercise,
 } from '@/features/exercises/types'
 import type { PageData } from '@/features/virtual-classroom/components/content/PageReel'
 import type { ExerciseValidationResult } from '@/features/exercises/types'
@@ -135,16 +134,9 @@ export const VirtualClassroom: React.FC = () => {
     const exercise = mockActivities.find((ex) => ex.id === exerciseId)
     if (!exercise) return
 
-    if (
-      !isMultipleChoiceExercise(exercise) &&
-      !isMultipleSelectExercise(exercise)
-    )
-      return
+    if (!isMultipleChoiceExercise(exercise)) return
 
-    const correctCount = exercise.data.options.filter(
-      (opt) => opt.isCorrect
-    ).length
-    const isMultipleSelect = correctCount > 1
+    const isMultipleSelect = true // Sempre permitir seleção múltipla
 
     if (isMultipleSelect) {
       const current = (selectedAnswers[exerciseId] as string[]) || []
@@ -162,11 +154,7 @@ export const VirtualClassroom: React.FC = () => {
     const exercise = mockActivities.find((ex) => ex.id === exerciseId)
     if (!exercise) return
 
-    if (
-      !isMultipleChoiceExercise(exercise) &&
-      !isMultipleSelectExercise(exercise)
-    )
-      return
+    if (!isMultipleChoiceExercise(exercise)) return
 
     const userAnswer = selectedAnswers[exerciseId]
     const correctOptions = exercise.data.options

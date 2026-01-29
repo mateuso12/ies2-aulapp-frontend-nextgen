@@ -4,12 +4,11 @@
 
 import type {
   MultipleChoiceExercise,
-  MultipleSelectExercise,
   WritingExercise,
 } from '@/features/exercises/types'
 
 /**
- * Mock 1: Múltipla escolha única (uma resposta correta)
+ * Mock 1: Múltipla escolha (permite escolher várias opções)
  */
 export const mockExercise1: MultipleChoiceExercise = {
   id: 'ex-001',
@@ -60,12 +59,11 @@ export const mockExercise1: MultipleChoiceExercise = {
 }
 
 /**
- * Mock 2: Múltipla seleção (várias respostas corretas)
- * Nota: O componente deve detectar que há múltiplas corretas e permitir seleção múltipla
+ * Mock 2: Múltipla escolha (várias respostas corretas)
  */
-export const mockExercise2: MultipleSelectExercise = {
+export const mockExercise2: MultipleChoiceExercise = {
   id: 'ex-002',
-  type: 'multiple-select',
+  type: 'multiple-choice',
   title: 'Quais das seguintes linguagens são orientadas a objetos?',
   description: 'Selecione todas as alternativas corretas.',
   data: {
@@ -112,7 +110,7 @@ export const mockExercise2: MultipleSelectExercise = {
 }
 
 /**
- * Mock 3: Múltipla escolha única (contexto matemático)
+ * Mock 3: Múltipla escolha (contexto matemático)
  */
 export const mockExercise3: MultipleChoiceExercise = {
   id: 'ex-003',

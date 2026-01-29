@@ -24,13 +24,6 @@ export const EXERCISE_TYPE_CONFIG: Record<
     supportAutoGrade: true,
     defaultMaxScore: 1,
   },
-  'multiple-select': {
-    label: 'Múltipla Seleção',
-    icon: 'CheckSquare',
-    description: 'Selecione todas as respostas corretas',
-    supportAutoGrade: true,
-    defaultMaxScore: 1,
-  },
   'open-text': {
     label: 'Resposta Aberta',
     icon: 'FileText',
@@ -52,40 +45,12 @@ export const EXERCISE_TYPE_CONFIG: Record<
     supportAutoGrade: true,
     defaultMaxScore: 1,
   },
-  matching: {
-    label: 'Associação',
-    icon: 'Link',
-    description: 'Associe os itens das duas listas',
-    supportAutoGrade: true,
-    defaultMaxScore: 1,
-  },
   'true-false': {
     label: 'Verdadeiro ou Falso',
     icon: 'HelpCircle',
     description: 'Indique se a afirmação é verdadeira ou falsa',
     supportAutoGrade: true,
     defaultMaxScore: 1,
-  },
-  'fill-blanks': {
-    label: 'Preencher Lacunas',
-    icon: 'UnderLine',
-    description: 'Complete o texto preenchendo as lacunas',
-    supportAutoGrade: true,
-    defaultMaxScore: 1,
-  },
-  'drag-drop': {
-    label: 'Arrastar e Soltar',
-    icon: 'Move',
-    description: 'Arraste os itens para as zonas corretas',
-    supportAutoGrade: true,
-    defaultMaxScore: 1,
-  },
-  code: {
-    label: 'Código',
-    icon: 'Code',
-    description: 'Escreva código para resolver o problema',
-    supportAutoGrade: false, // Pode ser true se integrar com judge online
-    defaultMaxScore: 10,
   },
   writing: {
     label: 'Atividade de Escrita',
