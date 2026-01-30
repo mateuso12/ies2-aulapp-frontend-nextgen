@@ -5,6 +5,7 @@
 import type {
   MultipleChoiceExercise,
   WritingExercise,
+  NumericExercise,
 } from '@/features/exercises/types'
 
 /**
@@ -202,6 +203,36 @@ export const mockExercise4: WritingExercise = {
 }
 
 /**
+ * Mock 5: Questão Numérica
+ */
+export const mockExercise5: NumericExercise = {
+  id: 'ex-005',
+  type: 'numeric',
+  title: 'Questão 3',
+  description:
+    'Calcule o resultado da operação: 10,5 + 9,5. Digite o valor numérico com até duas casas decimais.',
+  data: {
+    correctAnswer: 20,
+    tolerance: 0.01,
+    decimalPlaces: 2,
+  },
+  maxScore: 10,
+  difficulty: 'easy',
+  tags: ['matemática', 'aritmética'],
+  hints: ['Some os valores decimais com atenção'],
+  createdAt: new Date('2024-01-15'),
+  updatedAt: new Date('2024-01-15'),
+  metadata: {
+    comment: {
+      title: 'Operações com Decimais',
+      content: `Ao somar 10,5 + 9,5, obtemos 20. Esta é uma operação simples de adição com números decimais. Para somar decimais, alinhe as vírgulas e some os números como se fossem inteiros, mantendo a vírgula na posição correta no resultado.`,
+      imageUrl:
+        'https://images.unsplash.com/photo-1509228468518-180dd4864904?w=800&q=80',
+    },
+  },
+}
+
+/**
  * Lista de todos os exercícios mock
  */
 export const mockExercises = [
@@ -209,6 +240,7 @@ export const mockExercises = [
   mockExercise2,
   mockExercise3,
   mockExercise4,
+  mockExercise5,
 ]
 
 /**

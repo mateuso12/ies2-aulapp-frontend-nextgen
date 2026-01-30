@@ -26,3 +26,4 @@
 
 export { MultipleChoiceExerciseComponent } from './MultipleChoiceExercise'
 export { WritingExercise as WritingExerciseComponent } from './WritingExercise'
+export { NumericExercise as NumericExerciseComponent } from './NumericExercise'

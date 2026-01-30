@@ -2,10 +2,12 @@ import React from 'react'
 import {
   WritingExerciseComponent,
   MultipleChoiceExerciseComponent,
+  NumericExerciseComponent,
 } from '@/features/exercises/components/exercise-types'
 import {
   isWritingExercise,
   isMultipleChoiceExercise,
+  isNumericExercise,
 } from '@/features/exercises/types'
 import type {
   Exercise,
@@ -17,10 +19,10 @@ interface ActivityViewProps {
   currentPageIndex: number
   totalPages: number
   resourceType: string
-  selectedAnswer: string | string[] | undefined
+  selectedAnswer: string | string[] | number | undefined
   submittedAnswer?: {
     isCorrect: boolean
-    userAnswer: string | string[]
+    userAnswer: string | string[] | number
     comment?: { title: string; content: string; imageUrl?: string }
   }
   validationResult?: ExerciseValidationResult
@@ -28,6 +30,7 @@ interface ActivityViewProps {
   onConfirmAnswer: () => void
   onVerifyWriting: () => void
   onWritingChange: (answer: string) => void
+  onNumericChange: (answer: number) => void
 }
 
 export const ActivityView: React.FC<ActivityViewProps> = ({
@@ -42,8 +45,75 @@ export const ActivityView: React.FC<ActivityViewProps> = ({
   onConfirmAnswer,
   onVerifyWriting,
   onWritingChange,
+  onNumericChange,
 }) => {
   const progress = ((currentPageIndex + 1) / totalPages) * 100
+
+  if (isNumericExercise(exercise)) {
+    const currentAnswer = (selectedAnswer as number) || 0
+    const hasAnswer = currentAnswer !== 0
+    const isSubmitted = !!submittedAnswer && submittedAnswer.isCorrect
+    const isLocked = !!validationResult || isSubmitted
+
+    return (
+      <div
+        className={`w-full md:w-4xl mx-auto pb-8 ${
+          resourceType === 'gamified' ? 'mt-8' : 'py-8'
+        }`}
+      >
+        <div id={`exercise-${exercise.id}`} className="min-h-screen space-y-6">
+          <div>
+            <div className="h-1 w-full bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden mb-3">
+              <div
+                className="h-full bg-[#E91E63] transition-all duration-300"
+                style={{ width: `${progress}%` }}
+              ></div>
+            </div>
+            <h2 className="text-sm font-semibold text-gray-900 dark:text-gray-100">
+              Questão {currentPageIndex + 1}
+            </h2>
+          </div>
+
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-4">
+              {exercise.title}
+            </h1>
+            {exercise.description && (
+              <p className="text-base text-gray-700 dark:text-gray-300 leading-relaxed">
+                {exercise.description}
+              </p>
+            )}
+          </div>
+
+          <NumericExerciseComponent
+            exercise={exercise}
+            value={currentAnswer}
+            onChange={(answer) => onNumericChange(answer)}
+            readonly={isLocked}
+            validationResult={validationResult}
+            currentPageIndex={currentPageIndex}
+            comment={submittedAnswer?.comment}
+          />
+
+          {!isSubmitted && !validationResult && (
+            <div className="flex justify-center pt-8">
+              <button
+                onClick={onVerifyWriting}
+                disabled={!hasAnswer}
+                className={`px-12 py-3 font-semibold rounded-lg shadow-md transition-colors ${
+                  hasAnswer
+                    ? 'bg-blue-600 hover:bg-blue-700 text-white cursor-pointer'
+                    : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                }`}
+              >
+                Verificar
+              </button>
+            </div>
+          )}
+        </div>
+      </div>
+    )
+  }
 
   if (isWritingExercise(exercise)) {
     const currentAnswer = (selectedAnswer as string) || ''
@@ -92,14 +162,14 @@ export const ActivityView: React.FC<ActivityViewProps> = ({
           />
 
           {!isSubmitted && !validationResult && (
-            <div className="flex justify-center">
+            <div className="flex justify-center pt-8">
               <button
                 onClick={onVerifyWriting}
                 disabled={!hasAnswer}
-                className={`px-8 py-3 rounded-lg font-bold text-white transition-all ${
+                className={`px-12 py-3 font-semibold rounded-lg shadow-md transition-colors ${
                   hasAnswer
-                    ? 'bg-[#487BFF] hover:bg-[#3869E6] cursor-pointer'
-                    : 'bg-gray-300 cursor-not-allowed'
+                    ? 'bg-blue-600 hover:bg-blue-700 text-white cursor-pointer'
+                    : 'bg-gray-300 text-gray-500 cursor-not-allowed'
                 }`}
               >
                 Verificar
@@ -118,8 +188,8 @@ export const ActivityView: React.FC<ActivityViewProps> = ({
         currentPageIndex={currentPageIndex}
         totalPages={totalPages}
         resourceType={resourceType}
-        selectedAnswer={selectedAnswer}
-        submittedAnswer={submittedAnswer}
+        selectedAnswer={selectedAnswer as string | string[] | undefined}
+        submittedAnswer={submittedAnswer as { isCorrect: boolean; userAnswer: string | string[]; comment?: { title: string; content: string; imageUrl?: string } } | undefined}
         onSelectOption={onSelectOption}
         onConfirmAnswer={onConfirmAnswer}
       />

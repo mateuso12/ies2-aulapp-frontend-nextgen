@@ -19,6 +19,7 @@ import { validateExercise } from '@/features/exercises/lib/utils'
 import {
   isWritingExercise,
   isMultipleChoiceExercise,
+  isNumericExercise,
 } from '@/features/exercises/types'
 import type { PageData } from '@/features/virtual-classroom/components/content/PageReel'
 import type { ExerciseValidationResult } from '@/features/exercises/types'
@@ -28,14 +29,14 @@ export const VirtualClassroom: React.FC = () => {
   const [currentPageIndex, setCurrentPageIndex] = useState(0)
   const [resourceType, setResourceType] = useState('content')
   const [selectedAnswers, setSelectedAnswers] = useState<
-    Record<string, string | string[]>
+    Record<string, string | string[] | number>
   >({})
   const [submittedAnswers, setSubmittedAnswers] = useState<
     Record<
       string,
       {
         isCorrect: boolean
-        userAnswer: string | string[]
+        userAnswer: string | string[] | number
         comment?:
           | { title: string; content: string; imageUrl?: string }
           | undefined
@@ -166,7 +167,7 @@ export const VirtualClassroom: React.FC = () => {
       isCorrect =
         userAnswer.length === correctOptions.length &&
         userAnswer.every((id) => correctOptions.includes(id))
-    } else {
+    } else if (typeof userAnswer === 'string') {
       isCorrect = correctOptions.includes(userAnswer)
     }
 
@@ -219,8 +220,48 @@ export const VirtualClassroom: React.FC = () => {
     }
   }
 
+  // Handler para verificar resposta de questão numérica
+  const handleVerifyNumeric = (exerciseId: string) => {
+    const exercise = mockActivities.find((ex) => ex.id === exerciseId)
+    if (!exercise || !isNumericExercise(exercise)) return
+
+    const userAnswer = selectedAnswers[exerciseId] as number
+    if (userAnswer === 0 || userAnswer === undefined) return
+
+    const result = validateExercise(exercise, userAnswer)
+
+    if (result.isCorrect) {
+      playSuccess()
+    } else {
+      playError()
+    }
+
+    setValidationResults({
+      ...validationResults,
+      [exerciseId]: result,
+    })
+
+    if (result.isCorrect) {
+      const comment = exercise.metadata?.comment as
+        | { title: string; content: string; imageUrl?: string }
+        | undefined
+      setSubmittedAnswers({
+        ...submittedAnswers,
+        [exerciseId]: { isCorrect: true, userAnswer, comment },
+      })
+    }
+  }
+
   // Handler para mudança de resposta em atividade de escrita
   const handleWritingChange = (exerciseId: string, answer: string) => {
+    setSelectedAnswers({
+      ...selectedAnswers,
+      [exerciseId]: answer,
+    })
+  }
+
+  // Handler para mudança de resposta em questão numérica
+  const handleNumericChange = (exerciseId: string, answer: number) => {
     setSelectedAnswers({
       ...selectedAnswers,
       [exerciseId]: answer,
@@ -322,10 +363,15 @@ export const VirtualClassroom: React.FC = () => {
                     handleConfirmAnswer(currentPage.exercise!.id)
                   }
                   onVerifyWriting={() =>
-                    handleVerifyWriting(currentPage.exercise!.id)
+                    isNumericExercise(currentPage.exercise!)
+                      ? handleVerifyNumeric(currentPage.exercise!.id)
+                      : handleVerifyWriting(currentPage.exercise!.id)
                   }
                   onWritingChange={(answer) =>
                     handleWritingChange(currentPage.exercise!.id, answer)
+                  }
+                  onNumericChange={(answer) =>
+                    handleNumericChange(currentPage.exercise!.id, answer)
                   }
                 />
               )}
