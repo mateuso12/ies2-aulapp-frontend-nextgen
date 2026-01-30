@@ -23,11 +23,11 @@ const formatNumberWithThousands = (value: string): string => {
   const parts = value.split(',')
   const integerPart = parts[0].replace(/\D/g, '')
   const decimalPart = parts[1] ? parts[1].replace(/\D/g, '') : ''
-  
+
   if (!integerPart) return ''
-  
+
   const formattedInteger = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, '.')
-  
+
   return decimalPart !== undefined && parts.length > 1
     ? `${formattedInteger},${decimalPart}`
     : formattedInteger
@@ -58,21 +58,21 @@ export const NumericExercise: React.FC<NumericExerciseProps> = ({
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const input = e.target.value
-    
+
     if (input === '') {
       setDisplayValue('')
       onChange?.(0)
       return
     }
-    
+
     if (!/^[\d.,]*$/.test(input)) return
-    
+
     const commaCount = (input.match(/,/g) || []).length
     if (commaCount > 1) return
-    
+
     const formatted = formatNumberWithThousands(input)
     setDisplayValue(formatted)
-    
+
     const numericValue = parseFormattedNumber(formatted)
     onChange?.(numericValue)
   }

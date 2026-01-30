@@ -189,7 +189,15 @@ export const ActivityView: React.FC<ActivityViewProps> = ({
         totalPages={totalPages}
         resourceType={resourceType}
         selectedAnswer={selectedAnswer as string | string[] | undefined}
-        submittedAnswer={submittedAnswer as { isCorrect: boolean; userAnswer: string | string[]; comment?: { title: string; content: string; imageUrl?: string } } | undefined}
+        submittedAnswer={
+          submittedAnswer as
+            | {
+                isCorrect: boolean
+                userAnswer: string | string[]
+                comment?: { title: string; content: string; imageUrl?: string }
+              }
+            | undefined
+        }
         onSelectOption={onSelectOption}
         onConfirmAnswer={onConfirmAnswer}
       />
