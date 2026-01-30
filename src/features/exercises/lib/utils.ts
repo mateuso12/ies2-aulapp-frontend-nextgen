@@ -12,6 +12,7 @@ import type {
   TrueFalseExercise,
   WritingExercise,
 } from '../types'
+import i18n from '@/services/i18n'
 
 /**
  * Gera um ID único para exercícios/submissões
@@ -146,8 +147,11 @@ export const validateMultipleChoice = (
     isCorrect,
     score: Math.round(score * 100) / 100,
     feedback: isCorrect
-      ? 'Resposta correta! 🎉'
-      : `${correctSelections} corretas, ${incorrectSelections} incorretas`,
+      ? i18n.t('exercises:feedback.correct')
+      : i18n.t('exercises:feedback.multipleChoiceSummary', {
+          correct: correctSelections,
+          incorrect: incorrectSelections,
+        }),
   }
 }
 
@@ -165,8 +169,11 @@ export const validateNumeric = (
     isCorrect,
     score: isCorrect ? exercise.maxScore : 0,
     feedback: isCorrect
-      ? 'Resposta correta! 🎉'
-      : `Resposta incorreta. A resposta correta é ${correctAnswer}${exercise.data.unit ? ' ' + exercise.data.unit : ''}`,
+      ? i18n.t('exercises:feedback.correct')
+      : i18n.t('exercises:feedback.numericIncorrect', {
+          answer: correctAnswer,
+          unit: exercise.data.unit ? ` ${exercise.data.unit}` : '',
+        }),
   }
 }
 
@@ -199,8 +206,11 @@ export const validateOrdering = (
     isCorrect,
     score: Math.round(score * 100) / 100,
     feedback: isCorrect
-      ? 'Ordem correta! 🎉'
-      : `${correctPositions} de ${correctOrder.length} itens na posição correta`,
+      ? i18n.t('exercises:feedback.orderCorrect')
+      : i18n.t('exercises:feedback.orderIncorrect', {
+          correctPositions,
+          total: correctOrder.length,
+        }),
     details: {
       correctPositions,
       totalItems: correctOrder.length,
@@ -221,8 +231,8 @@ export const validateTrueFalse = (
     isCorrect,
     score: isCorrect ? exercise.maxScore : 0,
     feedback: isCorrect
-      ? 'Resposta correta! 🎉'
-      : 'Resposta incorreta. Tente novamente!',
+      ? i18n.t('exercises:feedback.correct')
+      : i18n.t('exercises:feedback.tryAgain'),
   }
 }
 
@@ -264,8 +274,8 @@ export const validateWriting = (
     isCorrect,
     score: isCorrect ? exercise.maxScore : 0,
     feedback: isCorrect
-      ? 'Resposta correta! 🎉'
-      : incorrectFeedback || 'Resposta incorreta. Tente novamente!',
+      ? i18n.t('exercises:feedback.correct')
+      : incorrectFeedback || i18n.t('exercises:feedback.tryAgain'),
   }
 }
 

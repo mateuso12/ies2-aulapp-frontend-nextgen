@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
 import type {
   ExerciseComponentProps,
   WritingData,
@@ -29,6 +30,7 @@ export const WritingExercise: React.FC<WritingExerciseProps> = ({
   currentPageIndex,
   comment,
 }) => {
+  const { t } = useTranslation('exercises')
   const [localValue, setLocalValue] = useState(value)
   const maxChars = exercise.data.maxCharacters || 200
 
@@ -88,7 +90,7 @@ export const WritingExercise: React.FC<WritingExerciseProps> = ({
           type="text"
           value={localValue}
           onChange={handleChange}
-          placeholder={exercise.data.placeholder || 'Escrita'}
+          placeholder={exercise.data.placeholder || t('writingPlaceholder')}
           disabled={readonly || disabled}
           maxLength={maxChars}
           className={cn(

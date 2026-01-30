@@ -1,4 +1,5 @@
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 import {
   WritingExerciseComponent,
   MultipleChoiceExerciseComponent,
@@ -47,6 +48,7 @@ export const ActivityView: React.FC<ActivityViewProps> = ({
   onWritingChange,
   onNumericChange,
 }) => {
+  const { t } = useTranslation('exercises')
   const progress = ((currentPageIndex + 1) / totalPages) * 100
 
   if (isNumericExercise(exercise)) {
@@ -70,7 +72,7 @@ export const ActivityView: React.FC<ActivityViewProps> = ({
               ></div>
             </div>
             <h2 className="text-sm font-semibold text-gray-900 dark:text-gray-100">
-              Questão {currentPageIndex + 1}
+              {t('questionLabel')} {currentPageIndex + 1}
             </h2>
           </div>
 
@@ -106,7 +108,7 @@ export const ActivityView: React.FC<ActivityViewProps> = ({
                     : 'bg-gray-300 text-gray-500 cursor-not-allowed'
                 }`}
               >
-                Verificar
+                {t('verify')}
               </button>
             </div>
           )}
@@ -136,7 +138,7 @@ export const ActivityView: React.FC<ActivityViewProps> = ({
               ></div>
             </div>
             <h2 className="text-sm font-semibold text-gray-900 dark:text-gray-100">
-              Questão {currentPageIndex + 1}
+              {t('questionLabel')} {currentPageIndex + 1}
             </h2>
           </div>
 
@@ -172,7 +174,7 @@ export const ActivityView: React.FC<ActivityViewProps> = ({
                     : 'bg-gray-300 text-gray-500 cursor-not-allowed'
                 }`}
               >
-                Verificar
+                {t('verify')}
               </button>
             </div>
           )}

@@ -1,4 +1,5 @@
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 import {
   ExerciseFeedback,
   ExerciseComment,
@@ -37,6 +38,7 @@ export const MultipleChoiceExerciseComponent: React.FC<
   onSelectOption,
   onConfirmAnswer,
 }) => {
+  const { t } = useTranslation('exercises')
   const progress = ((currentPageIndex + 1) / totalPages) * 100
   const isMultipleSelect = true // Sempre permitir seleção múltipla
   const currentAnswer = selectedAnswer
@@ -56,7 +58,7 @@ export const MultipleChoiceExerciseComponent: React.FC<
             ></div>
           </div>
           <h2 className="text-sm font-semibold text-gray-900 dark:text-gray-100">
-            Questão {currentPageIndex + 1}
+            {t('questionLabel')} {currentPageIndex + 1}
           </h2>
         </div>
 
@@ -159,7 +161,7 @@ export const MultipleChoiceExerciseComponent: React.FC<
                             />
                           </svg>
                           <p className="font-plus-jakarta font-semibold text-[16px] text-black tracking-[-0.24px]">
-                            Correto
+                            {t('correct')}
                           </p>
                         </div>
                       )}
@@ -181,7 +183,7 @@ export const MultipleChoiceExerciseComponent: React.FC<
                             />
                           </svg>
                           <p className="font-plus-jakarta font-semibold text-[16px] text-black tracking-[-0.24px]">
-                            Errado
+                            {t('wrong')}
                           </p>
                         </div>
                       )}
@@ -224,7 +226,7 @@ export const MultipleChoiceExerciseComponent: React.FC<
                   : 'bg-gray-300 text-gray-500 cursor-not-allowed'
               }`}
             >
-              Verificar
+              {t('verify')}
             </button>
           </div>
         )}

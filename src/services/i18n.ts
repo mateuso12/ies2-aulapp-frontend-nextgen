@@ -12,6 +12,7 @@ import buttonsPT from '../locales/pt-BR/buttons.json'
 import footerPT from '../locales/pt-BR/footer.json'
 import pageReelPT from '../locales/pt-BR/pageReel.json'
 import classroomPT from '../locales/pt-BR/classroom.json'
+import exercisesPT from '../locales/pt-BR/exercises.json'
 
 // en
 import commonEN from '../locales/en/common.json'
@@ -23,6 +24,7 @@ import buttonsEN from '../locales/en/buttons.json'
 import footerEN from '../locales/en/footer.json'
 import pageReelEN from '../locales/en/pageReel.json'
 import classroomEN from '../locales/en/classroom.json'
+import exercisesEN from '../locales/en/exercises.json'
 
 // es
 import commonES from '../locales/es/common.json'
@@ -34,6 +36,7 @@ import buttonsES from '../locales/es/buttons.json'
 import footerES from '../locales/es/footer.json'
 import pageReelES from '../locales/es/pageReel.json'
 import classroomES from '../locales/es/classroom.json'
+import exercisesES from '../locales/es/exercises.json'
 
 const resources = {
   'pt-BR': {
@@ -46,6 +49,7 @@ const resources = {
     footer: footerPT,
     pageReel: pageReelPT,
     classroom: classroomPT,
+    exercises: exercisesPT,
   },
   en: {
     common: commonEN,
@@ -57,6 +61,7 @@ const resources = {
     footer: footerEN,
     pageReel: pageReelEN,
     classroom: classroomEN,
+    exercises: exercisesEN,
   },
   es: {
     common: commonES,
@@ -68,6 +73,7 @@ const resources = {
     footer: footerES,
     pageReel: pageReelES,
     classroom: classroomES,
+    exercises: exercisesES,
   },
 }
 
@@ -89,6 +95,7 @@ i18n
       'footer',
       'pageReel',
       'classroom',
+      'exercises',
     ],
     interpolation: { escapeValue: false },
     detection: {

@@ -1,0 +1,16 @@
+{
+  "questionLabel": "Questão",
+  "verify": "Verificar",
+  "correct": "Correto",
+  "incorrect": "Incorreto",
+  "wrong": "Errado",
+  "writingPlaceholder": "Escrita",
+  "feedback": {
+    "correct": "Resposta correta! 🎉",
+    "tryAgain": "Resposta incorreta. Tente novamente!",
+    "numericIncorrect": "Resposta incorreta. A resposta correta é {{answer}}{{unit}}",
+    "orderCorrect": "Ordem correta! 🎉",
+    "orderIncorrect": "{{correctPositions}} de {{total}} itens na posição correta",
+    "multipleChoiceSummary": "{{correct}} corretas, {{incorrect}} incorretas"
+  }
+}

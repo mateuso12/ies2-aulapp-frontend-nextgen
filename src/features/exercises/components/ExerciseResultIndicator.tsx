@@ -1,4 +1,5 @@
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 
 interface ExerciseResultIndicatorProps {
   isCorrect: boolean
@@ -7,6 +8,7 @@ interface ExerciseResultIndicatorProps {
 export const ExerciseResultIndicator: React.FC<
   ExerciseResultIndicatorProps
 > = ({ isCorrect }) => {
+  const { t } = useTranslation('exercises')
   if (isCorrect) {
     return (
       <div className="flex items-center justify-center gap-1">
@@ -26,7 +28,7 @@ export const ExerciseResultIndicator: React.FC<
           />
         </svg>
         <p className="font-sans font-semibold text-[32px] leading-none text-black dark:text-white tracking-[-0.48px]">
-          Correto
+          {t('correct')}
         </p>
       </div>
     )
@@ -50,7 +52,7 @@ export const ExerciseResultIndicator: React.FC<
         />
       </svg>
       <p className="font-sans font-semibold text-[32px] leading-none text-black dark:text-white tracking-[-0.48px]">
-        Incorreto
+        {t('incorrect')}
       </p>
     </div>
   )
