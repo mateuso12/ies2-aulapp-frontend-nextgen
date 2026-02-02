@@ -5,6 +5,26 @@
   "incorrect": "Incorrect",
   "wrong": "Wrong",
   "writingPlaceholder": "Writing",
+  "trueFalse": {
+    "labels": {
+      "verdadeiroFalso": {
+        "true": "True",
+        "false": "False"
+      },
+      "vf": {
+        "true": "T",
+        "false": "F"
+      },
+      "simNao": {
+        "true": "Yes",
+        "false": "No"
+      },
+      "certoErrado": {
+        "true": "Right",
+        "false": "Wrong"
+      }
+    }
+  },
   "feedback": {
     "correct": "Correct answer! 🎉",
     "tryAgain": "Incorrect answer. Try again!",

@@ -288,11 +288,30 @@ export type OrderingExercise = BaseExercise<OrderingData, OrderingAnswer>
 /**
  * VERDADEIRO OU FALSO
  */
-export interface TrueFalseData {
+export type TrueFalseLabelVariant =
+  | 'verdadeiro-falso'
+  | 'vf'
+  | 'v-f'
+  | 'v/f'
+  | 'sim-nao'
+  | 'certo-errado'
+  | 'thumbs'
+
+export interface TrueFalseStatement {
+  id: string
+  text: string
   correctAnswer: boolean
+  incorrectFeedback?: string
 }
 
-export type TrueFalseAnswer = boolean
+export interface TrueFalseData {
+  correctAnswer?: boolean
+  statements?: TrueFalseStatement[]
+  labelVariant?: TrueFalseLabelVariant
+  incorrectFeedback?: string
+}
+
+export type TrueFalseAnswer = boolean | Record<string, boolean>
 
 export type TrueFalseExercise = BaseExercise<TrueFalseData, TrueFalseAnswer>
 

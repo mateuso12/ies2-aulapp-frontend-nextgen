@@ -6,6 +6,7 @@ import type {
   MultipleChoiceExercise,
   WritingExercise,
   NumericExercise,
+  TrueFalseExercise,
 } from '@/features/exercises/types'
 
 /**
@@ -233,6 +234,149 @@ export const mockExercise5: NumericExercise = {
 }
 
 /**
+ * Mock 6: Verdadeiro ou Falso (Certo/Errado - único)
+ */
+export const mockExercise6: TrueFalseExercise = {
+  id: 'ex-006',
+  type: 'true-false',
+  title: 'Questão 4',
+  description: 'O Brasil ganhou 8 copas do mundo de futebol.',
+  data: {
+    correctAnswer: false,
+    labelVariant: 'certo-errado',
+    incorrectFeedback: 'O Brasil venceu 5 Copas do Mundo, não 8.',
+  },
+  maxScore: 10,
+  difficulty: 'easy',
+  tags: ['esportes', 'futebol'],
+  createdAt: new Date('2024-01-15'),
+  updatedAt: new Date('2024-01-15'),
+  metadata: {
+    comment: {
+      title: 'Copas do Mundo',
+      content:
+        'O Brasil é o maior campeão da Copa do Mundo com 5 títulos (1958, 1962, 1970, 1994, 2002).',
+    },
+  },
+}
+
+/**
+ * Mock 7: Verdadeiro ou Falso (Verdadeiro/Falso - múltiplo)
+ */
+export const mockExercise7: TrueFalseExercise = {
+  id: 'ex-007',
+  type: 'true-false',
+  title: 'Questão 5',
+  description: 'Avalie as afirmações abaixo.',
+  data: {
+    labelVariant: 'verdadeiro-falso',
+    statements: [
+      {
+        id: 's1',
+        text: 'A água ferve a 100°C ao nível do mar.',
+        correctAnswer: true,
+        incorrectFeedback: 'Em condições padrão, a água ferve a 100°C.',
+      },
+      {
+        id: 's2',
+        text: 'A Terra é o maior planeta do Sistema Solar.',
+        correctAnswer: false,
+        incorrectFeedback: 'Júpiter é o maior planeta do Sistema Solar.',
+      },
+    ],
+  },
+  maxScore: 10,
+  difficulty: 'easy',
+  tags: ['ciências'],
+  createdAt: new Date('2024-01-15'),
+  updatedAt: new Date('2024-01-15'),
+}
+
+/**
+ * Mock 8: Verdadeiro ou Falso (Sim/Não - múltiplo)
+ */
+export const mockExercise8: TrueFalseExercise = {
+  id: 'ex-008',
+  type: 'true-false',
+  title: 'Questão 6',
+  description: 'Responda Sim ou Não.',
+  data: {
+    labelVariant: 'sim-nao',
+    statements: [
+      {
+        id: 's1',
+        text: 'O Monte Everest fica na Ásia.',
+        correctAnswer: true,
+        incorrectFeedback: 'Ele fica na cordilheira do Himalaia, na Ásia.',
+      },
+      {
+        id: 's2',
+        text: 'O Rio Amazonas é o menor do mundo.',
+        correctAnswer: false,
+        incorrectFeedback: 'Ele é um dos maiores do mundo.',
+      },
+    ],
+  },
+  maxScore: 10,
+  difficulty: 'easy',
+  tags: ['geografia'],
+  createdAt: new Date('2024-01-15'),
+  updatedAt: new Date('2024-01-15'),
+}
+
+/**
+ * Mock 9: Verdadeiro ou Falso (V/F - único)
+ */
+export const mockExercise9: TrueFalseExercise = {
+  id: 'ex-009',
+  type: 'true-false',
+  title: 'Questão 7',
+  description: 'A luz viaja mais rápido do que o som.',
+  data: {
+    correctAnswer: true,
+    labelVariant: 'vf',
+    incorrectFeedback: 'A velocidade da luz é muito maior que a do som.',
+  },
+  maxScore: 10,
+  difficulty: 'easy',
+  tags: ['física'],
+  createdAt: new Date('2024-01-15'),
+  updatedAt: new Date('2024-01-15'),
+}
+
+/**
+ * Mock 10: Verdadeiro ou Falso (ícones - múltiplo)
+ */
+export const mockExercise10: TrueFalseExercise = {
+  id: 'ex-010',
+  type: 'true-false',
+  title: 'Questão 8',
+  description: 'Julgue as afirmações com ícones.',
+  data: {
+    labelVariant: 'thumbs',
+    statements: [
+      {
+        id: 's1',
+        text: 'Plutão é classificado como planeta anão.',
+        correctAnswer: true,
+        incorrectFeedback: 'Plutão é um planeta anão.',
+      },
+      {
+        id: 's2',
+        text: 'O Sol é um planeta.',
+        correctAnswer: false,
+        incorrectFeedback: 'O Sol é uma estrela.',
+      },
+    ],
+  },
+  maxScore: 10,
+  difficulty: 'easy',
+  tags: ['astronomia'],
+  createdAt: new Date('2024-01-15'),
+  updatedAt: new Date('2024-01-15'),
+}
+
+/**
  * Lista de todos os exercícios mock
  */
 export const mockExercises = [
@@ -241,6 +385,11 @@ export const mockExercises = [
   mockExercise3,
   mockExercise4,
   mockExercise5,
+  mockExercise6,
+  mockExercise7,
+  mockExercise8,
+  mockExercise9,
+  mockExercise10,
 ]
 
 /**

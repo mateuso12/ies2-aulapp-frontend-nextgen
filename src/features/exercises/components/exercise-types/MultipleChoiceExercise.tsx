@@ -77,6 +77,10 @@ export const MultipleChoiceExerciseComponent: React.FC<
           )}
         </div>
 
+        {submittedAnswer && (
+          <ExerciseResultIndicator isCorrect={submittedAnswer.isCorrect} />
+        )}
+
         <div className="space-y-4 mt-8">
           {exercise.data.options.map(
             (option: MultipleChoiceOption, index: number) => {
@@ -210,10 +214,6 @@ export const MultipleChoiceExerciseComponent: React.FC<
             }
           )}
         </div>
-
-        {submittedAnswer && (
-          <ExerciseResultIndicator isCorrect={submittedAnswer.isCorrect} />
-        )}
 
         {!submittedAnswer && (
           <div className="flex justify-center pt-8">

@@ -4,11 +4,14 @@ import {
   WritingExerciseComponent,
   MultipleChoiceExerciseComponent,
   NumericExerciseComponent,
+  TrueFalseExerciseComponent,
 } from '@/features/exercises/components/exercise-types'
+import { ExerciseResultIndicator } from '@/features/exercises/components'
 import {
   isWritingExercise,
   isMultipleChoiceExercise,
   isNumericExercise,
+  isTrueFalseExercise,
 } from '@/features/exercises/types'
 import type {
   Exercise,
@@ -32,6 +35,8 @@ interface ActivityViewProps {
   onVerifyWriting: () => void
   onWritingChange: (answer: string) => void
   onNumericChange: (answer: number) => void
+  onTrueFalseChange: (statementId: string, answer: boolean) => void
+  onVerifyTrueFalse: () => void
 }
 
 export const ActivityView: React.FC<ActivityViewProps> = ({
@@ -47,6 +52,8 @@ export const ActivityView: React.FC<ActivityViewProps> = ({
   onVerifyWriting,
   onWritingChange,
   onNumericChange,
+  onTrueFalseChange,
+  onVerifyTrueFalse,
 }) => {
   const { t } = useTranslation('exercises')
   const progress = ((currentPageIndex + 1) / totalPages) * 100
@@ -86,6 +93,10 @@ export const ActivityView: React.FC<ActivityViewProps> = ({
               </p>
             )}
           </div>
+
+          {validationResult && (
+            <ExerciseResultIndicator isCorrect={validationResult.isCorrect} />
+          )}
 
           <NumericExerciseComponent
             exercise={exercise}
@@ -153,6 +164,10 @@ export const ActivityView: React.FC<ActivityViewProps> = ({
             )}
           </div>
 
+          {validationResult && (
+            <ExerciseResultIndicator isCorrect={validationResult.isCorrect} />
+          )}
+
           <WritingExerciseComponent
             exercise={exercise}
             value={currentAnswer}
@@ -202,6 +217,32 @@ export const ActivityView: React.FC<ActivityViewProps> = ({
         }
         onSelectOption={onSelectOption}
         onConfirmAnswer={onConfirmAnswer}
+      />
+    )
+  }
+
+  if (isTrueFalseExercise(exercise)) {
+    return (
+      <TrueFalseExerciseComponent
+        exercise={exercise}
+        currentPageIndex={currentPageIndex}
+        totalPages={totalPages}
+        resourceType={resourceType}
+        selectedAnswer={
+          selectedAnswer as boolean | Record<string, boolean> | undefined
+        }
+        submittedAnswer={
+          submittedAnswer as
+            | {
+                isCorrect: boolean
+                userAnswer: boolean | Record<string, boolean>
+                comment?: { title: string; content: string; imageUrl?: string }
+              }
+            | undefined
+        }
+        validationResult={validationResult}
+        onSelectAnswer={onTrueFalseChange}
+        onConfirmAnswer={onVerifyTrueFalse}
       />
     )
   }

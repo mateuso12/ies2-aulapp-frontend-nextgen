@@ -7,7 +7,6 @@ import type {
 } from '../../types'
 import { cn } from '@/lib/utils'
 import { ExerciseFeedback } from '../ExerciseFeedback'
-import { ExerciseResultIndicator } from '../ExerciseResultIndicator'
 import { ViewCommentButton } from '../ViewCommentButton'
 import { ExerciseComment } from '../ExerciseComment'
 
@@ -124,10 +123,6 @@ export const WritingExercise: React.FC<WritingExerciseProps> = ({
             </div>
           )}
       </div>
-
-      {validationResult && (
-        <ExerciseResultIndicator isCorrect={validationResult.isCorrect} />
-      )}
 
       {validationResult && comment && (
         <ViewCommentButton

@@ -20,6 +20,7 @@ import {
   isWritingExercise,
   isMultipleChoiceExercise,
   isNumericExercise,
+  isTrueFalseExercise,
 } from '@/features/exercises/types'
 import type { PageData } from '@/features/virtual-classroom/components/content/PageReel'
 import type { ExerciseValidationResult } from '@/features/exercises/types'
@@ -29,14 +30,22 @@ export const VirtualClassroom: React.FC = () => {
   const [currentPageIndex, setCurrentPageIndex] = useState(0)
   const [resourceType, setResourceType] = useState('content')
   const [selectedAnswers, setSelectedAnswers] = useState<
-    Record<string, string | string[] | number>
+    Record<
+      string,
+      string | string[] | number | boolean | Record<string, boolean>
+    >
   >({})
   const [submittedAnswers, setSubmittedAnswers] = useState<
     Record<
       string,
       {
         isCorrect: boolean
-        userAnswer: string | string[] | number
+        userAnswer:
+          | string
+          | string[]
+          | number
+          | boolean
+          | Record<string, boolean>
         comment?:
           | { title: string; content: string; imageUrl?: string }
           | undefined
@@ -188,6 +197,44 @@ export const VirtualClassroom: React.FC = () => {
     })
   }
 
+  const handleVerifyTrueFalse = (exerciseId: string) => {
+    const exercise = mockActivities.find((ex) => ex.id === exerciseId)
+    if (!exercise || !isTrueFalseExercise(exercise)) return
+
+    const userAnswer = selectedAnswers[exerciseId] as
+      | boolean
+      | Record<string, boolean>
+
+    if (exercise.data.statements && exercise.data.statements.length > 0) {
+      const answersMap = userAnswer as Record<string, boolean>
+      const allAnswered = exercise.data.statements.every(
+        (statement) => answersMap?.[statement.id] !== undefined
+      )
+      if (!allAnswered) return
+    }
+
+    const result = validateExercise(exercise, userAnswer)
+
+    if (result.isCorrect) {
+      playSuccess()
+    } else {
+      playError()
+    }
+
+    setValidationResults({
+      ...validationResults,
+      [exerciseId]: result,
+    })
+
+    const comment = exercise.metadata?.comment as
+      | { title: string; content: string; imageUrl?: string }
+      | undefined
+    setSubmittedAnswers({
+      ...submittedAnswers,
+      [exerciseId]: { isCorrect: result.isCorrect, userAnswer, comment },
+    })
+  }
+
   // Handler para verificar resposta de atividade de escrita
   const handleVerifyWriting = (exerciseId: string) => {
     const exercise = mockActivities.find((ex) => ex.id === exerciseId)
@@ -258,6 +305,30 @@ export const VirtualClassroom: React.FC = () => {
 
   // Handler para mudança de resposta em questão numérica
   const handleNumericChange = (exerciseId: string, answer: number) => {
+    setSelectedAnswers({
+      ...selectedAnswers,
+      [exerciseId]: answer,
+    })
+  }
+
+  const handleTrueFalseChange = (
+    exerciseId: string,
+    statementId: string,
+    answer: boolean
+  ) => {
+    const exercise = mockActivities.find((ex) => ex.id === exerciseId)
+    if (!exercise || !isTrueFalseExercise(exercise)) return
+
+    if (exercise.data.statements && exercise.data.statements.length > 0) {
+      const current =
+        (selectedAnswers[exerciseId] as Record<string, boolean>) || {}
+      setSelectedAnswers({
+        ...selectedAnswers,
+        [exerciseId]: { ...current, [statementId]: answer },
+      })
+      return
+    }
+
     setSelectedAnswers({
       ...selectedAnswers,
       [exerciseId]: answer,
@@ -368,6 +439,16 @@ export const VirtualClassroom: React.FC = () => {
                   }
                   onNumericChange={(answer) =>
                     handleNumericChange(currentPage.exercise!.id, answer)
+                  }
+                  onTrueFalseChange={(statementId, answer) =>
+                    handleTrueFalseChange(
+                      currentPage.exercise!.id,
+                      statementId,
+                      answer
+                    )
+                  }
+                  onVerifyTrueFalse={() =>
+                    handleVerifyTrueFalse(currentPage.exercise!.id)
                   }
                 />
               )}

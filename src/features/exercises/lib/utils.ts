@@ -223,8 +223,29 @@ export const validateOrdering = (
  */
 export const validateTrueFalse = (
   exercise: TrueFalseExercise,
-  answer: boolean
+  answer: boolean | Record<string, boolean>
 ): ExerciseValidationResult => {
+  const statements = exercise.data.statements
+  if (statements && statements.length > 0 && typeof answer === 'object') {
+    const results = statements.reduce<Record<string, boolean>>((acc, item) => {
+      acc[item.id] = answer[item.id] === item.correctAnswer
+      return acc
+    }, {})
+
+    const correctCount = Object.values(results).filter(Boolean).length
+    const isCorrect = correctCount === statements.length
+    const score = (correctCount / statements.length) * exercise.maxScore
+
+    return {
+      isCorrect,
+      score: Math.round(score * 100) / 100,
+      feedback: isCorrect
+        ? i18n.t('exercises:feedback.correct')
+        : i18n.t('exercises:feedback.tryAgain'),
+      details: { results },
+    }
+  }
+
   const isCorrect = answer === exercise.data.correctAnswer
 
   return {
@@ -297,7 +318,10 @@ export const validateExercise = (
     case 'ordering':
       return validateOrdering(exercise as OrderingExercise, answer as string[])
     case 'true-false':
-      return validateTrueFalse(exercise as TrueFalseExercise, answer as boolean)
+      return validateTrueFalse(
+        exercise as TrueFalseExercise,
+        answer as boolean | Record<string, boolean>
+      )
     case 'writing':
       return validateWriting(exercise as WritingExercise, answer as string)
     default:
