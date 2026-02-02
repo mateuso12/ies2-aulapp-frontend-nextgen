@@ -32,12 +32,17 @@ export const WritingExercise: React.FC<WritingExerciseProps> = ({
 }) => {
   const { t } = useTranslation('exercises')
   const [localValue, setLocalValue] = useState(value)
+  const [showComment, setShowComment] = useState(false)
   const maxChars = exercise.data.maxCharacters || 200
 
   // Sincroniza com valor externo
   useEffect(() => {
     setLocalValue(value)
   }, [value])
+
+  useEffect(() => {
+    setShowComment(false)
+  }, [exercise.id])
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value
@@ -125,15 +130,19 @@ export const WritingExercise: React.FC<WritingExerciseProps> = ({
       )}
 
       {validationResult && comment && (
-        <ViewCommentButton exerciseId={exercise.id} />
+        <ViewCommentButton
+          exerciseId={exercise.id}
+          onClick={() => setShowComment(true)}
+        />
       )}
 
-      {validationResult && comment && (
+      {validationResult && comment && showComment && (
         <ExerciseComment
           exerciseId={exercise.id}
           questionNumber={currentPageIndex || 0 + 1}
           comment={comment}
           onBackToQuestion={() => {
+            setShowComment(false)
             const mainElement = document.querySelector('main.overflow-auto')
             if (mainElement) {
               mainElement.scrollTo({

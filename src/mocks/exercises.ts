@@ -225,7 +225,7 @@ export const mockExercise5: NumericExercise = {
   metadata: {
     comment: {
       title: 'Operações com Decimais',
-      content: `Ao somar 10,5 + 9,5, obtemos 20. Esta é uma operação simples de adição com números decimais. Para somar decimais, alinhe as vírgulas e some os números como se fossem inteiros, mantendo a vírgula na posição correta no resultado.`,
+      content: `Teste do comentário: ao somar 10,5 + 9,5, obtemos 20. Para somar decimais, alinhe as vírgulas e some os números como se fossem inteiros, mantendo a vírgula na posição correta no resultado.`,
       imageUrl:
         'https://images.unsplash.com/photo-1509228468518-180dd4864904?w=800&q=80',
     },

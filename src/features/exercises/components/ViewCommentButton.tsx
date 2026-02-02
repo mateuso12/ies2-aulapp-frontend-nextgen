@@ -14,9 +14,24 @@ export const ViewCommentButton: React.FC<ViewCommentButtonProps> = ({
       onClick()
     }
 
-    document
-      .getElementById(`comment-${exerciseId}`)
-      ?.scrollIntoView({ behavior: 'smooth' })
+    const scrollToComment = () => {
+      const commentElement = document.getElementById(`comment-${exerciseId}`)
+      const mainElement = document.querySelector('main.overflow-auto')
+
+      if (commentElement && mainElement) {
+        mainElement.scrollTo({
+          top: commentElement.offsetTop,
+          behavior: 'smooth',
+        })
+        return
+      }
+
+      commentElement?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }
+
+    requestAnimationFrame(() => {
+      requestAnimationFrame(scrollToComment)
+    })
   }
 
   return (

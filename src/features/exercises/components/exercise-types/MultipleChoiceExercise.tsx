@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
   ExerciseFeedback,
@@ -39,7 +39,11 @@ export const MultipleChoiceExerciseComponent: React.FC<
   onConfirmAnswer,
 }) => {
   const { t } = useTranslation('exercises')
+  const [showComment, setShowComment] = useState(false)
   const progress = ((currentPageIndex + 1) / totalPages) * 100
+  useEffect(() => {
+    setShowComment(false)
+  }, [exercise.id])
   const isMultipleSelect = true // Sempre permitir seleção múltipla
   const currentAnswer = selectedAnswer
 
@@ -232,15 +236,19 @@ export const MultipleChoiceExerciseComponent: React.FC<
         )}
 
         {submittedAnswer?.comment && (
-          <ViewCommentButton exerciseId={exercise.id} />
+          <ViewCommentButton
+            exerciseId={exercise.id}
+            onClick={() => setShowComment(true)}
+          />
         )}
 
-        {submittedAnswer?.comment && (
+        {submittedAnswer?.comment && showComment && (
           <ExerciseComment
             exerciseId={exercise.id}
             questionNumber={currentPageIndex + 1}
             comment={submittedAnswer.comment}
             onBackToQuestion={() => {
+              setShowComment(false)
               const mainElement = document.querySelector('main.overflow-auto')
               if (mainElement) {
                 mainElement.scrollTo({

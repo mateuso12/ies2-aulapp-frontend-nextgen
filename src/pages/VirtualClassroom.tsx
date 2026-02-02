@@ -209,15 +209,13 @@ export const VirtualClassroom: React.FC = () => {
       [exerciseId]: result,
     })
 
-    if (result.isCorrect) {
-      const comment = exercise.metadata?.comment as
-        | { title: string; content: string; imageUrl?: string }
-        | undefined
-      setSubmittedAnswers({
-        ...submittedAnswers,
-        [exerciseId]: { isCorrect: true, userAnswer, comment },
-      })
-    }
+    const comment = exercise.metadata?.comment as
+      | { title: string; content: string; imageUrl?: string }
+      | undefined
+    setSubmittedAnswers({
+      ...submittedAnswers,
+      [exerciseId]: { isCorrect: result.isCorrect, userAnswer, comment },
+    })
   }
 
   // Handler para verificar resposta de questão numérica
@@ -241,15 +239,13 @@ export const VirtualClassroom: React.FC = () => {
       [exerciseId]: result,
     })
 
-    if (result.isCorrect) {
-      const comment = exercise.metadata?.comment as
-        | { title: string; content: string; imageUrl?: string }
-        | undefined
-      setSubmittedAnswers({
-        ...submittedAnswers,
-        [exerciseId]: { isCorrect: true, userAnswer, comment },
-      })
-    }
+    const comment = exercise.metadata?.comment as
+      | { title: string; content: string; imageUrl?: string }
+      | undefined
+    setSubmittedAnswers({
+      ...submittedAnswers,
+      [exerciseId]: { isCorrect: result.isCorrect, userAnswer, comment },
+    })
   }
 
   // Handler para mudança de resposta em atividade de escrita

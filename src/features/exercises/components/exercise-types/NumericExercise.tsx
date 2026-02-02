@@ -51,10 +51,15 @@ export const NumericExercise: React.FC<NumericExerciseProps> = ({
   const [displayValue, setDisplayValue] = useState(
     value ? value.toString().replace('.', ',') : ''
   )
+  const [showComment, setShowComment] = useState(false)
 
   useEffect(() => {
     setDisplayValue(value ? value.toString().replace('.', ',') : '')
   }, [value])
+
+  useEffect(() => {
+    setShowComment(false)
+  }, [exercise.id])
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const input = e.target.value
@@ -139,15 +144,19 @@ export const NumericExercise: React.FC<NumericExerciseProps> = ({
       )}
 
       {validationResult && comment && (
-        <ViewCommentButton exerciseId={exercise.id} />
+        <ViewCommentButton
+          exerciseId={exercise.id}
+          onClick={() => setShowComment(true)}
+        />
       )}
 
-      {validationResult && comment && (
+      {validationResult && comment && showComment && (
         <ExerciseComment
           exerciseId={exercise.id}
           questionNumber={currentPageIndex || 0 + 1}
           comment={comment}
           onBackToQuestion={() => {
+            setShowComment(false)
             const mainElement = document.querySelector('main.overflow-auto')
             if (mainElement) {
               mainElement.scrollTo({

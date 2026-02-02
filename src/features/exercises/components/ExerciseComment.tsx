@@ -18,7 +18,10 @@ export const ExerciseComment: React.FC<ExerciseCommentProps> = ({
   onBackToQuestion,
 }) => {
   return (
-    <div id={`comment-${exerciseId}`} className="mt-16 pt-8 border-t">
+    <div
+      id={`comment-${exerciseId}`}
+      className="mt-16 pt-8 pb-12 border-t min-h-screen"
+    >
       <h3 className="text-xs font-semibold text-gray-500 dark:text-gray-400 mb-2">
         Comentário Questão {questionNumber}
       </h3>
