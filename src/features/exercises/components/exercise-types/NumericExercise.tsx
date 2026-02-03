@@ -150,22 +150,22 @@ export const NumericExercise: React.FC<NumericExerciseProps> = ({
         comment &&
         resourceType === 'simulation' &&
         showComment && (
-        <ExerciseComment
-          exerciseId={exercise.id}
-          questionNumber={currentPageIndex || 0 + 1}
-          comment={comment}
-          onBackToQuestion={() => {
-            setShowComment(false)
-            const mainElement = document.querySelector('main.overflow-auto')
-            if (mainElement) {
-              mainElement.scrollTo({
-                top: 0,
-                behavior: 'smooth',
-              })
-            }
-          }}
-        />
-      )}
+          <ExerciseComment
+            exerciseId={exercise.id}
+            questionNumber={currentPageIndex || 0 + 1}
+            comment={comment}
+            onBackToQuestion={() => {
+              setShowComment(false)
+              const mainElement = document.querySelector('main.overflow-auto')
+              if (mainElement) {
+                mainElement.scrollTo({
+                  top: 0,
+                  behavior: 'smooth',
+                })
+              }
+            }}
+          />
+        )}
     </div>
   )
 }

@@ -242,23 +242,25 @@ export const MultipleChoiceExerciseComponent: React.FC<
           />
         )}
 
-        {resourceType === 'simulation' && submittedAnswer?.comment && showComment && (
-          <ExerciseComment
-            exerciseId={exercise.id}
-            questionNumber={currentPageIndex + 1}
-            comment={submittedAnswer.comment}
-            onBackToQuestion={() => {
-              setShowComment(false)
-              const mainElement = document.querySelector('main.overflow-auto')
-              if (mainElement) {
-                mainElement.scrollTo({
-                  top: 0,
-                  behavior: 'smooth',
-                })
-              }
-            }}
-          />
-        )}
+        {resourceType === 'simulation' &&
+          submittedAnswer?.comment &&
+          showComment && (
+            <ExerciseComment
+              exerciseId={exercise.id}
+              questionNumber={currentPageIndex + 1}
+              comment={submittedAnswer.comment}
+              onBackToQuestion={() => {
+                setShowComment(false)
+                const mainElement = document.querySelector('main.overflow-auto')
+                if (mainElement) {
+                  mainElement.scrollTo({
+                    top: 0,
+                    behavior: 'smooth',
+                  })
+                }
+              }}
+            />
+          )}
       </div>
     </div>
   )
