@@ -32,3 +32,4 @@ pnpm-lock.yaml
 *.sw?
 dev-dist/*
 .aider*
+.github/copilot-instructions.md
