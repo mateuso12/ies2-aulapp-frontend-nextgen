@@ -276,14 +276,14 @@ export const TrueFalseExerciseComponent: React.FC<
           </div>
         )}
 
-        {submittedAnswer?.comment && (
+        {resourceType === 'simulation' && submittedAnswer?.comment && (
           <ViewCommentButton
             exerciseId={exercise.id}
             onClick={() => setShowComment(true)}
           />
         )}
 
-        {submittedAnswer?.comment && showComment && (
+        {resourceType === 'simulation' && submittedAnswer?.comment && showComment && (
           <ExerciseComment
             exerciseId={exercise.id}
             questionNumber={currentPageIndex + 1}

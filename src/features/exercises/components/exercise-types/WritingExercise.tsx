@@ -26,6 +26,7 @@ export const WritingExercise: React.FC<WritingExerciseProps> = ({
   readonly = false,
   validationResult,
   disabled = false,
+  resourceType,
   currentPageIndex,
   comment,
 }) => {
@@ -124,30 +125,33 @@ export const WritingExercise: React.FC<WritingExerciseProps> = ({
           )}
       </div>
 
-      {validationResult && comment && (
+      {validationResult && comment && resourceType === 'simulation' && (
         <ViewCommentButton
           exerciseId={exercise.id}
           onClick={() => setShowComment(true)}
         />
       )}
 
-      {validationResult && comment && showComment && (
-        <ExerciseComment
-          exerciseId={exercise.id}
-          questionNumber={currentPageIndex || 0 + 1}
-          comment={comment}
-          onBackToQuestion={() => {
-            setShowComment(false)
-            const mainElement = document.querySelector('main.overflow-auto')
-            if (mainElement) {
-              mainElement.scrollTo({
-                top: 0,
-                behavior: 'smooth',
-              })
-            }
-          }}
-        />
-      )}
+      {validationResult &&
+        comment &&
+        resourceType === 'simulation' &&
+        showComment && (
+          <ExerciseComment
+            exerciseId={exercise.id}
+            questionNumber={currentPageIndex || 0 + 1}
+            comment={comment}
+            onBackToQuestion={() => {
+              setShowComment(false)
+              const mainElement = document.querySelector('main.overflow-auto')
+              if (mainElement) {
+                mainElement.scrollTo({
+                  top: 0,
+                  behavior: 'smooth',
+                })
+              }
+            }}
+          />
+        )}
     </div>
   )
 }

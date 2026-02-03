@@ -106,6 +106,7 @@ export const ActivityView: React.FC<ActivityViewProps> = ({
             validationResult={validationResult}
             currentPageIndex={currentPageIndex}
             comment={submittedAnswer?.comment}
+            resourceType={resourceType}
           />
 
           {!isSubmitted && !validationResult && (
@@ -176,6 +177,7 @@ export const ActivityView: React.FC<ActivityViewProps> = ({
             validationResult={validationResult}
             currentPageIndex={currentPageIndex}
             comment={submittedAnswer?.comment}
+            resourceType={resourceType}
           />
 
           {!isSubmitted && !validationResult && (

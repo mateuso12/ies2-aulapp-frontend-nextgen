@@ -44,6 +44,7 @@ export const NumericExercise: React.FC<NumericExerciseProps> = ({
   readonly = false,
   validationResult,
   disabled = false,
+  resourceType,
   currentPageIndex,
   comment,
 }) => {
@@ -138,14 +139,17 @@ export const NumericExercise: React.FC<NumericExerciseProps> = ({
         )}
       </div>
 
-      {validationResult && comment && (
+      {validationResult && comment && resourceType === 'simulation' && (
         <ViewCommentButton
           exerciseId={exercise.id}
           onClick={() => setShowComment(true)}
         />
       )}
 
-      {validationResult && comment && showComment && (
+      {validationResult &&
+        comment &&
+        resourceType === 'simulation' &&
+        showComment && (
         <ExerciseComment
           exerciseId={exercise.id}
           questionNumber={currentPageIndex || 0 + 1}

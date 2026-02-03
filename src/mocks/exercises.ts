@@ -325,26 +325,6 @@ export const mockExercise8: TrueFalseExercise = {
 }
 
 /**
- * Mock 9: Verdadeiro ou Falso (V/F - único)
- */
-export const mockExercise9: TrueFalseExercise = {
-  id: 'ex-009',
-  type: 'true-false',
-  title: 'Questão 7',
-  description: 'A luz viaja mais rápido do que o som.',
-  data: {
-    correctAnswer: true,
-    labelVariant: 'vf',
-    incorrectFeedback: 'A velocidade da luz é muito maior que a do som.',
-  },
-  maxScore: 10,
-  difficulty: 'easy',
-  tags: ['física'],
-  createdAt: new Date('2024-01-15'),
-  updatedAt: new Date('2024-01-15'),
-}
-
-/**
  * Mock 10: Verdadeiro ou Falso (ícones - múltiplo)
  */
 export const mockExercise10: TrueFalseExercise = {
@@ -388,7 +368,6 @@ export const mockExercises = [
   mockExercise6,
   mockExercise7,
   mockExercise8,
-  mockExercise9,
   mockExercise10,
 ]
 
