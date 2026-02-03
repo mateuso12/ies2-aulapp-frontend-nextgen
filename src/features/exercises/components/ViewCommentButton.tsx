@@ -1,4 +1,7 @@
 import React from 'react'
+import { useTranslation } from 'react-i18next'
+import { ArrowCircleDown2 } from 'iconsax-react'
+import { Button } from 'ies2-aulapp-ui-kit'
 
 interface ViewCommentButtonProps {
   exerciseId: string
@@ -9,6 +12,7 @@ export const ViewCommentButton: React.FC<ViewCommentButtonProps> = ({
   exerciseId,
   onClick,
 }) => {
+  const { t } = useTranslation('exercises')
   const handleClick = () => {
     if (onClick) {
       onClick()
@@ -36,30 +40,14 @@ export const ViewCommentButton: React.FC<ViewCommentButtonProps> = ({
 
   return (
     <div className="flex justify-center pt-8">
-      <button
+      <Button
         onClick={handleClick}
-        className="flex items-center gap-2 px-8 py-3 bg-[#E91E63] hover:bg-[#C2185B] text-white font-semibold rounded-lg transition-colors"
+        variant="ghost"
+        className="flex items-center gap-2 px-0 py-0 font-bold text-base text-[#FF246E] hover:text-[#E91E63]"
       >
-        Ver comentário
-        <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-          <circle
-            cx="12"
-            cy="12"
-            r="10"
-            stroke="currentColor"
-            strokeWidth="2"
-            fill="none"
-          />
-          <path
-            d="M12 8v8m0 0l4-4m-4 4l-4-4"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            fill="none"
-          />
-        </svg>
-      </button>
+        {t('goToComment')}
+        <ArrowCircleDown2 size="24" color="#FF246E" variant="Linear" />
+      </Button>
     </div>
   )
 }
