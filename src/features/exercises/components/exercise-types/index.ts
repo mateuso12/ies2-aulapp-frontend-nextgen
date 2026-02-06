@@ -8,6 +8,7 @@
  * - OrderingExercise.tsx
  * - TrueFalseExercise.tsx
  * - WritingExercise.tsx
+ * - SpeechExercise.tsx (EX.WP, EX.WS, EX.WY - via iframe web-components)
  *
  * Cada componente deve:
  * 1. Receber props do tipo ExerciseComponentProps<TData, TAnswer>
@@ -28,3 +29,6 @@ export { MultipleChoiceExerciseComponent } from './MultipleChoiceExercise'
 export { WritingExercise as WritingExerciseComponent } from './WritingExercise'
 export { NumericExercise as NumericExerciseComponent } from './NumericExercise'
 export { TrueFalseExerciseComponent } from './TrueFalseExercise'
+
+// Componentes de exercícios via iframe (web-components)
+export { SpeechExercise, type SpeechExerciseResult } from './SpeechExercise'

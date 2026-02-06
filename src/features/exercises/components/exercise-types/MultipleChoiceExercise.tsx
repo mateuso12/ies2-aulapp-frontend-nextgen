@@ -5,6 +5,7 @@ import {
   ExerciseComment,
   ViewCommentButton,
   ExerciseResultIndicator,
+  ExerciseProgressHeader,
 } from '@/features/exercises/components'
 import type {
   MultipleChoiceExercise,
@@ -40,7 +41,6 @@ export const MultipleChoiceExerciseComponent: React.FC<
 }) => {
   const { t } = useTranslation('exercises')
   const [showComment, setShowComment] = useState(false)
-  const progress = ((currentPageIndex + 1) / totalPages) * 100
   useEffect(() => {
     setShowComment(false)
   }, [exercise.id])
@@ -54,17 +54,10 @@ export const MultipleChoiceExerciseComponent: React.FC<
       }`}
     >
       <div className="min-h-screen space-y-6">
-        <div>
-          <div className="h-1 w-full bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden mb-3">
-            <div
-              className="h-full bg-[#E91E63] transition-all duration-300"
-              style={{ width: `${progress}%` }}
-            ></div>
-          </div>
-          <h2 className="text-sm font-semibold text-gray-900 dark:text-gray-100">
-            {t('questionLabel')} {currentPageIndex + 1}
-          </h2>
-        </div>
+        <ExerciseProgressHeader
+          currentPageIndex={currentPageIndex}
+          totalPages={totalPages}
+        />
 
         <div>
           <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-4">

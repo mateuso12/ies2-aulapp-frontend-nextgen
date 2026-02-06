@@ -7,6 +7,7 @@ import type {
   WritingExercise,
   NumericExercise,
   TrueFalseExercise,
+  SpeechExercise,
 } from '@/features/exercises/types'
 
 /**
@@ -357,6 +358,92 @@ export const mockExercise10: TrueFalseExercise = {
 }
 
 /**
+ * Mock 11: Exercício de fala (Pronunciação - EX.WP)
+ */
+export const mockExercise11: SpeechExercise = {
+  id: 'ex-011',
+  type: 'speech-pronunciation',
+  title: 'Pronuncie as palavras',
+  description: 'Fale cada palavra quando solicitado.',
+  data: {
+    questions: [
+      { text: 'casa', hasImage: false },
+      { text: 'escola', hasImage: false },
+      { text: 'computador', hasImage: false },
+      { text: 'caderno', hasImage: false },
+      { text: 'professor', hasImage: false },
+    ],
+    config: {
+      initialHelp: true,
+      canSkip: true,
+      instantCorrection: true,
+    },
+    institutionId: 'inst-001',
+  },
+  maxScore: 10,
+  difficulty: 'easy',
+  tags: ['fala', 'pronúncia'],
+  createdAt: new Date('2024-01-15'),
+  updatedAt: new Date('2024-01-15'),
+}
+
+/**
+ * Mock 12: Exercício de fala (Soletração - EX.WS)
+ */
+export const mockExercise12: SpeechExercise = {
+  id: 'ex-012',
+  type: 'speech-spelling',
+  title: 'Soletre as palavras',
+  description: 'Fale letra por letra quando solicitado.',
+  data: {
+    questions: [
+      { text: 'bola', hasImage: false },
+      { text: 'carro', hasImage: false },
+      { text: 'livro', hasImage: false },
+    ],
+    config: {
+      initialHelp: true,
+      canSkip: false,
+      instantCorrection: true,
+    },
+    institutionId: 'inst-001',
+  },
+  maxScore: 10,
+  difficulty: 'easy',
+  tags: ['fala', 'soletração'],
+  createdAt: new Date('2024-01-15'),
+  updatedAt: new Date('2024-01-15'),
+}
+
+/**
+ * Mock 13: Exercício de fala (Silabação - EX.WY)
+ */
+export const mockExercise13: SpeechExercise = {
+  id: 'ex-013',
+  type: 'speech-syllable',
+  title: 'Separe em sílabas',
+  description: 'Fale as sílabas da palavra.',
+  data: {
+    questions: [
+      { text: 'banana', separateWord: 'ba-na-na', hasImage: false },
+      { text: 'computador', separateWord: 'com-pu-ta-dor', hasImage: false },
+      { text: 'borboleta', separateWord: 'bor-bo-le-ta', hasImage: false },
+    ],
+    config: {
+      initialHelp: true,
+      canSkip: true,
+      instantCorrection: true,
+    },
+    institutionId: 'inst-001',
+  },
+  maxScore: 10,
+  difficulty: 'medium',
+  tags: ['fala', 'silabação'],
+  createdAt: new Date('2024-01-15'),
+  updatedAt: new Date('2024-01-15'),
+}
+
+/**
  * Lista de todos os exercícios mock
  */
 export const mockExercises = [
@@ -369,6 +456,9 @@ export const mockExercises = [
   mockExercise7,
   mockExercise8,
   mockExercise10,
+  mockExercise11,
+  mockExercise12,
+  mockExercise13,
 ]
 
 /**

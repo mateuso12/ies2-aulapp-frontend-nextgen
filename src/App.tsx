@@ -12,7 +12,7 @@ function App() {
             <div className="app">
               <h1>Aulapp</h1>
               <p>Aplicação educacional</p>
-              <nav className="mt-4">
+              <nav className="mt-4 flex flex-col gap-2">
                 <Link
                   to="/sala-virtual"
                   className="text-blue-400 hover:underline"

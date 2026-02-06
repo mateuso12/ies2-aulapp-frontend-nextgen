@@ -21,6 +21,10 @@ export type ExerciseType =
   | 'ordering' // Ordenação de itens
   | 'true-false' // Verdadeiro ou Falso
   | 'writing' // Atividade de escrita (resposta curta)
+  // Exercícios via web-components (iframe)
+  | 'speech-pronunciation' // EX.WP - Pronunciação de palavras
+  | 'speech-spelling' // EX.WS - Soletração de palavras
+  | 'speech-syllable' // EX.WY - Silabação de palavras
 
 /**
  * Estado de submissão de um exercício
@@ -47,7 +51,6 @@ export type DifficultyLevel = 'easy' | 'medium' | 'hard'
  * @template TData - Tipo dos dados específicos do exercício
  * @template TAnswer - Tipo da resposta do usuário (usado para inferência de tipos)
  */
-// @ts-ignore - TAnswer is used for type inference in derived types
 export interface BaseExercise<TData = unknown, TAnswer = unknown> {
   /** ID único do exercício */
   id: string
@@ -90,6 +93,9 @@ export interface BaseExercise<TData = unknown, TAnswer = unknown> {
 
   /** Data da última atualização */
   updatedAt: Date
+
+  /** Tipo fantasma para inferência de TAnswer */
+  __answerType?: TAnswer
 }
 
 /**
@@ -342,6 +348,38 @@ export type WritingAnswer = string
 
 export type WritingExercise = BaseExercise<WritingData, WritingAnswer>
 
+/**
+ * EXERCÍCIOS DE FALA (via web-components)
+ */
+export interface SpeechExerciseQuestion {
+  text: string
+  imageUrl?: string | null
+  imageName?: string | null
+  hasImage?: boolean
+  word?: string
+  separateWord?: string
+}
+
+export interface SpeechExerciseConfig {
+  initialHelp?: boolean
+  language?: string
+  canSkip?: boolean
+  instantCorrection?: boolean
+}
+
+export interface SpeechExerciseData {
+  questions: SpeechExerciseQuestion[]
+  config?: SpeechExerciseConfig
+  institutionId?: string
+}
+
+export type SpeechExerciseAnswer = unknown
+
+export type SpeechExercise = BaseExercise<
+  SpeechExerciseData,
+  SpeechExerciseAnswer
+>
+
 // ─────────────────────────────────────────────────────────────────────────────
 // Union Types
 // ─────────────────────────────────────────────────────────────────────────────
@@ -357,6 +395,7 @@ export type Exercise =
   | OrderingExercise
   | TrueFalseExercise
   | WritingExercise
+  | SpeechExercise
 
 /**
  * Union type de todas as respostas possíveis
@@ -368,6 +407,7 @@ export type ExerciseAnswer =
   | OrderingAnswer
   | TrueFalseAnswer
   | WritingAnswer
+  | SpeechExerciseAnswer
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Type Guards
@@ -411,3 +451,14 @@ export const isWritingExercise = (
 ): exercise is WritingExercise => {
   return exercise.type === 'writing'
 }
+
+export const isSpeechExercise = (
+  exercise: Exercise
+): exercise is SpeechExercise => {
+  return (
+    exercise.type === 'speech-pronunciation' ||
+    exercise.type === 'speech-spelling' ||
+    exercise.type === 'speech-syllable'
+  )
+}
+
