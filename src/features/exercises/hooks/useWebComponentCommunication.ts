@@ -10,7 +10,11 @@ export type WebComponentMessage =
   | { type: 'MIC_TEST_STATUS'; tested: boolean }
   | { type: 'fluencyData'; data: unknown }
   | { status: 'success'; result: SpeechExerciseResult }
-  | { status: 'final'; results: SpeechExerciseResult[]; realElapsedTime: string }
+  | {
+      status: 'final'
+      results: SpeechExerciseResult[]
+      realElapsedTime: string
+    }
 
 /**
  * Origens válidas para mensagens de web-components
@@ -28,21 +32,27 @@ interface UseWebComponentCommunicationOptions {
   /** Callback para resultado de speech */
   onSpeechResult?: (result: SpeechExerciseResult) => void
   /** Callback para resultado final de speech */
-  onSpeechFinalResult?: (results: SpeechExerciseResult[], elapsedTime: string) => void
+  onSpeechFinalResult?: (
+    results: SpeechExerciseResult[],
+    elapsedTime: string
+  ) => void
   /** Callback para teste de microfone */
   onMicTested?: () => void
 }
 
 interface UseWebComponentCommunicationReturn {
   /** Envia dados de exercício de speech para o iframe */
-  sendSpeechData: (iframeRef: React.RefObject<HTMLIFrameElement | null>, data: unknown) => void
+  sendSpeechData: (
+    iframeRef: React.RefObject<HTMLIFrameElement | null>,
+    data: unknown
+  ) => void
   /** Envia status de teste de microfone */
   sendMicStatus: (iframeRef: React.RefObject<HTMLIFrameElement | null>) => void
 }
 
 /**
  * Hook para gerenciar comunicação via postMessage com web-components
- * 
+ *
  * Implementa o protocolo de comunicação do ies2-aulapp-frontend para:
  * - Exercícios de fala (EX.WP, EX.WS, EX.WY)
  * - Exercícios de fala (EX.WP, EX.WS, EX.WY)
@@ -88,7 +98,10 @@ export function useWebComponentCommunication(
         try {
           localStorage.setItem('fluency.microphoneTested', 'true')
         } catch (e) {
-          console.warn('[WebComponentComm] Falha ao salvar estado do microfone:', e)
+          console.warn(
+            '[WebComponentComm] Falha ao salvar estado do microfone:',
+            e
+          )
         }
         callbacksRef.current.onMicTested?.()
         return
@@ -111,10 +124,12 @@ export function useWebComponentCommunication(
       // Resultado final de speech
       if (data?.status === 'final' && data?.results) {
         console.log('[WebComponentComm] Speech final result:', data)
-        callbacksRef.current.onSpeechFinalResult?.(data.results, data.realElapsedTime || '00:00')
+        callbacksRef.current.onSpeechFinalResult?.(
+          data.results,
+          data.realElapsedTime || '00:00'
+        )
         return
       }
-
     },
     [isValidOrigin]
   )
@@ -134,7 +149,9 @@ export function useWebComponentCommunication(
     (iframeRef: React.RefObject<HTMLIFrameElement | null>, data: unknown) => {
       const iframe = iframeRef.current
       if (!iframe?.contentWindow) {
-        console.error('[WebComponentComm] Iframe não disponível para enviar speech data')
+        console.error(
+          '[WebComponentComm] Iframe não disponível para enviar speech data'
+        )
         return
       }
 
@@ -160,10 +177,17 @@ export function useWebComponentCommunication(
       }
 
       try {
-        const tested = localStorage.getItem('fluency.microphoneTested') === 'true'
-        iframe.contentWindow.postMessage({ type: 'MIC_TEST_STATUS', tested }, '*')
+        const tested =
+          localStorage.getItem('fluency.microphoneTested') === 'true'
+        iframe.contentWindow.postMessage(
+          { type: 'MIC_TEST_STATUS', tested },
+          '*'
+        )
       } catch (e) {
-        console.warn('[WebComponentComm] Falha ao enviar status do microfone:', e)
+        console.warn(
+          '[WebComponentComm] Falha ao enviar status do microfone:',
+          e
+        )
       }
     },
     []

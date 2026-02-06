@@ -461,4 +461,3 @@ export const isSpeechExercise = (
     exercise.type === 'speech-syllable'
   )
 }
-

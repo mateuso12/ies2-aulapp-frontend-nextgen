@@ -42,7 +42,7 @@ const getActivityType = (
 
 /**
  * Componente de exercício de fala que integra com web-components via iframe
- * 
+ *
  * Replica a implementação do ies2-aulapp-frontend para exercícios EX.WP, EX.WS, EX.WY
  */
 export const SpeechExercise: React.FC<SpeechExerciseProps> = ({
@@ -69,8 +69,12 @@ export const SpeechExercise: React.FC<SpeechExerciseProps> = ({
 
     // Primeiro, envia o status do teste de microfone
     try {
-      const micTested = localStorage.getItem('fluency.microphoneTested') === 'true'
-      iframe.contentWindow.postMessage({ type: 'MIC_TEST_STATUS', tested: micTested }, '*')
+      const micTested =
+        localStorage.getItem('fluency.microphoneTested') === 'true'
+      iframe.contentWindow.postMessage(
+        { type: 'MIC_TEST_STATUS', tested: micTested },
+        '*'
+      )
     } catch (e) {
       console.warn('[SpeechExercise] Falha ao enviar status do microfone:', e)
     }
@@ -111,14 +115,16 @@ export const SpeechExercise: React.FC<SpeechExerciseProps> = ({
         'http://localhost:5173',
         'https://aulapp-public.s3.amazonaws.com',
       ]
-      
-      if (!validOrigins.some(origin => event.origin.startsWith(origin))) {
+
+      if (!validOrigins.some((origin) => event.origin.startsWith(origin))) {
         return
       }
 
       // Evento: iframe está pronto para receber dados
       if (data?.type === 'iframeReady' && data?.data?.ready) {
-        console.log('[SpeechExercise] Iframe ready, enviando dados do exercício')
+        console.log(
+          '[SpeechExercise] Iframe ready, enviando dados do exercício'
+        )
         setIsIframeReady(true)
         sendExerciseData()
         return
@@ -130,7 +136,10 @@ export const SpeechExercise: React.FC<SpeechExerciseProps> = ({
         try {
           localStorage.setItem('fluency.microphoneTested', 'true')
         } catch (e) {
-          console.warn('[SpeechExercise] Falha ao salvar estado do microfone:', e)
+          console.warn(
+            '[SpeechExercise] Falha ao salvar estado do microfone:',
+            e
+          )
         }
         onMicTested?.()
         return
@@ -139,7 +148,7 @@ export const SpeechExercise: React.FC<SpeechExerciseProps> = ({
       // Evento: resultado de uma palavra
       if (data?.status === 'success' && data?.result) {
         console.log('[SpeechExercise] Resultado recebido:', data.result)
-        
+
         const result: SpeechExerciseResult = {
           word: data.result.word || data.result.data?.word || '',
           wordId: data.result.wordId,
@@ -147,7 +156,7 @@ export const SpeechExercise: React.FC<SpeechExerciseProps> = ({
           score: data.result.score,
           ...data.result,
         }
-        
+
         onResult?.(result)
         return
       }
