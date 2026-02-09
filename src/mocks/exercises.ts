@@ -8,6 +8,7 @@ import type {
   NumericExercise,
   TrueFalseExercise,
   SpeechExercise,
+  FluencyReadingExercise,
 } from '@/features/exercises/types'
 
 /**
@@ -444,6 +445,34 @@ export const mockExercise13: SpeechExercise = {
 }
 
 /**
+ * Mock 14: Fluência Leitora (EX.TR)
+ */
+export const mockExercise14: FluencyReadingExercise = {
+  id: 'ex-014',
+  type: 'fluency-reading',
+  title: 'Fluência Leitora',
+  description: 'Leia o texto a seguir com atenção à entonação e ritmo.',
+  data: {
+    enunciado: 'Leia o texto a seguir com atenção à entonação e ritmo.',
+    tituloTexto: 'O pequeno viajante',
+    corpoTexto:
+      'Era uma vez um pequeno viajante que adorava explorar cidades novas. Ele observava as pessoas, os sons e as cores de cada lugar.',
+    configuracoesAtividade: {
+      activityId: 'fluencia-001',
+      studentId: 'student-001',
+      difficulty: 'intermediate',
+      timeLimit: 300,
+      source: 'aulapp_virtual_room',
+    },
+  },
+  maxScore: 100,
+  difficulty: 'medium',
+  tags: ['fluência', 'leitura'],
+  createdAt: new Date('2024-01-15'),
+  updatedAt: new Date('2024-01-15'),
+}
+
+/**
  * Lista de todos os exercícios mock
  */
 export const mockExercises = [
@@ -459,6 +488,7 @@ export const mockExercises = [
   mockExercise11,
   mockExercise12,
   mockExercise13,
+  mockExercise14,
 ]
 
 /**

@@ -25,6 +25,7 @@ export type ExerciseType =
   | 'speech-pronunciation' // EX.WP - Pronunciação de palavras
   | 'speech-spelling' // EX.WS - Soletração de palavras
   | 'speech-syllable' // EX.WY - Silabação de palavras
+  | 'fluency-reading' // EX.TR - Fluência Leitora
 
 /**
  * Estado de submissão de um exercício
@@ -380,6 +381,34 @@ export type SpeechExercise = BaseExercise<
   SpeechExerciseAnswer
 >
 
+export type FluencyReadingDifficulty = 'beginner' | 'intermediate' | 'advanced'
+
+export interface FluencyReadingConfig {
+  activityId?: string | number
+  studentId?: string | number
+  difficulty?: FluencyReadingDifficulty
+  timeLimit?: number
+  genre?: string
+  expectedWPM?: number
+  focusAreas?: string[]
+  [key: string]: unknown
+}
+
+export interface FluencyReadingData {
+  enunciado: string
+  tituloTexto: string
+  corpoTexto: string
+  idioma?: string
+  configuracoesAtividade?: FluencyReadingConfig
+}
+
+export type FluencyReadingAnswer = unknown
+
+export type FluencyReadingExercise = BaseExercise<
+  FluencyReadingData,
+  FluencyReadingAnswer
+>
+
 // ─────────────────────────────────────────────────────────────────────────────
 // Union Types
 // ─────────────────────────────────────────────────────────────────────────────
@@ -396,6 +425,7 @@ export type Exercise =
   | TrueFalseExercise
   | WritingExercise
   | SpeechExercise
+  | FluencyReadingExercise
 
 /**
  * Union type de todas as respostas possíveis
@@ -408,6 +438,7 @@ export type ExerciseAnswer =
   | TrueFalseAnswer
   | WritingAnswer
   | SpeechExerciseAnswer
+  | FluencyReadingAnswer
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Type Guards
@@ -460,4 +491,10 @@ export const isSpeechExercise = (
     exercise.type === 'speech-spelling' ||
     exercise.type === 'speech-syllable'
   )
+}
+
+export const isFluencyReadingExercise = (
+  exercise: Exercise
+): exercise is FluencyReadingExercise => {
+  return exercise.type === 'fluency-reading'
 }

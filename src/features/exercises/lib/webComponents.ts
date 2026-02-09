@@ -23,3 +23,9 @@ export const getSpeechWebComponentUrl = (): string => {
   }
   return 'https://aulapp-public.s3.amazonaws.com/web-components/audio-recorder-web-view.html'
 }
+
+export const getFluenciaLeitoraUrl = (): string => {
+  const env = getAulappEnv()
+  if (env === 0) return 'http://localhost:3003/iframe'
+  return 'https://fluencia-leitora.vercel.app/iframe'
+}

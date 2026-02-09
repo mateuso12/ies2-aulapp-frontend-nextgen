@@ -6,6 +6,7 @@ import {
   NumericExerciseComponent,
   TrueFalseExerciseComponent,
   SpeechExercise,
+  FluencyReadingExercise,
 } from '@/features/exercises/components/exercise-types'
 import {
   ExerciseResultIndicator,
@@ -17,6 +18,7 @@ import {
   isNumericExercise,
   isTrueFalseExercise,
   isSpeechExercise,
+  isFluencyReadingExercise,
 } from '@/features/exercises/types'
 import type {
   Exercise,
@@ -238,6 +240,36 @@ export const ActivityView: React.FC<ActivityViewProps> = ({
           </div>
 
           <SpeechExercise exercise={exercise} />
+        </div>
+      </div>
+    )
+  }
+
+  if (isFluencyReadingExercise(exercise)) {
+    return (
+      <div
+        className={`w-full md:w-4xl mx-auto pb-8 ${
+          resourceType === 'gamified' ? 'mt-8' : 'py-8'
+        }`}
+      >
+        <div id={`exercise-${exercise.id}`} className="min-h-screen space-y-6">
+          <ExerciseProgressHeader
+            currentPageIndex={currentPageIndex}
+            totalPages={totalPages}
+          />
+
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-4">
+              {exercise.title}
+            </h1>
+            {exercise.description && (
+              <p className="text-base text-gray-700 dark:text-gray-300 leading-relaxed">
+                {exercise.description}
+              </p>
+            )}
+          </div>
+
+          <FluencyReadingExercise exercise={exercise} />
         </div>
       </div>
     )
