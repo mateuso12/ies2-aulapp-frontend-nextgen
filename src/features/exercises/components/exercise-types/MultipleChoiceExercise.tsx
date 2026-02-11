@@ -49,8 +49,8 @@ export const MultipleChoiceExerciseComponent: React.FC<
 
   return (
     <div
-      className={`w-full md:w-4xl mx-auto pb-8 ${
-        resourceType === 'gamified' ? 'mt-8' : 'py-8'
+      className={`w-full md:w-4xl mx-auto sm:pb-8 ${
+        resourceType === 'gamified' ? 'sm:mt-8' : 'sm:py-8'
       }`}
     >
       <div className="min-h-screen space-y-6">
@@ -60,7 +60,7 @@ export const MultipleChoiceExerciseComponent: React.FC<
         />
 
         <div>
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-4">
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-2 sm:mb-4">
             {exercise.title}
           </h1>
           {exercise.description && (

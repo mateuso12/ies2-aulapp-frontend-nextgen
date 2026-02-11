@@ -72,8 +72,8 @@ export const ActivityView: React.FC<ActivityViewProps> = ({
 
     return (
       <div
-        className={`w-full md:w-4xl mx-auto pb-8 ${
-          resourceType === 'gamified' ? 'mt-8' : 'py-8'
+        className={`w-full md:w-4xl mx-auto sm:pb-8 ${
+          resourceType === 'gamified' ? 'sm:mt-8' : 'sm:py-8'
         }`}
       >
         <div id={`exercise-${exercise.id}`} className="min-h-screen space-y-6">
@@ -83,7 +83,7 @@ export const ActivityView: React.FC<ActivityViewProps> = ({
           />
 
           <div>
-            <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-4">
+            <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-2 sm:mb-4">
               {exercise.title}
             </h1>
             {exercise.description && (
@@ -136,8 +136,8 @@ export const ActivityView: React.FC<ActivityViewProps> = ({
 
     return (
       <div
-        className={`w-full md:w-4xl mx-auto pb-8 ${
-          resourceType === 'gamified' ? 'mt-8' : 'py-8'
+        className={`w-full md:w-4xl mx-auto sm:pb-8 ${
+          resourceType === 'gamified' ? 'sm:mt-8' : 'sm:py-8'
         }`}
       >
         <div id={`exercise-${exercise.id}`} className="min-h-screen space-y-6">
@@ -147,7 +147,7 @@ export const ActivityView: React.FC<ActivityViewProps> = ({
           />
 
           <div>
-            <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-4">
+            <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-2 sm:mb-4">
               {exercise.title}
             </h1>
             {exercise.description && (
@@ -218,8 +218,8 @@ export const ActivityView: React.FC<ActivityViewProps> = ({
   if (isSpeechExercise(exercise)) {
     return (
       <div
-        className={`w-full md:w-4xl mx-auto pb-8 ${
-          resourceType === 'gamified' ? 'mt-8' : 'py-8'
+        className={`w-full md:w-4xl mx-auto sm:pb-8 ${
+          resourceType === 'gamified' ? 'sm:mt-8' : 'sm:py-8'
         }`}
       >
         <div id={`exercise-${exercise.id}`} className="min-h-screen space-y-6">
@@ -229,7 +229,7 @@ export const ActivityView: React.FC<ActivityViewProps> = ({
           />
 
           <div>
-            <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-4">
+            <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-2 sm:mb-4">
               {exercise.title}
             </h1>
             {exercise.description && (
@@ -248,8 +248,8 @@ export const ActivityView: React.FC<ActivityViewProps> = ({
   if (isFluencyReadingExercise(exercise)) {
     return (
       <div
-        className={`w-full md:w-4xl mx-auto pb-8 ${
-          resourceType === 'gamified' ? 'mt-8' : 'py-8'
+        className={`w-full md:w-4xl mx-auto sm:pb-8 ${
+          resourceType === 'gamified' ? 'sm:mt-8' : 'sm:py-8'
         }`}
       >
         <div id={`exercise-${exercise.id}`} className="min-h-screen space-y-6">
@@ -259,7 +259,7 @@ export const ActivityView: React.FC<ActivityViewProps> = ({
           />
 
           <div>
-            <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-4">
+            <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-2 sm:mb-4">
               {exercise.title}
             </h1>
             {exercise.description && (
