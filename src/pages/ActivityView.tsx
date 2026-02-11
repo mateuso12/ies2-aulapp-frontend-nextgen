@@ -5,6 +5,7 @@ import {
   MultipleChoiceExerciseComponent,
   NumericExerciseComponent,
   TrueFalseExerciseComponent,
+  OpenTextExerciseComponent,
 } from '@/features/exercises/components/exercise-types'
 import { ExerciseResultIndicator } from '@/features/exercises/components'
 import {
@@ -12,6 +13,7 @@ import {
   isMultipleChoiceExercise,
   isNumericExercise,
   isTrueFalseExercise,
+  isOpenTextExercise,
 } from '@/features/exercises/types'
 import type {
   Exercise,
@@ -23,10 +25,16 @@ interface ActivityViewProps {
   currentPageIndex: number
   totalPages: number
   resourceType: string
-  selectedAnswer: string | string[] | number | undefined
+  selectedAnswer:
+    | string
+    | string[]
+    | number
+    | boolean
+    | Record<string, boolean>
+    | undefined
   submittedAnswer?: {
     isCorrect: boolean
-    userAnswer: string | string[] | number
+    userAnswer: string | string[] | number | boolean | Record<string, boolean>
     comment?: { title: string; content: string; imageUrl?: string }
   }
   validationResult?: ExerciseValidationResult
@@ -220,6 +228,67 @@ export const ActivityView: React.FC<ActivityViewProps> = ({
         onSelectOption={onSelectOption}
         onConfirmAnswer={onConfirmAnswer}
       />
+    )
+  }
+
+  if (isOpenTextExercise(exercise)) {
+    const currentAnswer = (selectedAnswer as string) || ''
+    const hasAnswer = currentAnswer.trim().length >= (exercise.data.minLength || 0)
+    const isSubmitted = !!submittedAnswer
+    const isLocked = !!validationResult || isSubmitted
+
+    return (
+      <div
+        className={`w-full md:w-4xl mx-auto pb-8 ${
+          resourceType === 'gamified' ? 'mt-8' : 'py-8'
+        }`}
+      >
+        <div id={`exercise-${exercise.id}`} className="min-h-screen space-y-6">
+          <div>
+            <div className="h-1 w-full bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden mb-3">
+              <div
+                className="h-full bg-[#E91E63] transition-all duration-300"
+                style={{ width: `${progress}%` }}
+              ></div>
+            </div>
+            <h2 className="text-sm font-semibold text-gray-900 dark:text-gray-100">
+              {t('questionLabel')} {currentPageIndex + 1}
+            </h2>
+          </div>
+
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-4">
+              {exercise.title}
+            </h1>
+            {exercise.description && (
+              <p className="text-base text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
+                {exercise.description}
+              </p>
+            )}
+            {exercise.contentHtml && (
+              <div
+                className="prose dark:prose-invert max-w-none mb-4"
+                dangerouslySetInnerHTML={{ __html: exercise.contentHtml }}
+              />
+            )}
+          </div>
+
+          {validationResult && (
+            <ExerciseResultIndicator isCorrect={validationResult.isCorrect} />
+          )}
+
+          <OpenTextExerciseComponent
+            exercise={exercise}
+            value={currentAnswer}
+            onChange={(answer) => onWritingChange(answer)}
+            readonly={isLocked}
+            validationResult={validationResult}
+            currentPageIndex={currentPageIndex}
+            resourceType={resourceType}
+            onVerifyAnswer={hasAnswer && !isLocked ? onVerifyWriting : undefined}
+          />
+        </div>
+      </div>
     )
   }
 

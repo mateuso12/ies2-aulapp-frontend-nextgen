@@ -7,6 +7,7 @@ import type {
   WritingExercise,
   NumericExercise,
   TrueFalseExercise,
+  OpenTextExercise,
 } from '@/features/exercises/types'
 
 /**
@@ -357,6 +358,174 @@ export const mockExercise10: TrueFalseExercise = {
 }
 
 /**
+ * Mock 11: Resposta aberta sobre Revolução Francesa
+ */
+export const mockExercise11: OpenTextExercise = {
+  id: 'ex-011',
+  type: 'open-text',
+  title: 'Disserte sobre as causas da Revolução Francesa',
+  description:
+    'Explique em um texto dissertativo as principais causas sociais, econômicas e políticas que levaram à Revolução Francesa de 1789.',
+  data: {
+    placeholder: 'Digite sua resposta aqui...',
+    minLength: 200,
+    maxLength: 2000,
+    expectedKeywords: [
+      'absolutismo',
+      'terceiro estado',
+      'desigualdade',
+      'crise financeira',
+      'iluminismo',
+    ],
+    modelAnswer:
+      'A Revolução Francesa foi resultado de uma combinação de fatores sociais, econômicos e políticos. Socialmente, havia grande desigualdade entre os três estados, com o Terceiro Estado (burguesia, camponeses e trabalhadores urbanos) arcando com a maior parte dos impostos. Economicamente, a França enfrentava grave crise financeira devido aos gastos da monarquia e às guerras. Politicamente, o absolutismo de Luís XVI e a resistência à mudança geraram insatisfação. As ideias iluministas de liberdade e igualdade também influenciaram o movimento revolucionário.',
+    // Configurações para iframe
+    language: 'pt-BR',
+    locale: 'pt-BR',
+    primaryColor: '#f6339a',
+    retrys: 2,
+    answers: [
+      {
+        correct: true,
+        comps: [
+          {
+            text: '<p><strong>Resposta modelo:</strong></p><p>A Revolução Francesa foi resultado de uma combinação de fatores sociais, econômicos e políticos. Socialmente, havia grande desigualdade entre os três estados, especialmente o Terceiro Estado. Economicamente, a crise financeira era grave. Politicamente, o absolutismo gerara insatisfação.</p>',
+          },
+        ],
+      },
+    ],
+  },
+  maxScore: 20,
+  difficulty: 'hard',
+  tags: ['história', 'revolução francesa', 'dissertação'],
+  hints: [
+    'Pense na estrutura social do Antigo Regime',
+    'Considere a crise financeira da monarquia',
+    'Lembre-se das ideias iluministas',
+  ],
+  createdAt: new Date('2024-01-15'),
+  updatedAt: new Date('2024-01-15'),
+  metadata: {
+    comment: {
+      title: 'A Revolução Francesa',
+      content:
+        'A Revolução Francesa (1789-1799) foi um período de intensa transformação política e social na França, marcando o fim do absolutismo e o início da era moderna. Suas causas foram complexas e multifatoriais, envolvendo crises econômicas, desigualdades sociais profundas e a disseminação de ideias iluministas que questionavam o poder absoluto dos reis.',
+      imageUrl:
+        'https://images.unsplash.com/photo-1541417904950-b855846fe074?w=800&q=80',
+    },
+  },
+}
+
+/**
+ * Mock 12: Resposta aberta sobre mudanças climáticas
+ */
+export const mockExercise12: OpenTextExercise = {
+  id: 'ex-012',
+  type: 'open-text',
+  title: 'Analise o impacto das mudanças climáticas',
+  description:
+    'Escreva um texto analítico sobre os principais impactos das mudanças climáticas no planeta e as possíveis soluções para mitigar seus efeitos.',
+  data: {
+    placeholder: 'Desenvolva sua análise aqui...',
+    minLength: 250,
+    maxLength: 1500,
+    expectedKeywords: [
+      'aquecimento global',
+      'emissões',
+      'sustentabilidade',
+      'energia renovável',
+      'biodiversidade',
+    ],
+    // Configurações para iframe
+    language: 'pt-BR',
+    locale: 'pt-BR',
+    primaryColor: '#7c3aed',
+    retrys: 2,
+    answers: [
+      {
+        correct: true,
+        comps: [
+          {
+            text: '<p><strong>Resposta modelo:</strong></p><p>As mudanças climáticas causam impactos significativos: aumento de temperaturas, alteração de padrões climáticos, elevação do nível do mar e ameaça à biodiversidade. As soluções incluem redução de emissões de gases de efeito estufa, uso de energias renováveis, reflorestamento e políticas de sustentabilidade.</p>',
+          },
+        ],
+      },
+    ],
+  },
+  maxScore: 20,
+  difficulty: 'hard',
+  tags: ['ciências', 'meio ambiente', 'dissertação'],
+  hints: [
+    'Considere os impactos ambientais, sociais e econômicos',
+    'Pense em soluções sustentáveis',
+    'Mencione acordos internacionais',
+  ],
+  createdAt: new Date('2024-01-15'),
+  updatedAt: new Date('2024-01-15'),
+}
+
+/**
+ * Mock 13: Resposta aberta sobre literatura
+ */
+export const mockExercise13: OpenTextExercise = {
+  id: 'ex-013',
+  type: 'open-text',
+  title: 'Interprete o poema "No meio do caminho" de Carlos Drummond de Andrade',
+  description:
+    'Faça uma interpretação crítica do poema, analisando seus aspectos formais, temáticos e o contexto literário.',
+  contentHtml: `
+    <div class="mb-4 p-4 bg-neutral-50 dark:bg-neutral-900 rounded-lg border">
+      <p class="font-serif italic text-center">
+        No meio do caminho tinha uma pedra<br />
+        tinha uma pedra no meio do caminho<br />
+        tinha uma pedra<br />
+        no meio do caminho tinha uma pedra.
+      </p>
+      <p class="text-sm text-muted-foreground text-center mt-2">
+        — Carlos Drummond de Andrade
+      </p>
+    </div>
+  `,
+  data: {
+    placeholder: 'Escreva sua interpretação...',
+    minLength: 150,
+    maxLength: 1000,
+    expectedKeywords: [
+      'obstáculo',
+      'repetição',
+      'modernismo',
+      'simbólico',
+      'simplicidade',
+    ],
+    // Configurações para iframe
+    language: 'pt-BR',
+    locale: 'pt-BR',
+    primaryColor: '#ec4899',
+    retrys: 3,
+    answers: [
+      {
+        correct: true,
+        comps: [
+          {
+            text: '<p><strong>Resposta modelo:</strong></p><p>O poema utiliza a repetição para enfatizar a repetição da imagem da pedra, que pode ser interpretada como um obstáculo ou dificuldade. No contexto do modernismo brasileiro, a simplicidade da linguagem contrasta com a profundidade simbólica, refletindo a capacidade de encontrar significado no cotidiano.</p>',
+          },
+        ],
+      },
+    ],
+  },
+  maxScore: 15,
+  difficulty: 'medium',
+  tags: ['literatura', 'poesia', 'interpretação'],
+  hints: [
+    'Analise o uso da repetição',
+    'Pense no simbolismo da "pedra"',
+    'Considere o contexto do Modernismo brasileiro',
+  ],
+  createdAt: new Date('2024-01-15'),
+  updatedAt: new Date('2024-01-15'),
+}
+
+/**
  * Lista de todos os exercícios mock
  */
 export const mockExercises = [
@@ -369,6 +538,9 @@ export const mockExercises = [
   mockExercise7,
   mockExercise8,
   mockExercise10,
+  mockExercise11,
+  mockExercise12,
+  mockExercise13,
 ]
 
 /**

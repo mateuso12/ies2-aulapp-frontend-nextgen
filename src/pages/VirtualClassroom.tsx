@@ -21,6 +21,7 @@ import {
   isMultipleChoiceExercise,
   isNumericExercise,
   isTrueFalseExercise,
+  isOpenTextExercise,
 } from '@/features/exercises/types'
 import type { PageData } from '@/features/virtual-classroom/components/content/PageReel'
 import type { ExerciseValidationResult } from '@/features/exercises/types'
@@ -83,6 +84,19 @@ export const VirtualClassroom: React.FC = () => {
           isMaterialView: true as const,
         },
       ]
+    }
+
+    // Para resourceType 'open_ended', filtra apenas exercícios do tipo 'open-text'
+    if (resourceType === 'open_ended') {
+      return mockActivities
+        .filter((exercise) => isOpenTextExercise(exercise))
+        .map((exercise) => ({
+          id: exercise.id,
+          title: exercise.title,
+          contentHtml: '',
+          isExercise: true as const,
+          exercise,
+        }))
     }
 
     // Para outros resourceTypes, retorna atividades

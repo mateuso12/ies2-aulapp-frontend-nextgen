@@ -245,6 +245,18 @@ export interface OpenTextData {
   maxLength?: number
   expectedKeywords?: string[] // Palavras-chave esperadas (para feedback)
   modelAnswer?: string // Resposta modelo (apenas para professores)
+  
+  // Configurações para o iframe
+  language?: string // Idioma (pt-BR, en, es, etc.)
+  locale?: string // Locale para i18n (ex: 'pt-BR')
+  primaryColor?: string // Cor primária do botão (padrão: #f6339a)
+  answers?: Array<{
+    correct: boolean
+    comps: Array<{
+      text: string // HTML content da resposta modelo
+    }>
+  }>
+  retrys?: number // Número de tentativas permitidas
 }
 
 export type OpenTextAnswer = string

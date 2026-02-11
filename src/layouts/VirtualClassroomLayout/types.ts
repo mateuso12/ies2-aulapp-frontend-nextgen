@@ -9,6 +9,7 @@ export type ResourceType =
   | 'scorm'
   | 'simulation'
   | 'material'
+  | 'open_ended'
 
 export interface VirtualClassroomLayoutProps {
   children: ReactNode | ((props: { isOtherToolActive: boolean }) => ReactNode)

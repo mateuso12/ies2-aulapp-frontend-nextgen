@@ -19,7 +19,6 @@
 
 // TODO: Implementar componentes individuais
 // export { MultipleChoiceExercise } from './MultipleChoiceExercise'
-// export { OpenTextExercise } from './OpenTextExercise'
 // export { NumericExercise } from './NumericExercise'
 // export { OrderingExercise } from './OrderingExercise'
 // export { TrueFalseExercise } from './TrueFalseExercise'
@@ -28,3 +27,4 @@ export { MultipleChoiceExerciseComponent } from './MultipleChoiceExercise'
 export { WritingExercise as WritingExerciseComponent } from './WritingExercise'
 export { NumericExercise as NumericExerciseComponent } from './NumericExercise'
 export { TrueFalseExerciseComponent } from './TrueFalseExercise'
+export { OpenTextExerciseComponent } from './OpenTextExercise'

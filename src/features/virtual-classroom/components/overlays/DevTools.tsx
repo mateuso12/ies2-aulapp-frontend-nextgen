@@ -140,6 +140,7 @@ export const DevTools: React.FC<DevToolsProps> = ({
                 <option value="scorm">SCORM</option>
                 <option value="simulation">Simulado</option>
                 <option value="material">Material de Apoio</option>
+                <option value="open_ended">Resposta Aberta</option>
               </select>
             </div>
           </div>
