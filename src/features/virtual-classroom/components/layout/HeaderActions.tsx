@@ -25,9 +25,22 @@ const getBadgeVariant = (type: string) => {
       return 'simulado'
     case 'gamified':
       return 'gamificada'
+    case 'open_ended':
+      return null
     case 'content':
     default:
       return 'conteudo'
+  }
+}
+
+const getCustomBadgeLabel = (type: string) => {
+  switch (type) {
+    case 'open_ended':
+      return 'RESPOSTA ABERTA'
+    case 'scorm':
+      return 'SCORM'
+    default:
+      return null
   }
 }
 
@@ -66,7 +79,7 @@ export const HeaderActions: React.FC<HeaderActionsProps> = ({
             />
           ) : (
             <div className="flex items-center gap-2 rounded-full bg-white/20 px-3 py-1 text-sm font-medium text-white backdrop-blur-md">
-              SCORM
+              {getCustomBadgeLabel(resourceType)}
             </div>
           )}
         </div>
@@ -105,7 +118,7 @@ export const HeaderActions: React.FC<HeaderActionsProps> = ({
           />
         ) : (
           <div className="flex items-center gap-2 rounded-full bg-gray-100 px-3 py-1 text-sm font-medium text-gray-600">
-            SCORM
+            {getCustomBadgeLabel(resourceType)}
           </div>
         )}
       </div>
