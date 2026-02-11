@@ -399,6 +399,7 @@ export interface FluencyReadingData {
   tituloTexto: string
   corpoTexto: string
   idioma?: string
+  initialHelp?: boolean
   configuracoesAtividade?: FluencyReadingConfig
 }
 

@@ -457,6 +457,8 @@ export const mockExercise14: FluencyReadingExercise = {
     tituloTexto: 'O pequeno viajante',
     corpoTexto:
       'Era uma vez um pequeno viajante que adorava explorar cidades novas. Ele observava as pessoas, os sons e as cores de cada lugar.',
+    initialHelp: true,
+    idioma: 'pt-BR',
     configuracoesAtividade: {
       activityId: 'fluencia-001',
       studentId: 'student-001',

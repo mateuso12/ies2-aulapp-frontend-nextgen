@@ -21,6 +21,7 @@ export type WebComponentMessage =
  */
 const VALID_ORIGINS = [
   'http://localhost:5173',
+  'http://localhost:5174',
   'http://localhost:3003',
   'https://aulapp-public.s3.amazonaws.com',
   'https://fluencia-leitora.vercel.app',

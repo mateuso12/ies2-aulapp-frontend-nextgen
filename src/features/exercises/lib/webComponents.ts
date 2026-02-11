@@ -17,7 +17,7 @@ export const getAulappEnv = (): AulappEnv => {
 
 export const getSpeechWebComponentUrl = (): string => {
   const env = getAulappEnv()
-  if (env === 0) return 'http://localhost:5173/web-components/'
+  if (env === 0) return 'http://localhost:5174/web-components/'
   if (env === 2) {
     return 'https://aulapp-public.s3.amazonaws.com/web-components/audio-recorder-web-view-hlg.html'
   }

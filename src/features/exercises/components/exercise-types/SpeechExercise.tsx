@@ -113,6 +113,7 @@ export const SpeechExercise: React.FC<SpeechExerciseProps> = ({
       // Validar origem (aceitar localhost em dev ou S3 em produção)
       const validOrigins = [
         'http://localhost:5173',
+        'http://localhost:5174',
         'https://aulapp-public.s3.amazonaws.com',
       ]
 
