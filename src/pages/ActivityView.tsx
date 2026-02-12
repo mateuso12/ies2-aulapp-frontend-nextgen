@@ -217,29 +217,32 @@ export const ActivityView: React.FC<ActivityViewProps> = ({
 
   if (isSpeechExercise(exercise)) {
     return (
-      <div
-        className={`w-full md:w-4xl mx-auto sm:pb-8 ${
-          resourceType === 'gamified' ? 'sm:mt-8' : 'sm:py-8'
-        }`}
-      >
-        <div id={`exercise-${exercise.id}`} className="min-h-screen space-y-6">
-          <ExerciseProgressHeader
-            currentPageIndex={currentPageIndex}
-            totalPages={totalPages}
-          />
+      <div className="w-full md:w-4xl mx-auto">
+        <div
+          id={`exercise-${exercise.id}`}
+          className="flex flex-col h-[calc(100svh-160px)] md:h-[calc(100svh-256px)] min-h-[400px]"
+        >
+          <div className="shrink-0 space-y-4 pb-4">
+            <ExerciseProgressHeader
+              currentPageIndex={currentPageIndex}
+              totalPages={totalPages}
+            />
 
-          <div>
-            <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-2 sm:mb-4">
-              {exercise.title}
-            </h1>
-            {exercise.description && (
-              <p className="text-base text-gray-700 dark:text-gray-300 leading-relaxed">
-                {exercise.description}
-              </p>
-            )}
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-2 sm:mb-4">
+                {exercise.title}
+              </h1>
+              {exercise.description && (
+                <p className="text-base text-gray-700 dark:text-gray-300 leading-relaxed">
+                  {exercise.description}
+                </p>
+              )}
+            </div>
           </div>
 
-          <SpeechExercise exercise={exercise} />
+          <div className="flex-1 min-h-0">
+            <SpeechExercise exercise={exercise} />
+          </div>
         </div>
       </div>
     )
@@ -247,29 +250,32 @@ export const ActivityView: React.FC<ActivityViewProps> = ({
 
   if (isFluencyReadingExercise(exercise)) {
     return (
-      <div
-        className={`w-full md:w-4xl mx-auto sm:pb-8 ${
-          resourceType === 'gamified' ? 'sm:mt-8' : 'sm:py-8'
-        }`}
-      >
-        <div id={`exercise-${exercise.id}`} className="min-h-screen space-y-6">
-          <ExerciseProgressHeader
-            currentPageIndex={currentPageIndex}
-            totalPages={totalPages}
-          />
+      <div className="w-full md:w-4xl mx-auto">
+        <div
+          id={`exercise-${exercise.id}`}
+          className="flex flex-col h-[calc(100svh-160px)] md:h-[calc(100svh-256px)] min-h-[400px]"
+        >
+          <div className="shrink-0 space-y-4 pb-4">
+            <ExerciseProgressHeader
+              currentPageIndex={currentPageIndex}
+              totalPages={totalPages}
+            />
 
-          <div>
-            <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-2 sm:mb-4">
-              {exercise.title}
-            </h1>
-            {exercise.description && (
-              <p className="text-base text-gray-700 dark:text-gray-300 leading-relaxed">
-                {exercise.description}
-              </p>
-            )}
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-2 sm:mb-4">
+                {exercise.title}
+              </h1>
+              {exercise.description && (
+                <p className="text-base text-gray-700 dark:text-gray-300 leading-relaxed">
+                  {exercise.description}
+                </p>
+              )}
+            </div>
           </div>
 
-          <FluencyReadingExercise exercise={exercise} />
+          <div className="flex-1 min-h-0">
+            <FluencyReadingExercise exercise={exercise} />
+          </div>
         </div>
       </div>
     )

@@ -110,13 +110,13 @@ export const FluencyReadingExercise: React.FC<FluencyReadingExerciseProps> = ({
   }, [exercise.id, isIframeReady, sendConfig])
 
   return (
-    <div className={`fluency-reading-container ${className}`}>
+    <div className={`fluency-reading-container h-full ${className}`}>
       <iframe
         id={iframeId}
         ref={iframeRef}
         src={getFluenciaLeitoraUrl()}
         style={{
-          height: 'max(60vh, 500px)',
+          height: '100%',
           width: '100%',
           border: 'none',
         }}

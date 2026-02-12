@@ -206,13 +206,13 @@ export const SpeechExercise: React.FC<SpeechExerciseProps> = ({
   }, [exercise.id, isIframeReady, sendExerciseData])
 
   return (
-    <div className={`speech-exercise-container ${className}`}>
+    <div className={`speech-exercise-container h-full ${className}`}>
       <iframe
         id={iframeId}
         ref={iframeRef}
         src={getIframeSrc()}
         style={{
-          height: 'max(60vh, 500px)',
+          height: '100%',
           width: '100%',
           border: 'none',
         }}

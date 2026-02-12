@@ -3,6 +3,10 @@ import { VirtualClassroom } from './pages/VirtualClassroom'
 import './App.css'
 
 function App() {
+  const webComponentsUrl =
+    import.meta.env.VITE_WEB_COMPONENTS_URL || 'http://localhost:5174'
+  const webComponentsSrc = `${webComponentsUrl.replace(/\/+$/, '')}/`
+
   return (
     <BrowserRouter>
       <Routes>
@@ -24,6 +28,19 @@ function App() {
           }
         />
         <Route path="/sala-virtual" element={<VirtualClassroom />} />
+        <Route
+          path="/web-components/*"
+          element={
+            <div className="w-full h-screen bg-white">
+              <iframe
+                src={webComponentsSrc}
+                title="Web Components"
+                className="w-full h-full border-0"
+                allow="microphone"
+              />
+            </div>
+          }
+        />
       </Routes>
     </BrowserRouter>
   )
