@@ -5,13 +5,41 @@
  * Re-exporta os exercícios existentes com uma interface de API
  */
 
-import { mockExercises } from './exercises'
+import {
+  mockExercise1,
+  mockExercise2,
+  mockExercise3,
+  mockExercise4,
+  mockExercise5,
+  mockExercise6,
+  mockExercise7,
+  mockExercise8,
+  mockExercise10,
+  mockExercise11,
+  mockExercise12,
+  mockExercise13,
+  mockExercise14,
+} from './exercises'
 import type { Exercise } from '@/features/exercises/types'
 
 /**
  * Re-exporta os exercícios existentes
  */
-export const mockActivities = mockExercises
+export const mockActivities: Exercise[] = [
+  mockExercise1,
+  mockExercise2,
+  mockExercise3,
+  mockExercise4,
+  mockExercise5,
+  mockExercise6,
+  mockExercise7,
+  mockExercise8,
+  mockExercise10,
+  mockExercise11,
+  mockExercise12,
+  mockExercise13,
+  mockExercise14,
+]
 
 /**
  * API mock para simular chamadas ao backend de atividades

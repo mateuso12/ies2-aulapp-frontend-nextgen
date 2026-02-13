@@ -8,6 +8,8 @@ import type {
   NumericExercise,
   TrueFalseExercise,
   OpenTextExercise,
+  SpeechExercise,
+  FluencyReadingExercise,
 } from '@/features/exercises/types'
 
 /**
@@ -358,6 +360,7 @@ export const mockExercise10: TrueFalseExercise = {
 }
 
 /**
+<<<<<<< HEAD
  * Mock 11: Resposta aberta sobre Revolução Francesa
  */
 export const mockExercise11: OpenTextExercise = {
@@ -526,6 +529,148 @@ export const mockExercise13: OpenTextExercise = {
 }
 
 /**
+ * Mock 14: Exercício de fala (Pronunciação - EX.WP)
+ */
+export const mockExercise14: SpeechExercise = {
+  id: 'ex-014',
+  type: 'speech-pronunciation',
+  title: 'Pronuncie as palavras',
+  description: 'Fale cada palavra quando solicitado.',
+  data: {
+    questions: [
+      { text: 'casa', hasImage: false },
+      { text: 'escola', hasImage: false },
+      { text: 'computador', hasImage: false },
+      { text: 'caderno', hasImage: false },
+      { text: 'professor', hasImage: false },
+      { text: 'biblioteca', hasImage: false },
+      { text: 'matemática', hasImage: false },
+      { text: 'geografia', hasImage: false },
+      { text: 'história', hasImage: false },
+      { text: 'ciências', hasImage: false },
+      { text: 'português', hasImage: false },
+      { text: 'inglês', hasImage: false },
+      { text: 'educação', hasImage: false },
+      { text: 'literatura', hasImage: false },
+      { text: 'tecnologia', hasImage: false },
+    ],
+    config: {
+      initialHelp: true,
+      canSkip: true,
+      instantCorrection: true,
+    },
+    institutionId: 'inst-001',
+  },
+  maxScore: 10,
+  difficulty: 'easy',
+  tags: ['fala', 'pronúncia'],
+  createdAt: new Date('2024-01-15'),
+  updatedAt: new Date('2024-01-15'),
+}
+
+/**
+ * Mock 15: Exercício de fala (Soletração - EX.WS)
+ */
+export const mockExercise15: SpeechExercise = {
+  id: 'ex-015',
+  type: 'speech-spelling',
+  title: 'Soletre as palavras',
+  description: 'Fale letra por letra quando solicitado.',
+  data: {
+    questions: [
+      { text: 'bola', hasImage: false },
+      { text: 'carro', hasImage: false },
+      { text: 'livro', hasImage: false },
+      { text: 'mesa', hasImage: false },
+      { text: 'cadeira', hasImage: false },
+      { text: 'janela', hasImage: false },
+      { text: 'porta', hasImage: false },
+      { text: 'quadro', hasImage: false },
+      { text: 'lápis', hasImage: false },
+      { text: 'caneta', hasImage: false },
+      { text: 'papel', hasImage: false },
+      { text: 'borracha', hasImage: false },
+    ],
+    config: {
+      initialHelp: true,
+      canSkip: false,
+      instantCorrection: true,
+    },
+    institutionId: 'inst-001',
+  },
+  maxScore: 10,
+  difficulty: 'easy',
+  tags: ['fala', 'soletração'],
+  createdAt: new Date('2024-01-15'),
+  updatedAt: new Date('2024-01-15'),
+}
+
+/**
+ * Mock 16: Exercício de fala (Silabação - EX.WY)
+ */
+export const mockExercise16: SpeechExercise = {
+  id: 'ex-016',
+  type: 'speech-syllable',
+  title: 'Separe em sílabas',
+  description: 'Fale as sílabas da palavra.',
+  data: {
+    questions: [
+      { text: 'banana', separateWord: 'ba-na-na', hasImage: false },
+      { text: 'computador', separateWord: 'com-pu-ta-dor', hasImage: false },
+      { text: 'borboleta', separateWord: 'bor-bo-le-ta', hasImage: false },
+      { text: 'telefone', separateWord: 'te-le-fo-ne', hasImage: false },
+      { text: 'maravilhoso', separateWord: 'ma-ra-vi-lho-so', hasImage: false },
+      { text: 'elefante', separateWord: 'e-le-fan-te', hasImage: false },
+      { text: 'biblioteca', separateWord: 'bi-bli-o-te-ca', hasImage: false },
+      { text: 'chocolate', separateWord: 'cho-co-la-te', hasImage: false },
+      { text: 'paralelepípedo', separateWord: 'pa-ra-le-le-pí-pe-do', hasImage: false },
+      { text: 'refrigerante', separateWord: 're-fri-ge-ran-te', hasImage: false },
+    ],
+    config: {
+      initialHelp: true,
+      canSkip: true,
+      instantCorrection: true,
+    },
+    institutionId: 'inst-001',
+  },
+  maxScore: 10,
+  difficulty: 'medium',
+  tags: ['fala', 'silabação'],
+  createdAt: new Date('2024-01-15'),
+  updatedAt: new Date('2024-01-15'),
+}
+
+/**
+ * Mock 17: Fluência Leitora (EX.TR)
+ */
+export const mockExercise17: FluencyReadingExercise = {
+  id: 'ex-017',
+  type: 'fluency-reading',
+  title: 'Fluência Leitora',
+  description: 'Leia o texto a seguir com atenção à entonação e ritmo.',
+  data: {
+    enunciado: 'Leia o texto a seguir com atenção à entonação e ritmo.',
+    tituloTexto: 'O pequeno viajante e suas grandes descobertas',
+    corpoTexto:
+      'Era uma vez um pequeno viajante que adorava explorar cidades novas. Ele observava as pessoas, os sons e as cores de cada lugar. Com sua mochila nas costas e um caderno nas mãos, ele registrava tudo o que via e sentia. As ruas movimentadas contavam histórias de gerações passadas, e cada esquina revelava um novo segredo. Os mercados eram repletos de aromas deliciosos, desde frutas frescas até especiarias exóticas. As praças públicas reuniam famílias que riam e conversavam, criando uma atmosfera acolhedora. Ele sempre encontrava tempo para conversar com os moradores locais, aprendendo sobre suas tradições e costumes. À noite, ele contemplava o céu estrelado e sonhava com as próximas aventuras que o aguardavam.',
+    initialHelp: true,
+    idioma: 'pt-BR',
+    configuracoesAtividade: {
+      activityId: 'fluencia-001',
+      studentId: 'student-001',
+      difficulty: 'intermediate',
+      timeLimit: 300,
+      source: 'aulapp_virtual_room',
+    },
+  },
+  maxScore: 100,
+  difficulty: 'medium',
+  tags: ['fluência', 'leitura'],
+  createdAt: new Date('2024-01-15'),
+  updatedAt: new Date('2024-01-15'),
+}
+
+/**
  * Lista de todos os exercícios mock
  */
 export const mockExercises = [
@@ -541,6 +686,10 @@ export const mockExercises = [
   mockExercise11,
   mockExercise12,
   mockExercise13,
+  mockExercise14,
+  mockExercise15,
+  mockExercise16,
+  mockExercise17,
 ]
 
 /**

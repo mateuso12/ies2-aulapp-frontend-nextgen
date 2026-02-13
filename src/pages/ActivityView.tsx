@@ -6,14 +6,21 @@ import {
   NumericExerciseComponent,
   TrueFalseExerciseComponent,
   OpenTextExerciseComponent,
+  SpeechExercise,
+  FluencyReadingExercise,
 } from '@/features/exercises/components/exercise-types'
-import { ExerciseResultIndicator } from '@/features/exercises/components'
+import {
+  ExerciseResultIndicator,
+  ExerciseProgressHeader,
+} from '@/features/exercises/components'
 import {
   isWritingExercise,
   isMultipleChoiceExercise,
   isNumericExercise,
   isTrueFalseExercise,
   isOpenTextExercise,
+  isSpeechExercise,
+  isFluencyReadingExercise,
 } from '@/features/exercises/types'
 import type {
   Exercise,
@@ -64,7 +71,6 @@ export const ActivityView: React.FC<ActivityViewProps> = ({
   onVerifyTrueFalse,
 }) => {
   const { t } = useTranslation('exercises')
-  const progress = ((currentPageIndex + 1) / totalPages) * 100
 
   if (isNumericExercise(exercise)) {
     const currentAnswer = (selectedAnswer as number) || 0
@@ -74,25 +80,18 @@ export const ActivityView: React.FC<ActivityViewProps> = ({
 
     return (
       <div
-        className={`w-full md:w-4xl mx-auto pb-8 ${
-          resourceType === 'gamified' ? 'mt-8' : 'py-8'
+        className={`w-full md:w-4xl mx-auto sm:pb-8 ${
+          resourceType === 'gamified' ? 'sm:mt-8' : 'sm:py-8'
         }`}
       >
         <div id={`exercise-${exercise.id}`} className="min-h-screen space-y-6">
-          <div>
-            <div className="h-1 w-full bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden mb-3">
-              <div
-                className="h-full bg-[#E91E63] transition-all duration-300"
-                style={{ width: `${progress}%` }}
-              ></div>
-            </div>
-            <h2 className="text-sm font-semibold text-gray-900 dark:text-gray-100">
-              {t('questionLabel')} {currentPageIndex + 1}
-            </h2>
-          </div>
+          <ExerciseProgressHeader
+            currentPageIndex={currentPageIndex}
+            totalPages={totalPages}
+          />
 
           <div>
-            <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-4">
+            <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-2 sm:mb-4">
               {exercise.title}
             </h1>
             {exercise.description && (
@@ -145,25 +144,18 @@ export const ActivityView: React.FC<ActivityViewProps> = ({
 
     return (
       <div
-        className={`w-full md:w-4xl mx-auto pb-8 ${
-          resourceType === 'gamified' ? 'mt-8' : 'py-8'
+        className={`w-full md:w-4xl mx-auto sm:pb-8 ${
+          resourceType === 'gamified' ? 'sm:mt-8' : 'sm:py-8'
         }`}
       >
         <div id={`exercise-${exercise.id}`} className="min-h-screen space-y-6">
-          <div>
-            <div className="h-1 w-full bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden mb-3">
-              <div
-                className="h-full bg-[#E91E63] transition-all duration-300"
-                style={{ width: `${progress}%` }}
-              ></div>
-            </div>
-            <h2 className="text-sm font-semibold text-gray-900 dark:text-gray-100">
-              {t('questionLabel')} {currentPageIndex + 1}
-            </h2>
-          </div>
+          <ExerciseProgressHeader
+            currentPageIndex={currentPageIndex}
+            totalPages={totalPages}
+          />
 
           <div>
-            <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-4">
+            <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-2 sm:mb-4">
               {exercise.title}
             </h1>
             {exercise.description && (
@@ -236,6 +228,7 @@ export const ActivityView: React.FC<ActivityViewProps> = ({
     const hasAnswer = currentAnswer.trim().length >= (exercise.data.minLength || 0)
     const isSubmitted = !!submittedAnswer
     const isLocked = !!validationResult || isSubmitted
+    const progress = ((currentPageIndex + 1) / totalPages) * 100
 
     return (
       <div
@@ -287,6 +280,72 @@ export const ActivityView: React.FC<ActivityViewProps> = ({
             resourceType={resourceType}
             onVerifyAnswer={hasAnswer && !isLocked ? onVerifyWriting : undefined}
           />
+        </div>
+      </div>
+    )
+  }
+
+  if (isSpeechExercise(exercise)) {
+    return (
+      <div className="w-full md:w-4xl mx-auto">
+        <div
+          id={`exercise-${exercise.id}`}
+          className="flex flex-col h-[calc(100svh-160px)] md:h-[calc(100svh-256px)] min-h-[400px]"
+        >
+          <div className="shrink-0 space-y-4 pb-4">
+            <ExerciseProgressHeader
+              currentPageIndex={currentPageIndex}
+              totalPages={totalPages}
+            />
+
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-2 sm:mb-4">
+                {exercise.title}
+              </h1>
+              {exercise.description && (
+                <p className="text-base text-gray-700 dark:text-gray-300 leading-relaxed">
+                  {exercise.description}
+                </p>
+              )}
+            </div>
+          </div>
+
+          <div className="flex-1 min-h-0">
+            <SpeechExercise exercise={exercise} />
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  if (isFluencyReadingExercise(exercise)) {
+    return (
+      <div className="w-full md:w-4xl mx-auto">
+        <div
+          id={`exercise-${exercise.id}`}
+          className="flex flex-col h-[calc(100svh-160px)] md:h-[calc(100svh-256px)] min-h-[400px]"
+        >
+          <div className="shrink-0 space-y-4 pb-4">
+            <ExerciseProgressHeader
+              currentPageIndex={currentPageIndex}
+              totalPages={totalPages}
+            />
+
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-2 sm:mb-4">
+                {exercise.title}
+              </h1>
+              {exercise.description && (
+                <p className="text-base text-gray-700 dark:text-gray-300 leading-relaxed">
+                  {exercise.description}
+                </p>
+              )}
+            </div>
+          </div>
+
+          <div className="flex-1 min-h-0">
+            <FluencyReadingExercise exercise={exercise} />
+          </div>
         </div>
       </div>
     )
