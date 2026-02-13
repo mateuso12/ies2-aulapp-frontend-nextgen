@@ -99,14 +99,16 @@ export const VirtualClassroom: React.FC = () => {
         }))
     }
 
-    // Para outros resourceTypes, retorna atividades
-    return mockActivities.map((exercise) => ({
-      id: exercise.id,
-      title: exercise.title,
-      contentHtml: '',
-      isExercise: true as const,
-      exercise,
-    }))
+    // Para outros resourceTypes, retorna atividades (excluindo open-text, que são exclusivas do recurso 'open_ended')
+    return mockActivities
+      .filter((exercise) => !isOpenTextExercise(exercise))
+      .map((exercise) => ({
+        id: exercise.id,
+        title: exercise.title,
+        contentHtml: '',
+        isExercise: true as const,
+        exercise,
+      }))
   }, [resourceType])
 
   const totalPages = allPages.length

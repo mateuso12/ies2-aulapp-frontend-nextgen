@@ -4,6 +4,7 @@ import type {
   OpenTextData,
   OpenTextAnswer,
 } from '../../types'
+import { getOpenEndedWebComponentUrl } from '../../lib/webComponents'
 
 interface OpenTextExerciseProps
   extends ExerciseComponentProps<OpenTextData, OpenTextAnswer> {
@@ -59,7 +60,7 @@ export const OpenTextExercise: React.FC<OpenTextExerciseProps> = ({
     <div className="w-full">
       <iframe
         ref={iframeRef}
-        src="http://localhost:5174/web-components/"
+        src={getOpenEndedWebComponentUrl()}
         title="Open Text Exercise Component"
         className="w-full border-0"
         style={{

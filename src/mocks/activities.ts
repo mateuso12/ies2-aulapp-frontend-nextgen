@@ -19,6 +19,9 @@ import {
   mockExercise12,
   mockExercise13,
   mockExercise14,
+  mockExercise15,
+  mockExercise16,
+  mockExercise17,
 } from './exercises'
 import type { Exercise } from '@/features/exercises/types'
 
@@ -39,6 +42,9 @@ export const mockActivities: Exercise[] = [
   mockExercise12,
   mockExercise13,
   mockExercise14,
+  mockExercise15,
+  mockExercise16,
+  mockExercise17,
 ]
 
 /**
