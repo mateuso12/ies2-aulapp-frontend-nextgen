@@ -20,4 +20,7 @@ export * from './repositories'
 export * from './hooks'
 
 // Componentes
-export * from './components/exercise-types'
+export {
+  WritingExercise as WritingExerciseComponent,
+  OrderingExerciseComponent,
+} from './components/exercise-types'

@@ -4,6 +4,7 @@ import {
   WritingExerciseComponent,
   MultipleChoiceExerciseComponent,
   NumericExerciseComponent,
+  OrderingExerciseComponent,
   TrueFalseExerciseComponent,
   OpenTextExerciseComponent,
   SpeechExercise,
@@ -17,6 +18,7 @@ import {
   isWritingExercise,
   isMultipleChoiceExercise,
   isNumericExercise,
+  isOrderingExercise,
   isTrueFalseExercise,
   isOpenTextExercise,
   isSpeechExercise,
@@ -50,8 +52,10 @@ interface ActivityViewProps {
   onVerifyWriting: () => void
   onWritingChange: (answer: string) => void
   onNumericChange: (answer: number) => void
+  onOrderingChange: (answer: string[]) => void
   onTrueFalseChange: (statementId: string, answer: boolean) => void
   onVerifyTrueFalse: () => void
+  onVerifyOrdering: () => void
 }
 
 export const ActivityView: React.FC<ActivityViewProps> = ({
@@ -67,8 +71,10 @@ export const ActivityView: React.FC<ActivityViewProps> = ({
   onVerifyWriting,
   onWritingChange,
   onNumericChange,
+  onOrderingChange,
   onTrueFalseChange,
   onVerifyTrueFalse,
+  onVerifyOrdering,
 }) => {
   const { t } = useTranslation('exercises')
 
@@ -223,9 +229,73 @@ export const ActivityView: React.FC<ActivityViewProps> = ({
     )
   }
 
+  if (isOrderingExercise(exercise)) {
+    const currentAnswer = (selectedAnswer as string[]) || []
+    const hasAnswer = currentAnswer.length > 0
+    const isSubmitted = !!validationResult || !!submittedAnswer
+
+    return (
+      <div
+        className={`w-full md:w-4xl mx-auto sm:pb-8 ${
+          resourceType === 'gamified' ? 'sm:mt-8' : 'sm:py-8'
+        }`}
+      >
+        <div id={`exercise-${exercise.id}`} className="min-h-screen space-y-6">
+          <ExerciseProgressHeader
+            currentPageIndex={currentPageIndex}
+            totalPages={totalPages}
+          />
+
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-2 sm:mb-4">
+              {exercise.title}
+            </h1>
+            {exercise.description && (
+              <p className="text-base text-gray-700 dark:text-gray-300 leading-relaxed">
+                {exercise.description}
+              </p>
+            )}
+          </div>
+
+          {validationResult && (
+            <ExerciseResultIndicator isCorrect={validationResult.isCorrect} />
+          )}
+
+          <OrderingExerciseComponent
+            exercise={exercise}
+            value={currentAnswer}
+            onChange={(answer) => onOrderingChange(answer)}
+            readonly={isSubmitted}
+            validationResult={validationResult}
+            resourceType={resourceType}
+            currentPageIndex={currentPageIndex}
+            comment={submittedAnswer?.comment}
+          />
+
+          {!isSubmitted && (
+            <div className="flex justify-center pt-8">
+              <button
+                onClick={onVerifyOrdering}
+                disabled={!hasAnswer}
+                className={`px-12 py-3 font-semibold rounded-lg shadow-md transition-colors ${
+                  hasAnswer
+                    ? 'bg-blue-600 hover:bg-blue-700 text-white cursor-pointer'
+                    : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                }`}
+              >
+                {t('verify')}
+              </button>
+            </div>
+          )}
+        </div>
+      </div>
+    )
+  }
+
   if (isOpenTextExercise(exercise)) {
     const currentAnswer = (selectedAnswer as string) || ''
-    const hasAnswer = currentAnswer.trim().length >= (exercise.data.minLength || 0)
+    const hasAnswer =
+      currentAnswer.trim().length >= (exercise.data.minLength || 0)
     const isSubmitted = !!submittedAnswer
     const isLocked = !!validationResult || isSubmitted
     const progress = ((currentPageIndex + 1) / totalPages) * 100
@@ -278,7 +348,9 @@ export const ActivityView: React.FC<ActivityViewProps> = ({
             validationResult={validationResult}
             currentPageIndex={currentPageIndex}
             resourceType={resourceType}
-            onVerifyAnswer={hasAnswer && !isLocked ? onVerifyWriting : undefined}
+            onVerifyAnswer={
+              hasAnswer && !isLocked ? onVerifyWriting : undefined
+            }
           />
         </div>
       </div>

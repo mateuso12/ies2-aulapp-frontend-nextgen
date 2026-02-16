@@ -23,11 +23,14 @@
 // export { MultipleChoiceExercise } from './MultipleChoiceExercise'
 // export { NumericExercise } from './NumericExercise'
 // export { OrderingExercise } from './OrderingExercise'
+// export { MatchingExercise } from './MatchingExercise'
 // export { TrueFalseExercise } from './TrueFalseExercise'
 
 export { MultipleChoiceExerciseComponent } from './MultipleChoiceExercise'
 export { WritingExercise as WritingExerciseComponent } from './WritingExercise'
+export { WritingExercise } from './WritingExercise'
 export { NumericExercise as NumericExerciseComponent } from './NumericExercise'
+export { OrderingExerciseComponent } from './OrderingExercise'
 export { TrueFalseExerciseComponent } from './TrueFalseExercise'
 export { OpenTextExerciseComponent } from './OpenTextExercise'
 
