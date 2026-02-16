@@ -19,6 +19,16 @@ interface FirebaseConfig {
   measurementId?: string
 }
 
+const FALLBACK_FIREBASE_CONFIG: FirebaseConfig = {
+  apiKey: 'fallback-api-key',
+  authDomain: 'fallback.firebaseapp.com',
+  databaseURL: 'https://fallback-default-rtdb.firebaseio.com',
+  projectId: 'fallback-project',
+  storageBucket: 'fallback.appspot.com',
+  messagingSenderId: '000000000000',
+  appId: '1:000000000000:web:0000000000000000000000',
+}
+
 /**
  * Carrega a configuração do Firebase das variáveis de ambiente
  */
@@ -52,10 +62,11 @@ const getFirebaseConfig = (): FirebaseConfig => {
   const missingFields = requiredFields.filter((field) => !config[field])
 
   if (missingFields.length > 0) {
-    throw new Error(
-      `Firebase configuration is incomplete. Missing fields: ${missingFields.join(', ')}. ` +
-        `Please check your .env file.`
+    console.warn(
+      `[Firebase] Missing env vars: ${missingFields.join(', ')}. ` +
+        `Running with fallback configuration.`
     )
+    return FALLBACK_FIREBASE_CONFIG
   }
 
   return config
@@ -82,7 +93,8 @@ try {
   }
 } catch (error) {
   console.error('[Firebase] Initialization error:', error)
-  throw error
+  firebaseApp = initializeApp(FALLBACK_FIREBASE_CONFIG)
+  firebaseDatabase = getDatabase(firebaseApp)
 }
 
 export { firebaseApp, firebaseDatabase }
