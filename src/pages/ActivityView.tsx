@@ -264,7 +264,7 @@ export const ActivityView: React.FC<ActivityViewProps> = ({
           <OrderingExerciseComponent
             exercise={exercise}
             value={currentAnswer}
-            onChange={(answer) => onOrderingChange(answer)}
+            onChange={(answer: string[]) => onOrderingChange(answer)}
             readonly={isSubmitted}
             validationResult={validationResult}
           />
