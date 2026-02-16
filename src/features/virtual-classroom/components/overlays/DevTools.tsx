@@ -10,6 +10,10 @@ export const DevTools: React.FC<DevToolsProps> = ({
   resourceType,
   onResourceTypeChange,
 }) => {
+  const isPreviewDeployment =
+    typeof window !== 'undefined' && window.location.hostname.includes('vercel.app')
+  const shouldShowSelector = import.meta.env.DEV || isPreviewDeployment
+
   const [isOpen, setIsOpen] = useState(false)
   const [position, setPosition] = useState({
     x: 16,
@@ -81,7 +85,7 @@ export const DevTools: React.FC<DevToolsProps> = ({
     }
   }
 
-  if (!import.meta.env.DEV) return null
+  if (!shouldShowSelector) return null
 
   return (
     <>
@@ -134,12 +138,6 @@ export const DevTools: React.FC<DevToolsProps> = ({
                 className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
               >
                 <option value="content">Conteúdo</option>
-                <option value="exercise_list">Lista de Exercícios</option>
-                <option value="gamified">Gamificada</option>
-                <option value="assessment">Avaliação</option>
-                <option value="scorm">SCORM</option>
-                <option value="simulation">Simulado</option>
-                <option value="material">Material de Apoio</option>
                 <option value="open_ended">Resposta Aberta</option>
               </select>
             </div>

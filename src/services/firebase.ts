@@ -3,7 +3,7 @@ import { getDatabase, type Database } from 'firebase/database'
 
 /**
  * Firebase Configuration
- * 
+ *
  * Este arquivo gerencia a inicialização do Firebase para diferentes ambientes.
  * As credenciais são carregadas de variáveis de ambiente (.env files).
  */
