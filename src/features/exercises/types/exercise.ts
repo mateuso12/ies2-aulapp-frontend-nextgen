@@ -50,7 +50,6 @@ export type DifficultyLevel = 'easy' | 'medium' | 'hard'
  * Use generics para definir tipos específicos de dados e respostas.
  *
  * @template TData - Tipo dos dados específicos do exercício
- * @template TAnswer - Tipo da resposta do usuário (usado para inferência de tipos)
  */
 export interface BaseExercise<TData = unknown, TAnswer = unknown> {
   /** ID único do exercício */
@@ -236,7 +235,7 @@ export interface MultipleChoiceData {
   maxSelections?: number // Máximo de seleções permitidas
 }
 
-export type MultipleChoiceAnswer = string[] // Array de IDs das opções selecionadas
+export type MultipleChoiceAnswer = string[] // Array de IDs selecionados
 
 export type MultipleChoiceExercise = BaseExercise<
   MultipleChoiceData,
@@ -252,7 +251,7 @@ export interface OpenTextData {
   maxLength?: number
   expectedKeywords?: string[] // Palavras-chave esperadas (para feedback)
   modelAnswer?: string // Resposta modelo (apenas para professores)
-  
+
   // Configurações para o iframe
   language?: string // Idioma (pt-BR, en, es, etc.)
   locale?: string // Locale para i18n (ex: 'pt-BR')

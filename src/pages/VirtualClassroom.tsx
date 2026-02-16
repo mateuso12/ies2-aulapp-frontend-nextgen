@@ -20,6 +20,7 @@ import {
   isWritingExercise,
   isMultipleChoiceExercise,
   isNumericExercise,
+  isOrderingExercise,
   isTrueFalseExercise,
   isOpenTextExercise,
 } from '@/features/exercises/types'
@@ -61,19 +62,36 @@ export const VirtualClassroom: React.FC = () => {
 
   const resourceId = 'virtual-classroom-demo'
 
-  // Combina conteúdo e atividades em páginas
   const allPages = useMemo(() => {
-    // Se resourceType for 'content', retorna páginas de conteúdo
     if (resourceType === 'content') {
-      return mockContentPages.map((page) => ({
+      const contentPages = mockContentPages.map((page) => ({
         id: page.id,
         title: page.title,
         contentHtml: page.contentHtml,
         isExercise: false as const,
       }))
+
+      const contentExercises = mockActivities
+        .filter((exercise) =>
+          [
+            'multiple-choice',
+            'true-false',
+            'ordering',
+            'numeric',
+            'writing',
+          ].includes(exercise.type)
+        )
+        .map((exercise) => ({
+          id: exercise.id,
+          title: exercise.title,
+          contentHtml: '',
+          isExercise: true as const,
+          exercise,
+        }))
+
+      return [...contentPages, ...contentExercises]
     }
 
-    // Se resourceType for 'material', retorna uma única "página" de materiais
     if (resourceType === 'material') {
       return [
         {
@@ -86,7 +104,6 @@ export const VirtualClassroom: React.FC = () => {
       ]
     }
 
-    // Para resourceType 'open_ended', filtra apenas exercícios do tipo 'open-text'
     if (resourceType === 'open_ended') {
       return mockActivities
         .filter((exercise) => isOpenTextExercise(exercise))
@@ -99,7 +116,6 @@ export const VirtualClassroom: React.FC = () => {
         }))
     }
 
-    // Para outros resourceTypes, retorna atividades (excluindo open-text, que são exclusivas do recurso 'open_ended')
     return mockActivities
       .filter((exercise) => !isOpenTextExercise(exercise))
       .map((exercise) => ({
@@ -155,27 +171,19 @@ export const VirtualClassroom: React.FC = () => {
     removeBookmark(page)
   }
 
-  // Handler para seleção de alternativas
   const handleSelectOption = (exerciseId: string, optionId: string) => {
     const exercise = mockActivities.find((ex) => ex.id === exerciseId)
     if (!exercise) return
 
     if (!isMultipleChoiceExercise(exercise)) return
 
-    const isMultipleSelect = true // Sempre permitir seleção múltipla
-
-    if (isMultipleSelect) {
-      const current = (selectedAnswers[exerciseId] as string[]) || []
-      const newSelection = current.includes(optionId)
-        ? current.filter((id) => id !== optionId)
-        : [...current, optionId]
-      setSelectedAnswers({ ...selectedAnswers, [exerciseId]: newSelection })
-    } else {
-      setSelectedAnswers({ ...selectedAnswers, [exerciseId]: optionId })
-    }
+    const current = (selectedAnswers[exerciseId] as string[]) || []
+    const newSelection = current.includes(optionId)
+      ? current.filter((id) => id !== optionId)
+      : [...current, optionId]
+    setSelectedAnswers({ ...selectedAnswers, [exerciseId]: newSelection })
   }
 
-  // Handler para confirmar resposta
   const handleConfirmAnswer = (exerciseId: string) => {
     const exercise = mockActivities.find((ex) => ex.id === exerciseId)
     if (!exercise) return
@@ -196,7 +204,6 @@ export const VirtualClassroom: React.FC = () => {
       isCorrect = correctOptions.includes(userAnswer)
     }
 
-    // Toca o áudio de feedback
     if (isCorrect) {
       playSuccess()
     } else {
@@ -251,7 +258,6 @@ export const VirtualClassroom: React.FC = () => {
     })
   }
 
-  // Handler para verificar resposta de atividade de escrita
   const handleVerifyWriting = (exerciseId: string) => {
     const exercise = mockActivities.find((ex) => ex.id === exerciseId)
     if (!exercise || !isWritingExercise(exercise)) return
@@ -281,7 +287,6 @@ export const VirtualClassroom: React.FC = () => {
     })
   }
 
-  // Handler para verificar resposta de questão numérica
   const handleVerifyNumeric = (exerciseId: string) => {
     const exercise = mockActivities.find((ex) => ex.id === exerciseId)
     if (!exercise || !isNumericExercise(exercise)) return
@@ -311,7 +316,35 @@ export const VirtualClassroom: React.FC = () => {
     })
   }
 
-  // Handler para mudança de resposta em atividade de escrita
+  const handleVerifyOrdering = (exerciseId: string) => {
+    const exercise = mockActivities.find((ex) => ex.id === exerciseId)
+    if (!exercise || !isOrderingExercise(exercise)) return
+
+    const userAnswer = selectedAnswers[exerciseId] as string[]
+    if (!userAnswer || userAnswer.length === 0) return
+
+    const result = validateExercise(exercise, userAnswer)
+
+    if (result.isCorrect) {
+      playSuccess()
+    } else {
+      playError()
+    }
+
+    setValidationResults({
+      ...validationResults,
+      [exerciseId]: result,
+    })
+
+    const comment = exercise.metadata?.comment as
+      | { title: string; content: string; imageUrl?: string }
+      | undefined
+    setSubmittedAnswers({
+      ...submittedAnswers,
+      [exerciseId]: { isCorrect: result.isCorrect, userAnswer, comment },
+    })
+  }
+
   const handleWritingChange = (exerciseId: string, answer: string) => {
     setSelectedAnswers({
       ...selectedAnswers,
@@ -319,8 +352,14 @@ export const VirtualClassroom: React.FC = () => {
     })
   }
 
-  // Handler para mudança de resposta em questão numérica
   const handleNumericChange = (exerciseId: string, answer: number) => {
+    setSelectedAnswers({
+      ...selectedAnswers,
+      [exerciseId]: answer,
+    })
+  }
+
+  const handleOrderingChange = (exerciseId: string, answer: string[]) => {
     setSelectedAnswers({
       ...selectedAnswers,
       [exerciseId]: answer,
@@ -375,11 +414,9 @@ export const VirtualClassroom: React.FC = () => {
     return createFirebaseHighlightRepository(userId)
   }, [userId])
 
-  // Handler para download de material
   const handleDownloadMaterial = async (materialId: string) => {
     try {
       const { url } = await mockSupportMaterialsApi.downloadMaterial(materialId)
-      // Simula download abrindo em nova aba
       window.open(url, '_blank')
     } catch (error) {
       console.error('Erro ao baixar material:', error)
@@ -407,7 +444,6 @@ export const VirtualClassroom: React.FC = () => {
       >
         {({ isOtherToolActive }) => (
           <>
-            {/* Renderiza ContentView para resourceType 'content' */}
             {resourceType === 'content' && !isExercisePage && (
               <ContentView
                 key={`${currentPage.id}-${userId || 'loading'}`}
@@ -418,7 +454,6 @@ export const VirtualClassroom: React.FC = () => {
               />
             )}
 
-            {/* Renderiza MaterialView para resourceType 'material' */}
             {resourceType === 'material' && isMaterialView && (
               <MaterialView
                 materials={mockSupportMaterials}
@@ -426,9 +461,7 @@ export const VirtualClassroom: React.FC = () => {
               />
             )}
 
-            {/* Renderiza ActivityView para outros resourceTypes */}
-            {resourceType !== 'content' &&
-              resourceType !== 'material' &&
+            {resourceType !== 'material' &&
               isExercisePage &&
               currentPage.exercise && (
                 <ActivityView
@@ -456,6 +489,9 @@ export const VirtualClassroom: React.FC = () => {
                   onNumericChange={(answer) =>
                     handleNumericChange(currentPage.exercise!.id, answer)
                   }
+                  onOrderingChange={(answer) =>
+                    handleOrderingChange(currentPage.exercise!.id, answer)
+                  }
                   onTrueFalseChange={(statementId, answer) =>
                     handleTrueFalseChange(
                       currentPage.exercise!.id,
@@ -465,6 +501,9 @@ export const VirtualClassroom: React.FC = () => {
                   }
                   onVerifyTrueFalse={() =>
                     handleVerifyTrueFalse(currentPage.exercise!.id)
+                  }
+                  onVerifyOrdering={() =>
+                    handleVerifyOrdering(currentPage.exercise!.id)
                   }
                 />
               )}

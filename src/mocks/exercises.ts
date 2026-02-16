@@ -1,388 +1,205 @@
 /**
  * Mocks de exercícios para desenvolvimento
+ * Referência: Curso de Contas a Pagar
  */
 
 import type {
+  Exercise,
   MultipleChoiceExercise,
-  WritingExercise,
-  NumericExercise,
   TrueFalseExercise,
+  OrderingExercise,
+  NumericExercise,
+  WritingExercise,
   OpenTextExercise,
-  SpeechExercise,
-  FluencyReadingExercise,
 } from '@/features/exercises/types'
 
 /**
- * Mock 1: Múltipla escolha (permite escolher várias opções)
+ * 1) Múltipla escolha
  */
 export const mockExercise1: MultipleChoiceExercise = {
   id: 'ex-001',
   type: 'multiple-choice',
-  title: 'Qual é a capital do Brasil?',
-  description: 'Selecione a alternativa correta.',
+  title: 'Contas a Pagar - Múltipla escolha',
+  description: 'O setor de Contas a Pagar é responsável por:',
   data: {
     options: [
       {
         id: 'a',
-        text: 'São Paulo',
+        text: 'Receber pagamentos dos clientes',
         isCorrect: false,
         feedback:
-          'São Paulo é a maior cidade do Brasil, mas não é a capital. A capital está localizada no Distrito Federal.',
+          'Essa atividade pertence ao Contas a Receber. Contas a Pagar organiza pagamentos da empresa.',
       },
-      { id: 'b', text: 'Brasília', isCorrect: true },
+      { id: 'b', text: 'Controlar os pagamentos da empresa', isCorrect: true },
       {
         id: 'c',
-        text: 'Rio de Janeiro',
+        text: 'Vender produtos',
         isCorrect: false,
-        feedback:
-          'Rio de Janeiro foi capital do Brasil até 1960, quando Brasília foi inaugurada como nova capital.',
+        feedback: 'Vendas é função comercial, não do setor de Contas a Pagar.',
       },
       {
         id: 'd',
-        text: 'Salvador',
+        text: 'Fazer propaganda',
         isCorrect: false,
-        feedback:
-          'Salvador foi a primeira capital do Brasil colonial (1549-1763), mas hoje a capital é Brasília.',
-      },
-    ],
-    shuffleOptions: false,
-  },
-  maxScore: 10,
-  difficulty: 'easy',
-  tags: ['geografia', 'brasil'],
-  hints: ['É a sede do governo federal', 'Fica no Centro-Oeste'],
-  createdAt: new Date('2024-01-15'),
-  updatedAt: new Date('2024-01-15'),
-  metadata: {
-    comment: {
-      title: 'Por que Brasília?',
-      content: `Brasília foi fundada em 21 de abril de 1960 e tornou-se a capital do Brasil. A cidade foi planejada pelo urbanista Lúcio Costa e projetada pelo arquiteto Oscar Niemeyer. A transferência da capital do Rio de Janeiro para o Planalto Central teve como objetivo promover o desenvolvimento do interior do país e descongestionar a região litorânea.`,
-      imageUrl:
-        'https://images.unsplash.com/photo-1516483638261-f4dbaf036963?w=800&q=80',
-    },
-  },
-}
-
-/**
- * Mock 2: Múltipla escolha (várias respostas corretas)
- */
-export const mockExercise2: MultipleChoiceExercise = {
-  id: 'ex-002',
-  type: 'multiple-choice',
-  title: 'Quais das seguintes linguagens são orientadas a objetos?',
-  description: 'Selecione todas as alternativas corretas.',
-  data: {
-    options: [
-      { id: 'a', text: 'JavaScript', isCorrect: true },
-      { id: 'b', text: 'Python', isCorrect: true },
-      {
-        id: 'c',
-        text: 'C',
-        isCorrect: false,
-        feedback:
-          'C é uma linguagem procedural que não possui suporte nativo a Programação Orientada a Objetos. Para POO em C, você precisaria usar C++.',
-      },
-      { id: 'd', text: 'Java', isCorrect: true },
-      {
-        id: 'e',
-        text: 'Assembly',
-        isCorrect: false,
-        feedback:
-          'Assembly é uma linguagem de baixo nível focada em instruções de máquina. Não possui conceitos de POO como classes, objetos ou herança.',
+        feedback: 'Propaganda é função de marketing.',
       },
     ],
     shuffleOptions: false,
     minSelections: 1,
-    maxSelections: 5,
-  },
-  maxScore: 15,
-  difficulty: 'medium',
-  tags: ['programação', 'poo'],
-  hints: [
-    'Pense em linguagens que suportam classes',
-    'Algumas linguagens modernas são multi-paradigma',
-  ],
-  createdAt: new Date('2024-01-15'),
-  updatedAt: new Date('2024-01-15'),
-  metadata: {
-    comment: {
-      title: 'Programação Orientada a Objetos',
-      content: `JavaScript, Python e Java são linguagens que suportam o paradigma de Programação Orientada a Objetos (POO). JavaScript usa protótipos mas também suporta classes desde ES6. Python tem suporte nativo a classes e herança. Java é uma linguagem puramente orientada a objetos. Por outro lado, C é uma linguagem procedural que não possui suporte nativo a POO, e Assembly é uma linguagem de baixo nível focada em instruções de máquina.`,
-      imageUrl:
-        'https://images.unsplash.com/photo-1542831371-29b0f74f9713?w=800&q=80',
-    },
-  },
-}
-
-/**
- * Mock 3: Múltipla escolha (contexto matemático)
- */
-export const mockExercise3: MultipleChoiceExercise = {
-  id: 'ex-003',
-  type: 'multiple-choice',
-  title: 'Quanto é 2 + 2?',
-  description: 'Resolva a operação matemática.',
-  data: {
-    options: [
-      {
-        id: 'a',
-        text: '3',
-        isCorrect: false,
-        feedback:
-          'Incorreto. Revise a operação de adição: 2 + 2 resulta em um número maior que 3.',
-      },
-      { id: 'b', text: '4', isCorrect: true },
-      {
-        id: 'c',
-        text: '5',
-        isCorrect: false,
-        feedback:
-          'Incorreto. O resultado de 2 + 2 não é 5. Lembre-se: estamos somando dois números iguais.',
-      },
-      {
-        id: 'd',
-        text: '22',
-        isCorrect: false,
-        feedback:
-          'Atenção! Aqui estamos fazendo uma adição matemática (2 + 2), não uma concatenação de strings. O resultado é 4, não 22.',
-      },
-    ],
-    shuffleOptions: false,
-  },
-  maxScore: 5,
-
-  difficulty: 'easy',
-  tags: ['matemática', 'básico'],
-  hints: ['É uma operação simples de adição'],
-  references: [
-    {
-      title: 'Operações Básicas',
-      description: 'Revisão de adição e subtração',
-    },
-  ],
-  createdAt: new Date('2024-01-15'),
-  updatedAt: new Date('2024-01-15'),
-  metadata: {
-    comment: {
-      title: 'Operações Básicas',
-      content: `A adição é uma das quatro operações fundamentais da aritmética. Neste caso, 2 + 2 = 4. Esta é uma operação simples de soma de dois números inteiros positivos. A adição é comutativa, ou seja, a ordem dos números não altera o resultado: 2 + 2 = 2 + 2.`,
-      imageUrl:
-        'https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=800&q=80',
-    },
-  },
-}
-
-/**
- * Mock 4: Atividade de Escrita
- */
-export const mockExercise4: WritingExercise = {
-  id: 'ex-004',
-  type: 'writing',
-  title: 'Questão 2',
-  description:
-    'Lorem ipsum dolor sit amet consectetur. Et bibendum felis urna est et scelerisque duis semper nisl. Urna ultrices fermentum arcu a nulla. Posuere dui tincidunt pellentesque aliquet quam. In maecenas imperdiet amet sapien nulla. Ac sed hendrerit nascetur mauris congue. Id hac ac neque dolor elementum quis pulvinar urna. Magna suspendisse consectetur augue a sapien a imperdiet enim.',
-  data: {
-    correctAnswers: ['República', 'república', 'REPUBLICA', 'republica'],
-    maxCharacters: 200,
-    placeholder: 'Escrita',
-    incorrectFeedback:
-      'Resposta incorreta. Tente pensar no sistema político brasileiro.',
-    caseSensitive: false,
-    trimSpaces: true,
-  },
-  maxScore: 10,
-  difficulty: 'medium',
-  tags: ['história', 'brasil', 'política'],
-  hints: ['Pense no sistema de governo do Brasil', 'Oposto de monarquia'],
-  createdAt: new Date('2024-01-15'),
-  updatedAt: new Date('2024-01-15'),
-  metadata: {
-    comment: {
-      title: 'O que é uma República?',
-      content: `Uma república é uma forma de governo na qual o país é considerado "coisa pública" e o chefe de Estado é eleito pelo povo ou por seus representantes, por um tempo determinado. O Brasil adotou o sistema republicano em 1889, após a Proclamação da República, que pôs fim ao Império. Na república, diferentemente da monarquia, o poder não é hereditário e os governantes são escolhidos através de eleições.`,
-      imageUrl:
-        'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=800&q=80',
-    },
-  },
-}
-
-/**
- * Mock 5: Questão Numérica
- */
-export const mockExercise5: NumericExercise = {
-  id: 'ex-005',
-  type: 'numeric',
-  title: 'Questão 3',
-  description:
-    'Calcule o resultado da operação: 10,5 + 9,5. Digite o valor numérico com até duas casas decimais.',
-  data: {
-    correctAnswer: 20,
-    tolerance: 0.01,
-    decimalPlaces: 2,
+    maxSelections: 1,
   },
   maxScore: 10,
   difficulty: 'easy',
-  tags: ['matemática', 'aritmética'],
-  hints: ['Some os valores decimais com atenção'],
-  createdAt: new Date('2024-01-15'),
-  updatedAt: new Date('2024-01-15'),
+  tags: ['financeiro', 'contas a pagar'],
+  createdAt: new Date('2026-02-16'),
+  updatedAt: new Date('2026-02-16'),
   metadata: {
     comment: {
-      title: 'Operações com Decimais',
-      content: `Teste do comentário: ao somar 10,5 + 9,5, obtemos 20. Para somar decimais, alinhe as vírgulas e some os números como se fossem inteiros, mantendo a vírgula na posição correta no resultado.`,
-      imageUrl:
-        'https://images.unsplash.com/photo-1509228468518-180dd4864904?w=800&q=80',
-    },
-  },
-}
-
-/**
- * Mock 6: Verdadeiro ou Falso (Certo/Errado - único)
- */
-export const mockExercise6: TrueFalseExercise = {
-  id: 'ex-006',
-  type: 'true-false',
-  title: 'Questão 4',
-  description: 'O Brasil ganhou 8 copas do mundo de futebol.',
-  data: {
-    correctAnswer: false,
-    labelVariant: 'certo-errado',
-    incorrectFeedback: 'O Brasil venceu 5 Copas do Mundo, não 8.',
-  },
-  maxScore: 10,
-  difficulty: 'easy',
-  tags: ['esportes', 'futebol'],
-  createdAt: new Date('2024-01-15'),
-  updatedAt: new Date('2024-01-15'),
-  metadata: {
-    comment: {
-      title: 'Copas do Mundo',
+      title: 'Função principal',
       content:
-        'O Brasil é o maior campeão da Copa do Mundo com 5 títulos (1958, 1962, 1970, 1994, 2002).',
+        'Contas a Pagar controla as obrigações financeiras e garante que os pagamentos sejam feitos em dia.',
     },
   },
 }
 
 /**
- * Mock 7: Verdadeiro ou Falso (Verdadeiro/Falso - múltiplo)
+ * 2) Verdadeiro ou Falso
  */
-export const mockExercise7: TrueFalseExercise = {
-  id: 'ex-007',
+export const mockExercise2: TrueFalseExercise = {
+  id: 'ex-002',
   type: 'true-false',
-  title: 'Questão 5',
-  description: 'Avalie as afirmações abaixo.',
+  title: 'Contas a Pagar - Verdadeiro ou Falso',
+  description: 'Marque verdadeiro ou falso para cada afirmação.',
   data: {
     labelVariant: 'verdadeiro-falso',
     statements: [
       {
         id: 's1',
-        text: 'A água ferve a 100°C ao nível do mar.',
-        correctAnswer: true,
-        incorrectFeedback: 'Em condições padrão, a água ferve a 100°C.',
+        text: 'Contas a Pagar cuida apenas de salários.',
+        correctAnswer: false,
+        incorrectFeedback:
+          'Além de salários, o setor também controla aluguel, fornecedores, impostos e outras obrigações.',
       },
       {
         id: 's2',
-        text: 'A Terra é o maior planeta do Sistema Solar.',
-        correctAnswer: false,
-        incorrectFeedback: 'Júpiter é o maior planeta do Sistema Solar.',
+        text: 'Pagar contas em dia evita multas e juros.',
+        correctAnswer: true,
+        incorrectFeedback:
+          'Pagar no prazo evita multas, juros e problemas de relacionamento com fornecedores.',
+      },
+      {
+        id: 's3',
+        text: 'Registrar os pagamentos é importante para o controle financeiro.',
+        correctAnswer: true,
+        incorrectFeedback:
+          'O registro é essencial para rastreabilidade e gestão do fluxo de caixa.',
       },
     ],
   },
   maxScore: 10,
   difficulty: 'easy',
-  tags: ['ciências'],
-  createdAt: new Date('2024-01-15'),
-  updatedAt: new Date('2024-01-15'),
+  tags: ['financeiro', 'controle'],
+  createdAt: new Date('2026-02-16'),
+  updatedAt: new Date('2026-02-16'),
 }
 
 /**
- * Mock 8: Verdadeiro ou Falso (Sim/Não - múltiplo)
+ * 3) Ordenar
  */
-export const mockExercise8: TrueFalseExercise = {
-  id: 'ex-008',
-  type: 'true-false',
-  title: 'Questão 6',
-  description: 'Responda Sim ou Não.',
+export const mockExercise3: OrderingExercise = {
+  id: 'ex-003',
+  type: 'ordering',
+  title: 'Contas a Pagar - Ordenação',
+  description: 'Coloque a rotina de Contas a Pagar na ordem correta.',
   data: {
-    labelVariant: 'sim-nao',
-    statements: [
-      {
-        id: 's1',
-        text: 'O Monte Everest fica na Ásia.',
-        correctAnswer: true,
-        incorrectFeedback: 'Ele fica na cordilheira do Himalaia, na Ásia.',
-      },
-      {
-        id: 's2',
-        text: 'O Rio Amazonas é o menor do mundo.',
-        correctAnswer: false,
-        incorrectFeedback: 'Ele é um dos maiores do mundo.',
-      },
+    items: [
+      { id: 'i1', text: 'Efetuar o pagamento', correctOrder: 2 },
+      { id: 'i2', text: 'Receber a conta', correctOrder: 0 },
+      { id: 'i3', text: 'Registrar o pagamento', correctOrder: 3 },
+      { id: 'i4', text: 'Conferir valores e vencimento', correctOrder: 1 },
     ],
+    shuffleItems: false,
   },
   maxScore: 10,
-  difficulty: 'easy',
-  tags: ['geografia'],
-  createdAt: new Date('2024-01-15'),
-  updatedAt: new Date('2024-01-15'),
+  difficulty: 'medium',
+  tags: ['rotina', 'processo'],
+  createdAt: new Date('2026-02-16'),
+  updatedAt: new Date('2026-02-16'),
 }
 
 /**
- * Mock 10: Verdadeiro ou Falso (ícones - múltiplo)
+ * 4) Numérica
  */
-export const mockExercise10: TrueFalseExercise = {
-  id: 'ex-010',
-  type: 'true-false',
-  title: 'Questão 8',
-  description: 'Julgue as afirmações com ícones.',
-  data: {
-    labelVariant: 'thumbs',
-    statements: [
-      {
-        id: 's1',
-        text: 'Plutão é classificado como planeta anão.',
-        correctAnswer: true,
-        incorrectFeedback: 'Plutão é um planeta anão.',
-      },
-      {
-        id: 's2',
-        text: 'O Sol é um planeta.',
-        correctAnswer: false,
-        incorrectFeedback: 'O Sol é uma estrela.',
-      },
-    ],
-  },
-  maxScore: 10,
-  difficulty: 'easy',
-  tags: ['astronomia'],
-  createdAt: new Date('2024-01-15'),
-  updatedAt: new Date('2024-01-15'),
-}
-
-/**
-<<<<<<< HEAD
- * Mock 11: Resposta aberta sobre Revolução Francesa
- */
-export const mockExercise11: OpenTextExercise = {
-  id: 'ex-011',
-  type: 'open-text',
-  title: 'Disserte sobre as causas da Revolução Francesa',
+export const mockExercise4: NumericExercise = {
+  id: 'ex-004',
+  type: 'numeric',
+  title: 'Contas a Pagar - Questão numérica',
   description:
-    'Explique em um texto dissertativo as principais causas sociais, econômicas e políticas que levaram à Revolução Francesa de 1789.',
+    'Uma empresa tem as seguintes contas no mês: aluguel R$ 1.200, energia elétrica R$ 350 e internet R$ 150. Qual é o total de contas a pagar no mês?',
   data: {
-    placeholder: 'Digite sua resposta aqui...',
-    minLength: 200,
-    maxLength: 2000,
+    correctAnswer: 1700,
+    tolerance: 0.01,
+    decimalPlaces: 2,
+    unit: 'R$',
+  },
+  maxScore: 10,
+  difficulty: 'easy',
+  tags: ['financeiro', 'cálculo'],
+  hints: ['Some 1200 + 350 + 150.'],
+  createdAt: new Date('2026-02-16'),
+  updatedAt: new Date('2026-02-16'),
+  metadata: {
+    comment: {
+      title: 'Total mensal',
+      content: 'A soma correta é R$ 1.700,00.',
+    },
+  },
+}
+
+/**
+ * 5) Escrita
+ */
+export const mockExercise5: WritingExercise = {
+  id: 'ex-005',
+  type: 'writing',
+  title: 'Contas a Pagar - Escrita curta',
+  description:
+    'Qual o setor responsável por organizar e pagar as contas e obrigações financeiras da empresa?',
+  data: {
+    correctAnswers: ['contas a pagar', 'Contas a Pagar', 'contas pagar'],
+    maxCharacters: 60,
+    placeholder: 'Digite a resposta',
+    incorrectFeedback: 'Resposta esperada: contas a pagar.',
+    caseSensitive: false,
+    trimSpaces: true,
+  },
+  maxScore: 10,
+  difficulty: 'easy',
+  tags: ['conceito', 'financeiro'],
+  createdAt: new Date('2026-02-16'),
+  updatedAt: new Date('2026-02-16'),
+}
+
+/**
+ * 6) Resposta Aberta
+ */
+export const mockExercise6: OpenTextExercise = {
+  id: 'ex-006',
+  type: 'open-text',
+  title: 'Contas a Pagar - Resposta aberta',
+  description: 'Explique o que é Contas a Pagar.',
+  data: {
+    placeholder: 'Escreva sua explicação aqui...',
+    minLength: 40,
+    maxLength: 400,
     expectedKeywords: [
-      'absolutismo',
-      'terceiro estado',
-      'desigualdade',
-      'crise financeira',
-      'iluminismo',
+      'organizar',
+      'pagar',
+      'obrigações financeiras',
+      'empresa',
     ],
     modelAnswer:
-      'A Revolução Francesa foi resultado de uma combinação de fatores sociais, econômicos e políticos. Socialmente, havia grande desigualdade entre os três estados, com o Terceiro Estado (burguesia, camponeses e trabalhadores urbanos) arcando com a maior parte dos impostos. Economicamente, a França enfrentava grave crise financeira devido aos gastos da monarquia e às guerras. Politicamente, o absolutismo de Luís XVI e a resistência à mudança geraram insatisfação. As ideias iluministas de liberdade e igualdade também influenciaram o movimento revolucionário.',
-    // Configurações para iframe
+      'É o setor responsável por organizar e pagar as contas e obrigações financeiras da empresa.',
     language: 'pt-BR',
     locale: 'pt-BR',
     primaryColor: '#f6339a',
@@ -392,336 +209,60 @@ export const mockExercise11: OpenTextExercise = {
         correct: true,
         comps: [
           {
-            text: '<p><strong>Resposta modelo:</strong></p><p>A Revolução Francesa foi resultado de uma combinação de fatores sociais, econômicos e políticos. Socialmente, havia grande desigualdade entre os três estados, especialmente o Terceiro Estado. Economicamente, a crise financeira era grave. Politicamente, o absolutismo gerara insatisfação.</p>',
+            text: '<p><strong>Resposta esperada (exemplo):</strong> É o setor responsável por organizar e pagar as contas e obrigações financeiras da empresa.</p>',
           },
         ],
       },
     ],
   },
   maxScore: 20,
-  difficulty: 'hard',
-  tags: ['história', 'revolução francesa', 'dissertação'],
-  hints: [
-    'Pense na estrutura social do Antigo Regime',
-    'Considere a crise financeira da monarquia',
-    'Lembre-se das ideias iluministas',
-  ],
-  createdAt: new Date('2024-01-15'),
-  updatedAt: new Date('2024-01-15'),
+  difficulty: 'medium',
+  tags: ['conceito', 'dissertativa'],
+  createdAt: new Date('2026-02-16'),
+  updatedAt: new Date('2026-02-16'),
   metadata: {
     comment: {
-      title: 'A Revolução Francesa',
+      title: 'Definição de Contas a Pagar',
       content:
-        'A Revolução Francesa (1789-1799) foi um período de intensa transformação política e social na França, marcando o fim do absolutismo e o início da era moderna. Suas causas foram complexas e multifatoriais, envolvendo crises econômicas, desigualdades sociais profundas e a disseminação de ideias iluministas que questionavam o poder absoluto dos reis.',
-      imageUrl:
-        'https://images.unsplash.com/photo-1541417904950-b855846fe074?w=800&q=80',
+        'Contas a Pagar controla compromissos financeiros, prazos e registros de pagamento para manter a saúde financeira da empresa.',
     },
   },
 }
 
 /**
- * Mock 12: Resposta aberta sobre mudanças climáticas
+ * Exercícios do documento de referência
  */
-export const mockExercise12: OpenTextExercise = {
-  id: 'ex-012',
-  type: 'open-text',
-  title: 'Analise o impacto das mudanças climáticas',
-  description:
-    'Escreva um texto analítico sobre os principais impactos das mudanças climáticas no planeta e as possíveis soluções para mitigar seus efeitos.',
-  data: {
-    placeholder: 'Desenvolva sua análise aqui...',
-    minLength: 250,
-    maxLength: 1500,
-    expectedKeywords: [
-      'aquecimento global',
-      'emissões',
-      'sustentabilidade',
-      'energia renovável',
-      'biodiversidade',
-    ],
-    // Configurações para iframe
-    language: 'pt-BR',
-    locale: 'pt-BR',
-    primaryColor: '#7c3aed',
-    retrys: 2,
-    answers: [
-      {
-        correct: true,
-        comps: [
-          {
-            text: '<p><strong>Resposta modelo:</strong></p><p>As mudanças climáticas causam impactos significativos: aumento de temperaturas, alteração de padrões climáticos, elevação do nível do mar e ameaça à biodiversidade. As soluções incluem redução de emissões de gases de efeito estufa, uso de energias renováveis, reflorestamento e políticas de sustentabilidade.</p>',
-          },
-        ],
-      },
-    ],
-  },
-  maxScore: 20,
-  difficulty: 'hard',
-  tags: ['ciências', 'meio ambiente', 'dissertação'],
-  hints: [
-    'Considere os impactos ambientais, sociais e econômicos',
-    'Pense em soluções sustentáveis',
-    'Mencione acordos internacionais',
-  ],
-  createdAt: new Date('2024-01-15'),
-  updatedAt: new Date('2024-01-15'),
-}
-
-/**
- * Mock 13: Resposta aberta sobre literatura
- */
-export const mockExercise13: OpenTextExercise = {
-  id: 'ex-013',
-  type: 'open-text',
-  title: 'Interprete o poema "No meio do caminho" de Carlos Drummond de Andrade',
-  description:
-    'Faça uma interpretação crítica do poema, analisando seus aspectos formais, temáticos e o contexto literário.',
-  contentHtml: `
-    <div class="mb-4 p-4 bg-neutral-50 dark:bg-neutral-900 rounded-lg border">
-      <p class="font-serif italic text-center">
-        No meio do caminho tinha uma pedra<br />
-        tinha uma pedra no meio do caminho<br />
-        tinha uma pedra<br />
-        no meio do caminho tinha uma pedra.
-      </p>
-      <p class="text-sm text-muted-foreground text-center mt-2">
-        — Carlos Drummond de Andrade
-      </p>
-    </div>
-  `,
-  data: {
-    placeholder: 'Escreva sua interpretação...',
-    minLength: 150,
-    maxLength: 1000,
-    expectedKeywords: [
-      'obstáculo',
-      'repetição',
-      'modernismo',
-      'simbólico',
-      'simplicidade',
-    ],
-    // Configurações para iframe
-    language: 'pt-BR',
-    locale: 'pt-BR',
-    primaryColor: '#ec4899',
-    retrys: 3,
-    answers: [
-      {
-        correct: true,
-        comps: [
-          {
-            text: '<p><strong>Resposta modelo:</strong></p><p>O poema utiliza a repetição para enfatizar a repetição da imagem da pedra, que pode ser interpretada como um obstáculo ou dificuldade. No contexto do modernismo brasileiro, a simplicidade da linguagem contrasta com a profundidade simbólica, refletindo a capacidade de encontrar significado no cotidiano.</p>',
-          },
-        ],
-      },
-    ],
-  },
-  maxScore: 15,
-  difficulty: 'medium',
-  tags: ['literatura', 'poesia', 'interpretação'],
-  hints: [
-    'Analise o uso da repetição',
-    'Pense no simbolismo da "pedra"',
-    'Considere o contexto do Modernismo brasileiro',
-  ],
-  createdAt: new Date('2024-01-15'),
-  updatedAt: new Date('2024-01-15'),
-}
-
-/**
- * Mock 14: Exercício de fala (Pronunciação - EX.WP)
- */
-export const mockExercise14: SpeechExercise = {
-  id: 'ex-014',
-  type: 'speech-pronunciation',
-  title: 'Pronuncie as palavras',
-  description: 'Fale cada palavra quando solicitado.',
-  data: {
-    questions: [
-      { text: 'casa', hasImage: false },
-      { text: 'escola', hasImage: false },
-      { text: 'computador', hasImage: false },
-      { text: 'caderno', hasImage: false },
-      { text: 'professor', hasImage: false },
-      { text: 'biblioteca', hasImage: false },
-      { text: 'matemática', hasImage: false },
-      { text: 'geografia', hasImage: false },
-      { text: 'história', hasImage: false },
-      { text: 'ciências', hasImage: false },
-      { text: 'português', hasImage: false },
-      { text: 'inglês', hasImage: false },
-      { text: 'educação', hasImage: false },
-      { text: 'literatura', hasImage: false },
-      { text: 'tecnologia', hasImage: false },
-    ],
-    config: {
-      initialHelp: true,
-      canSkip: true,
-      instantCorrection: true,
-    },
-    institutionId: 'inst-001',
-  },
-  maxScore: 10,
-  difficulty: 'easy',
-  tags: ['fala', 'pronúncia'],
-  createdAt: new Date('2024-01-15'),
-  updatedAt: new Date('2024-01-15'),
-}
-
-/**
- * Mock 15: Exercício de fala (Soletração - EX.WS)
- */
-export const mockExercise15: SpeechExercise = {
-  id: 'ex-015',
-  type: 'speech-spelling',
-  title: 'Soletre as palavras',
-  description: 'Fale letra por letra quando solicitado.',
-  data: {
-    questions: [
-      { text: 'bola', hasImage: false },
-      { text: 'carro', hasImage: false },
-      { text: 'livro', hasImage: false },
-      { text: 'mesa', hasImage: false },
-      { text: 'cadeira', hasImage: false },
-      { text: 'janela', hasImage: false },
-      { text: 'porta', hasImage: false },
-      { text: 'quadro', hasImage: false },
-      { text: 'lápis', hasImage: false },
-      { text: 'caneta', hasImage: false },
-      { text: 'papel', hasImage: false },
-      { text: 'borracha', hasImage: false },
-    ],
-    config: {
-      initialHelp: true,
-      canSkip: false,
-      instantCorrection: true,
-    },
-    institutionId: 'inst-001',
-  },
-  maxScore: 10,
-  difficulty: 'easy',
-  tags: ['fala', 'soletração'],
-  createdAt: new Date('2024-01-15'),
-  updatedAt: new Date('2024-01-15'),
-}
-
-/**
- * Mock 16: Exercício de fala (Silabação - EX.WY)
- */
-export const mockExercise16: SpeechExercise = {
-  id: 'ex-016',
-  type: 'speech-syllable',
-  title: 'Separe em sílabas',
-  description: 'Fale as sílabas da palavra.',
-  data: {
-    questions: [
-      { text: 'banana', separateWord: 'ba-na-na', hasImage: false },
-      { text: 'computador', separateWord: 'com-pu-ta-dor', hasImage: false },
-      { text: 'borboleta', separateWord: 'bor-bo-le-ta', hasImage: false },
-      { text: 'telefone', separateWord: 'te-le-fo-ne', hasImage: false },
-      { text: 'maravilhoso', separateWord: 'ma-ra-vi-lho-so', hasImage: false },
-      { text: 'elefante', separateWord: 'e-le-fan-te', hasImage: false },
-      { text: 'biblioteca', separateWord: 'bi-bli-o-te-ca', hasImage: false },
-      { text: 'chocolate', separateWord: 'cho-co-la-te', hasImage: false },
-      { text: 'paralelepípedo', separateWord: 'pa-ra-le-le-pí-pe-do', hasImage: false },
-      { text: 'refrigerante', separateWord: 're-fri-ge-ran-te', hasImage: false },
-    ],
-    config: {
-      initialHelp: true,
-      canSkip: true,
-      instantCorrection: true,
-    },
-    institutionId: 'inst-001',
-  },
-  maxScore: 10,
-  difficulty: 'medium',
-  tags: ['fala', 'silabação'],
-  createdAt: new Date('2024-01-15'),
-  updatedAt: new Date('2024-01-15'),
-}
-
-/**
- * Mock 17: Fluência Leitora (EX.TR)
- */
-export const mockExercise17: FluencyReadingExercise = {
-  id: 'ex-017',
-  type: 'fluency-reading',
-  title: 'Fluência Leitora',
-  description: 'Leia o texto a seguir com atenção à entonação e ritmo.',
-  data: {
-    enunciado: 'Leia o texto a seguir com atenção à entonação e ritmo.',
-    tituloTexto: 'O pequeno viajante e suas grandes descobertas',
-    corpoTexto:
-      'Era uma vez um pequeno viajante que adorava explorar cidades novas. Ele observava as pessoas, os sons e as cores de cada lugar. Com sua mochila nas costas e um caderno nas mãos, ele registrava tudo o que via e sentia. As ruas movimentadas contavam histórias de gerações passadas, e cada esquina revelava um novo segredo. Os mercados eram repletos de aromas deliciosos, desde frutas frescas até especiarias exóticas. As praças públicas reuniam famílias que riam e conversavam, criando uma atmosfera acolhedora. Ele sempre encontrava tempo para conversar com os moradores locais, aprendendo sobre suas tradições e costumes. À noite, ele contemplava o céu estrelado e sonhava com as próximas aventuras que o aguardavam.',
-    initialHelp: true,
-    idioma: 'pt-BR',
-    configuracoesAtividade: {
-      activityId: 'fluencia-001',
-      studentId: 'student-001',
-      difficulty: 'intermediate',
-      timeLimit: 300,
-      source: 'aulapp_virtual_room',
-    },
-  },
-  maxScore: 100,
-  difficulty: 'medium',
-  tags: ['fluência', 'leitura'],
-  createdAt: new Date('2024-01-15'),
-  updatedAt: new Date('2024-01-15'),
-}
-
-/**
- * Lista de todos os exercícios mock
- */
-export const mockExercises = [
+export const mockDocumentExercises: Exercise[] = [
   mockExercise1,
   mockExercise2,
   mockExercise3,
   mockExercise4,
   mockExercise5,
   mockExercise6,
-  mockExercise7,
-  mockExercise8,
-  mockExercise10,
-  mockExercise11,
-  mockExercise12,
-  mockExercise13,
-  mockExercise14,
-  mockExercise15,
-  mockExercise16,
-  mockExercise17,
 ]
+
+export const mockExercises: Exercise[] = mockDocumentExercises
 
 /**
  * Mock da API de exercícios
  * Simula o comportamento da API REST que será integrada
  */
 export const mockExerciseApi = {
-  /**
-   * GET /api/exercises/{id}
-   */
   async getExerciseById(id: string) {
-    await new Promise((resolve) => setTimeout(resolve, 300)) // Simula delay de rede
-    return mockExercises.find((ex) => ex.id === id) || null
+    await new Promise((resolve) => setTimeout(resolve, 300))
+    return mockDocumentExercises.find((ex) => ex.id === id) || null
   },
 
-  /**
-   * GET /api/exercises?ids={ids}
-   */
   async getExercisesByIds(ids: string[]) {
     await new Promise((resolve) => setTimeout(resolve, 300))
-    return mockExercises.filter((ex) => ids.includes(ex.id))
+    return mockDocumentExercises.filter((ex) => ids.includes(ex.id))
   },
 
-  /**
-   * GET /api/exercise-lists/{listId}/exercises
-   */
   async getExercisesByList(listId: string) {
     await new Promise((resolve) => setTimeout(resolve, 300))
 
-    // Mock: lista "list-001" retorna todos os exercícios
     if (listId === 'list-001') {
-      return mockExercises
+      return mockDocumentExercises
     }
 
     return []

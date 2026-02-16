@@ -59,6 +59,34 @@ export const EXERCISE_TYPE_CONFIG: Record<
     supportAutoGrade: true,
     defaultMaxScore: 1,
   },
+  'speech-pronunciation': {
+    label: 'Fala: Pronunciação',
+    icon: 'Mic',
+    description: 'Exercício de pronunciação de palavras',
+    supportAutoGrade: true,
+    defaultMaxScore: 1,
+  },
+  'speech-spelling': {
+    label: 'Fala: Soletração',
+    icon: 'SpellCheck',
+    description: 'Exercício de soletração por voz',
+    supportAutoGrade: true,
+    defaultMaxScore: 1,
+  },
+  'speech-syllable': {
+    label: 'Fala: Silabação',
+    icon: 'AudioLines',
+    description: 'Exercício de separação silábica por voz',
+    supportAutoGrade: true,
+    defaultMaxScore: 1,
+  },
+  'fluency-reading': {
+    label: 'Fluência Leitora',
+    icon: 'BookOpenCheck',
+    description: 'Exercício de leitura com avaliação de fluência',
+    supportAutoGrade: true,
+    defaultMaxScore: 1,
+  },
 }
 
 /**

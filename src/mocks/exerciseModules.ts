@@ -23,12 +23,12 @@ export interface ExerciseListModule {
  */
 export const mockExerciseListModule: ExerciseListModule = {
   id: 'module-exercises-001',
-  title: 'Lista de Exercícios - Conhecimentos Gerais',
+  title: 'Lista de Exercícios - Contas a Pagar',
   description:
-    'Pratique seus conhecimentos com esta lista de exercícios de múltipla escolha.',
+    'Pratique os conceitos do curso de Contas a Pagar com atividades objetivas e discursivas.',
   type: 'exercise_list',
   exercises: mockExercises,
-  totalScore: mockExercises.reduce((sum, ex) => sum + ex.maxScore, 0), // 10 + 15 + 5 = 30
+  totalScore: mockExercises.reduce((sum, ex) => sum + ex.maxScore, 0),
   estimatedTimeMinutes: 15,
 }
 
