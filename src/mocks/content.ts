@@ -32,8 +32,8 @@ const image = (src: string, alt: string) =>
   </div>`
 
 const videoIframe = (src: string, title: string) =>
-  `<div class="my-8 w-full overflow-hidden rounded-lg border border-neutral-200">
-    <div class="w-full aspect-video">
+  `<div class="my-8 relative left-1/2 w-[calc(100vw-2rem)] max-w-[1400px] -translate-x-1/2 overflow-hidden rounded-lg border border-neutral-200">
+    <div class="w-full h-80 sm:h-screen md:h-screen lg:h-screen">
       <iframe
         class="h-full w-full"
         src="${src}"
