@@ -267,9 +267,6 @@ export const ActivityView: React.FC<ActivityViewProps> = ({
             onChange={(answer) => onOrderingChange(answer)}
             readonly={isSubmitted}
             validationResult={validationResult}
-            resourceType={resourceType}
-            currentPageIndex={currentPageIndex}
-            comment={submittedAnswer?.comment}
           />
 
           {!isSubmitted && (

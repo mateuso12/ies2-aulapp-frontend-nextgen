@@ -30,7 +30,10 @@ export { MultipleChoiceExerciseComponent } from './MultipleChoiceExercise'
 export { WritingExercise as WritingExerciseComponent } from './WritingExercise'
 export { WritingExercise } from './WritingExercise'
 export { NumericExercise as NumericExerciseComponent } from './NumericExercise'
-export { OrderingExerciseComponent } from './OrderingExercise'
+export {
+  OrderingExercise,
+  OrderingExercise as OrderingExerciseComponent,
+} from './OrderingExercise'
 export { TrueFalseExerciseComponent } from './TrueFalseExercise'
 export { OpenTextExerciseComponent } from './OpenTextExercise'
 

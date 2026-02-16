@@ -1,150 +1,254 @@
-import React, { useEffect, useMemo, useState } from 'react'
-import {
-  ExerciseFeedback,
-  ExerciseComment,
-  ViewCommentButton,
-} from '@/features/exercises/components'
+import React, { useState, useEffect } from 'react'
 import type {
-  OrderingExercise,
-  ExerciseValidationResult,
-} from '@/features/exercises/types'
+  ExerciseComponentProps,
+  OrderingData,
+  OrderingAnswer,
+} from '../../types'
+import { cn } from '@/lib/utils'
+import { shuffleArray } from '../../lib/utils'
 
-interface OrderingExerciseComponentProps {
-  exercise: OrderingExercise
-  value: string[] | undefined
-  readonly?: boolean
-  validationResult?: ExerciseValidationResult
-  resourceType: string
-  currentPageIndex: number
-  comment?: { title: string; content: string; imageUrl?: string }
-  onChange: (answer: string[]) => void
-}
-
-export const OrderingExerciseComponent: React.FC<
-  OrderingExerciseComponentProps
+export const OrderingExercise: React.FC<
+  ExerciseComponentProps<OrderingData, OrderingAnswer>
 > = ({
   exercise,
-  value,
+  value = [],
+  onChange,
   readonly = false,
   validationResult,
-  resourceType,
-  currentPageIndex,
-  comment,
-  onChange,
+  disabled = false,
 }) => {
-  const [showComment, setShowComment] = useState(false)
-
-  const fallbackOrder = useMemo(
-    () => exercise.data.items.map((item) => item.id),
-    [exercise.data.items]
-  )
-
-  const currentOrder =
-    value && value.length === exercise.data.items.length ? value : fallbackOrder
-
-  const itemById = useMemo(
-    () =>
-      exercise.data.items.reduce<Record<string, string>>((acc, item) => {
-        acc[item.id] = item.text
-        return acc
-      }, {}),
-    [exercise.data.items]
-  )
+  const [orderedItems, setOrderedItems] = useState<string[]>([])
+  const [draggedItemId, setDraggedItemId] = useState<string | null>(null)
+  const [dragOverItemId, setDragOverItemId] = useState<string | null>(null)
 
   useEffect(() => {
-    if (!value || value.length !== exercise.data.items.length) {
-      onChange(fallbackOrder)
+    if (value && value.length > 0) {
+      setOrderedItems(value)
+    } else {
+      let initialOrder = exercise.data.items.map((item: { id: string }) => item.id)
+
+      if (exercise.data.shuffleItems) {
+        initialOrder = shuffleArray(initialOrder)
+      }
+
+      setOrderedItems(initialOrder)
+      onChange?.(initialOrder)
     }
-  }, [value, exercise.data.items.length, fallbackOrder, onChange])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
+  // Sincroniza com valor externo (quando há mudanças de fora do componente)
   useEffect(() => {
-    setShowComment(false)
-  }, [exercise.id])
+    if (value && value.length > 0 && JSON.stringify(value) !== JSON.stringify(orderedItems)) {
+      setOrderedItems(value)
+    }
+  }, [value, orderedItems])
 
-  const moveItem = (index: number, direction: -1 | 1) => {
-    if (readonly) return
+  const handleDragStart = (e: React.DragEvent<HTMLDivElement>, itemId: string) => {
+    if (readonly || disabled || validationResult?.isCorrect) return
 
-    const nextIndex = index + direction
-    if (nextIndex < 0 || nextIndex >= currentOrder.length) return
+    setDraggedItemId(itemId)
+    e.dataTransfer.effectAllowed = 'move'
+    e.dataTransfer.setData('text/html', itemId)
+  }
 
-    const reordered = [...currentOrder]
-    ;[reordered[index], reordered[nextIndex]] = [
-      reordered[nextIndex],
-      reordered[index],
-    ]
-    onChange(reordered)
+  const handleDragEnd = () => {
+    setDraggedItemId(null)
+    setDragOverItemId(null)
+  }
+
+  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault()
+    e.dataTransfer.dropEffect = 'move'
+  }
+
+  const handleDragEnter = (itemId: string) => {
+    if (readonly || disabled || validationResult?.isCorrect) return
+    setDragOverItemId(itemId)
+  }
+
+  const handleDrop = (e: React.DragEvent<HTMLDivElement>, targetItemId: string) => {
+    e.preventDefault()
+
+    if (readonly || disabled || validationResult?.isCorrect || !draggedItemId) return
+
+    if (draggedItemId === targetItemId) {
+      setDragOverItemId(null)
+      return
+    }
+
+    const newOrder = [...orderedItems]
+    const draggedIndex = newOrder.indexOf(draggedItemId)
+    const targetIndex = newOrder.indexOf(targetItemId)
+
+    newOrder.splice(draggedIndex, 1)
+    newOrder.splice(targetIndex, 0, draggedItemId)
+
+    setOrderedItems(newOrder)
+    onChange?.(newOrder)
+    setDragOverItemId(null)
+  }
+
+  const getItemById = (itemId: string) => {
+    return exercise.data.items.find((item: { id: string }) => item.id === itemId)
+  }
+
+  const isItemCorrect = (itemId: string, index: number): boolean => {
+    if (!validationResult) return false
+
+    const item = getItemById(itemId)
+    if (!item) return false
+
+    return item.correctOrder === index
+  }
+
+  const getItemStyles = (itemId: string, index: number) => {
+    const isDragging = draggedItemId === itemId
+    const isDragOver = dragOverItemId === itemId
+    const isCorrect = validationResult && isItemCorrect(itemId, index)
+    const isIncorrect = validationResult && !validationResult.isCorrect && !isItemCorrect(itemId, index)
+
+    if (isCorrect && validationResult?.isCorrect) {
+      return {
+        borderColor: 'border-[#2BC779]',
+        backgroundColor: 'bg-[#C9F6DB] dark:bg-green-900/20',
+        cursor: 'default',
+      }
+    }
+
+    if (isIncorrect) {
+      return {
+        borderColor: 'border-[#EC272B]',
+        backgroundColor: 'bg-[#FFCAD6] dark:bg-red-900/20',
+        cursor: 'default',
+      }
+    }
+
+    if (isDragOver && !isDragging) {
+      return {
+        borderColor: 'border-[#487BFF]',
+        backgroundColor: 'bg-white dark:bg-gray-800',
+        cursor: 'pointer',
+      }
+    }
+
+    if (isDragging) {
+      return {
+        borderColor: 'border-[#CCCCCC]',
+        backgroundColor: 'bg-white/50 dark:bg-gray-800/50',
+        cursor: 'grabbing',
+      }
+    }
+
+    return {
+      borderColor: 'border-[#CCCCCC]',
+      backgroundColor: 'bg-white dark:bg-gray-800',
+      cursor: readonly || disabled || validationResult?.isCorrect ? 'default' : 'grab',
+    }
   }
 
   return (
-    <div className="space-y-4">
-      <div className="space-y-3">
-        {currentOrder.map((itemId, index) => (
-          <div
-            key={itemId}
-            className="flex items-center gap-3 rounded-2xl border-2 border-[#C6D3F5] bg-white px-4 py-3"
-          >
-            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#487BFF] text-sm font-bold text-white">
-              {index + 1}
-            </div>
+    <div className="w-full space-y-4">
+      <div className="flex flex-col gap-3">
+        {orderedItems.map((itemId, index) => {
+          const item = getItemById(itemId)
+          if (!item) return null
 
-            <p className="flex-1 text-sm text-gray-900">{itemById[itemId]}</p>
+          const styles = getItemStyles(itemId, index)
+          const isDraggable = !readonly && !disabled && !validationResult?.isCorrect
 
-            <div className="flex items-center gap-2">
-              <button
-                type="button"
-                onClick={() => moveItem(index, -1)}
-                disabled={readonly || index === 0}
-                className="h-8 w-8 rounded-md border border-[#C6D3F5] text-base text-[#487BFF] disabled:opacity-40"
-              >
-                ↑
-              </button>
-              <button
-                type="button"
-                onClick={() => moveItem(index, 1)}
-                disabled={readonly || index === currentOrder.length - 1}
-                className="h-8 w-8 rounded-md border border-[#C6D3F5] text-base text-[#487BFF] disabled:opacity-40"
-              >
-                ↓
-              </button>
+          return (
+            <div
+              key={itemId}
+              draggable={isDraggable}
+              onDragStart={(e) => handleDragStart(e, itemId)}
+              onDragEnd={handleDragEnd}
+              onDragOver={handleDragOver}
+              onDragEnter={() => handleDragEnter(itemId)}
+              onDrop={(e) => handleDrop(e, itemId)}
+              className={cn(
+                'group relative w-full min-h-18 rounded-3xl border-2 px-6 py-4',
+                'flex items-center justify-between gap-4',
+                'transition-all duration-200',
+                styles.borderColor,
+                styles.backgroundColor,
+                isDraggable && 'active:opacity-70'
+              )}
+              style={{
+                cursor: styles.cursor,
+                opacity: draggedItemId === itemId ? 0.5 : 1,
+              }}
+            >
+              <div className="flex-1 text-sm md:text-base leading-relaxed text-gray-900 dark:text-gray-100">
+                {item.text}
+              </div>
+
+              {isDraggable && (
+                <div className="shrink-0 flex flex-col gap-2.5">
+                  <div className="w-10 h-px bg-[#6C757D] rounded-full" />
+                  <div className="w-10 h-px bg-[#6C757D] rounded-full" />
+                </div>
+              )}
             </div>
-          </div>
-        ))}
+          )
+        })}
       </div>
 
-      {validationResult && validationResult.feedback && (
-        <ExerciseFeedback
-          feedback={validationResult.feedback}
-          variant={validationResult.isCorrect ? 'info' : 'error'}
-        />
+      {validationResult && validationResult.isCorrect && (
+        <div className="flex items-center justify-center gap-1 mt-8">
+          <svg
+            className="w-[71.711px] h-[71.711px] shrink-0"
+            viewBox="0 0 72 72"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <circle cx="36" cy="36" r="36" fill="#2BC779" />
+            <path
+              d="M30 36L33.5 39.5L42 31"
+              stroke="white"
+              strokeWidth="4"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+
+          <p className="font-sans font-semibold text-[32px] leading-none text-black dark:text-white tracking-[-0.48px]">
+            Correto
+          </p>
+        </div>
       )}
 
-      {validationResult && comment && resourceType === 'simulation' && (
-        <ViewCommentButton
-          exerciseId={exercise.id}
-          onClick={() => setShowComment(true)}
-        />
-      )}
+      {validationResult && !validationResult.isCorrect && (
+        <div className="space-y-6 mt-8">
+          <div className="flex items-center justify-center gap-1">
+            <svg
+              className="w-[71.711px] h-[71.711px] shrink-0"
+              viewBox="0 0 72 72"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <circle cx="36" cy="36" r="36" fill="#EC272B" />
+              <path
+                d="M28 28L44 44M44 28L28 44"
+                stroke="white"
+                strokeWidth="4"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
 
-      {validationResult &&
-        comment &&
-        resourceType === 'simulation' &&
-        showComment && (
-          <ExerciseComment
-            exerciseId={exercise.id}
-            questionNumber={currentPageIndex + 1}
-            comment={comment}
-            onBackToQuestion={() => {
-              setShowComment(false)
-              const mainElement = document.querySelector('main.overflow-auto')
-              if (mainElement) {
-                mainElement.scrollTo({
-                  top: 0,
-                  behavior: 'smooth',
-                })
-              }
-            }}
-          />
-        )}
+            <p className="font-sans font-semibold text-[32px] leading-none text-black dark:text-white tracking-[-0.48px]">
+              Incorreto
+            </p>
+          </div>
+
+          {validationResult.feedback && (
+            <div className="text-center text-sm md:text-base text-gray-700 dark:text-gray-300">
+              {validationResult.feedback}
+            </div>
+          )}
+        </div>
+      )}
     </div>
   )
 }
