@@ -63,7 +63,7 @@ function SheetOverlay({
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         transition={{ duration: 0.3 }}
-        className={cn('fixed inset-0 z-50 bg-black/50', className)}
+        className={cn('fixed inset-0 z-80 bg-black/50', className)}
       />
     </SheetPrimitive.Overlay>
   )
@@ -120,7 +120,7 @@ function SheetContent({
             >
               <motion.div
                 className={cn(
-                  'bg-background fixed z-50 flex flex-col gap-4 shadow-lg',
+                  'bg-background fixed z-90 flex flex-col gap-4 shadow-lg',
                   side === 'right' &&
                     'inset-y-0 right-0 h-full w-3/4 border-l sm:max-w-sm',
                   side === 'left' &&

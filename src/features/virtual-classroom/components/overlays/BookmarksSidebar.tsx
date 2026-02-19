@@ -125,7 +125,7 @@ export const BookmarksSidebar: React.FC<BookmarksSidebarProps> = ({
 
   return (
     <Drawer open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <DrawerContent className="bg-[#EFEFEF] dark:bg-card h-[80vh] outline-none">
+      <DrawerContent className="bg-[#EFEFEF] dark:bg-card h-[80vh] outline-none z-90">
         <SidebarContent />
       </DrawerContent>
     </Drawer>

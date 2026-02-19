@@ -29,7 +29,7 @@ export const SidebarMenu: React.FC<SidebarMenuProps> = ({
         <SheetTrigger asChild>{children}</SheetTrigger>
         <SheetContent
           side="right"
-          className="w-full rounded-l-4xl border-none bg-white dark:bg-card p-0 shadow-[-7px_-2px_22.4px_0px_rgba(0,0,0,0.25)] sm:w-[406px] outline-none focus:outline-none"
+          className="w-full rounded-l-4xl border-none bg-white dark:bg-card p-0 shadow-[-7px_-2px_22.4px_0px_rgba(0,0,0,0.25)] sm:w-[406px] outline-none focus:outline-none z-90"
         >
           <SheetHeader className="sr-only">
             <SheetTitle>Menu de Conteúdo</SheetTitle>
@@ -50,7 +50,7 @@ export const SidebarMenu: React.FC<SidebarMenuProps> = ({
       <SheetTrigger asChild>{children}</SheetTrigger>
       <SheetContent
         side="right"
-        className="w-screen rounded-none border-none bg-white dark:bg-card p-0 shadow-[-7px_-2px_22.4px_0px_rgba(0,0,0,0.25)] outline-none focus:outline-none"
+        className="w-screen rounded-none border-none bg-white dark:bg-card p-0 shadow-[-7px_-2px_22.4px_0px_rgba(0,0,0,0.25)] outline-none focus:outline-none z-90"
       >
         <SheetHeader className="sr-only">
           <SheetTitle>Menu de Conteúdo</SheetTitle>
