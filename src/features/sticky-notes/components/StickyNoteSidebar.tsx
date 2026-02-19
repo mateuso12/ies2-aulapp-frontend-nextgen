@@ -198,7 +198,7 @@ export const StickyNoteSidebar: React.FC<StickyNoteSidebarProps> = ({
             animate={{ x: 0, opacity: 1 }}
             exit={{ x: -350, opacity: 0 }}
             transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-            className="fixed left-0 top-0 h-full w-[350px] bg-[#EFEFEF] shadow-[1px_0px_26.8px_0px_rgba(0,0,0,0.25)] z-60 rounded-r-lg"
+            className="fixed left-0 top-0 h-full w-[350px] bg-[#EFEFEF] shadow-[1px_0px_26.8px_0px_rgba(0,0,0,0.25)] z-90 rounded-r-lg"
           >
             {sidebarContent}
           </motion.div>
@@ -209,7 +209,7 @@ export const StickyNoteSidebar: React.FC<StickyNoteSidebarProps> = ({
 
   return (
     <Drawer open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <DrawerContent className="bg-[#EFEFEF] h-[80vh] outline-none">
+      <DrawerContent className="bg-[#EFEFEF] h-[80vh] outline-none z-90">
         {sidebarContent}
       </DrawerContent>
     </Drawer>
