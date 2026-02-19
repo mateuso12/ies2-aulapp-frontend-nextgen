@@ -24,7 +24,7 @@ export function DesktopSettingsSection({
           onClick={onToggleFullscreen}
           variant="ghost"
           size="icon"
-          className="rounded-lg transition-colors hover:bg-black hover:text-white"
+          className="rounded-lg transition-colors text-white hover:bg-black hover:text-white"
           aria-label={isFullscreen ? 'Sair da tela cheia' : 'Tela cheia'}
           title={isFullscreen ? 'Sair da tela cheia' : 'Tela cheia'}
         >
