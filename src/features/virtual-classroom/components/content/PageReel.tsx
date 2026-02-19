@@ -63,7 +63,7 @@ export const PageReel: React.FC<PageReelProps> = ({
         'not-completed': ['completed'],
       }
 
-      let newFilters = prev.filter((f) => {
+      const newFilters = prev.filter((f) => {
         const conflicts = conflictingFilters[filterId] || []
         return !conflicts.includes(f)
       })
@@ -149,7 +149,7 @@ export const PageReel: React.FC<PageReelProps> = ({
                     variant === 'gamified' ? 'h-[70vh] z-60' : 'h-[85vh] z-60'
                   }`
                 : `bottom-30 left-1/2 rounded-2xl w-[90vw] max-w-411 transition-all duration-300 ease-in-out z-40 ${
-                    isMaximized ? 'h-[80vh] max-h-154.75' : 'h-64.5'
+                    isMaximized ? 'h-[80vh] max-h-154.75' : 'h-80'
                   }`
             }`}
           >
@@ -171,33 +171,46 @@ export const PageReel: React.FC<PageReelProps> = ({
               )}
 
               {!isMobile && (
-                <div className="px-8 pt-6 pb-4">
-                  <div className="flex flex-wrap justify-center gap-2">
+                <div
+                  className={isMaximized ? 'px-8 pt-6 pb-4' : 'px-4 pt-3 pb-2'}
+                >
+                  <div
+                    className={`flex gap-2 justify-center ${isMaximized ? 'flex-wrap' : 'overflow-x-auto no-scrollbar'}`}
+                  >
                     {availableFilters.map((filter) => {
                       const isActive = activeFilters.includes(filter.id)
                       const count = filteredPages.filter((page) => {
                         switch (filter.id) {
-                          case 'bookmarked': return page.isBookmarked
-                          case 'with-annotations': return page.hasAnnotations
-                          case 'with-highlights': return page.hasHighlights
-                          case 'with-drawings': return page.hasDrawings
-                          case 'completed': return page.isCompleted
-                          case 'not-completed': return !page.isCompleted
-                          default: return false
+                          case 'bookmarked':
+                            return page.isBookmarked
+                          case 'with-annotations':
+                            return page.hasAnnotations
+                          case 'with-highlights':
+                            return page.hasHighlights
+                          case 'with-drawings':
+                            return page.hasDrawings
+                          case 'completed':
+                            return page.isCompleted
+                          case 'not-completed':
+                            return !page.isCompleted
+                          default:
+                            return false
                         }
                       }).length
                       return (
                         <button
                           key={filter.id}
                           onClick={() => toggleFilter(filter.id)}
-                          className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                          className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all whitespace-nowrap shrink-0 ${
                             isActive
                               ? 'bg-[#487BFF] text-white shadow-md'
                               : 'bg-white/90 text-gray-700 hover:bg-white hover:shadow-sm'
                           }`}
                         >
                           <span>{filter.label}</span>
-                          <span className={`text-xs font-bold ${isActive ? 'text-white' : 'text-gray-500'}`}>
+                          <span
+                            className={`text-xs font-bold ${isActive ? 'text-white' : 'text-gray-500'}`}
+                          >
                             {count}
                           </span>
                         </button>
@@ -209,14 +222,18 @@ export const PageReel: React.FC<PageReelProps> = ({
 
               <div
                 className={`w-full flex-1 overflow-y-auto overflow-x-hidden custom-scrollbar ${
-                  isMobile ? 'px-4 pt-2 pb-12' : 'p-8 pt-4'
+                  isMobile
+                    ? 'px-4 pt-2 pb-12'
+                    : isMaximized
+                      ? 'p-8 pt-4'
+                      : 'px-6 py-3'
                 }`}
               >
                 <div
-                  className={`gap-4 pb-12 ${
+                  className={`gap-4 ${
                     isMobile || isMaximized
-                      ? 'grid'
-                      : 'flex overflow-x-auto overflow-y-hidden items-center px-4'
+                      ? 'grid pb-12'
+                      : 'flex overflow-x-auto overflow-y-hidden items-center px-4 pb-2'
                   }`}
                   style={
                     isMobile || isMaximized
@@ -266,7 +283,7 @@ export const PageReel: React.FC<PageReelProps> = ({
                         disabled={isLocked}
                         className={`relative group flex flex-col items-center gap-2 transition-all ${
                           isLocked ? 'cursor-not-allowed' : 'cursor-pointer'
-                        } ${!isMobile && !isMaximized ? 'shrink-0 w-49.5' : 'w-full'}`}
+                        } ${!isMobile && !isMaximized ? 'shrink-0 w-52' : !isMobile && isMaximized ? 'w-full' : 'w-full'}`}
                       >
                         <div className="relative w-full">
                           {page.isBookmarked && (
@@ -284,7 +301,7 @@ export const PageReel: React.FC<PageReelProps> = ({
                               </div>
                             </div>
                           )}
-                          
+
                           <div
                             className={`relative w-full aspect-4/3 rounded-lg overflow-hidden bg-white transition-all ${borderClass} ${shadowClass}`}
                           >
@@ -314,7 +331,7 @@ export const PageReel: React.FC<PageReelProps> = ({
                           >
                             {pageNumber}
                           </span>
-                          
+
                           <div className="flex items-center gap-1">
                             {page.hasHighlights && (
                               <div className="bg-[#F3C353] rounded-full w-6 h-6 flex items-center justify-center shadow-sm">
